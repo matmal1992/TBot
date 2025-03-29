@@ -1,0 +1,27 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Compile and Run C++",
+            "type": "shell",
+            "command": "g++",
+            "args": [
+                "bot_simulator.cpp", // Your C++ file
+                "-o",
+                "bot_simulator" // Output file
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Run C++ Program",
+            "type": "shell",
+            "command": "./bot_simulator", // Command to run the compiled program
+            "dependsOn": [
+                "Compile and Run C++"
+            ]
+        }
+    ]
+}
