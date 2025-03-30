@@ -7,7 +7,7 @@
             "command": "g++",
             "args": [
                 "main.cpp",
-                "LoadCsvData.cpp", // Your C++ file
+                "src/LoadCsvData.cpp", // Your C++ file
                 "-o",
                 "bot_simulator" // Output file
             ],

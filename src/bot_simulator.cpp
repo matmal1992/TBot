@@ -1,4 +1,4 @@
-#include "BotSimulator.h"
+#include "headers\BotSimulator.h"
 
 BotSimulator::BotSimulator(const std::vector<double> &prices)
     : prices_(prices) {}
