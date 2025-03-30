@@ -1,5 +1,7 @@
+#include "headers\BotSimulator.h"
 #include "headers\LoadCsvData.h"
 #include <iomanip>
+
 
 int main() {
   CsvData data("US500_prices.csv");

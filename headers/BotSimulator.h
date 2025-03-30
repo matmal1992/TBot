@@ -1,19 +1,23 @@
 #include "LoadCsvData.h"
+#include <deque>
 
 class BotSimulator {
 public:
   BotSimulator(const std::vector<double> &prices);
 
 private:
-  void AddRecord();
+  void RunSimulator();
+  void AddRecord(int price_index);
   void CheckTrend();
   void Buy();
   void Sell();
   bool IsConstantLoss();
   bool IsConstantRise();
+  bool IsSuddenLoss();
+  bool IsSuddenRise();
 
   std::vector<double> prices_;
-  std::vector<double> current_records;
+  std::deque<double> current_records;
   const size_t amount_of_current_records = 5;
   const size_t percentage_profit = 20;
   const size_t percentage_loss = 20;
