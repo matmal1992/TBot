@@ -1,4 +1,4 @@
-#include "LoadCsvData.h"
+#include "../headers/LoadCsvData.h"
 
 CsvData::CsvData(const std::string &path) : path_(path) { ; }
 
@@ -92,7 +92,7 @@ void CsvData::PrintGraph() {
       "set grid; "
       "plot 'plot_data.txt' using 1:2 with lines title 'Price', "
       "'highlight_data.txt' using 1:2 with points pointtype 7 pointsize 1.5 lc "
-      "rgb 'green' title '5-min Markers'; "
+      "rgb 'green' title '60-min Markers'; "
       "pause -1\"";
   system(command.c_str());
 }
