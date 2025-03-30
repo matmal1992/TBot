@@ -1,3 +1,6 @@
+#ifndef _LOAD_CSV_DATA_
+#define _LOAD_CSV_DATA_
+
 #include <fstream>
 #include <iomanip>
 #include <iostream>
@@ -14,3 +17,5 @@ public:
 private:
   std::string path_;
 };
+
+#endif
