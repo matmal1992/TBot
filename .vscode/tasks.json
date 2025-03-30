@@ -6,9 +6,9 @@
             "type": "shell",
             "command": "g++",
             "args": [
-                "bot_simulator.cpp", // Your C++ file
+                "main.cpp", // Your C++ file
                 "-o",
-                "bot_simulator" // Output file
+                "main" // Output file
             ],
             "group": {
                 "kind": "build",
@@ -18,7 +18,7 @@
         {
             "label": "Run C++ Program",
             "type": "shell",
-            "command": "./bot_simulator", // Command to run the compiled program
+            "command": "./main", // Command to run the compiled program
             "dependsOn": [
                 "Compile and Run C++"
             ]
