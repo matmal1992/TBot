@@ -1,57 +1,31 @@
-#include <fstream>
-#include <iomanip>
-#include <iostream>
-#include <sstream>
-#include <vector>
+#include "BotSimulator.h"
+
+BotSimulator::BotSimulator(const std::vector<double> &prices)
+    : prices_(prices) {}
 
 int main() {
-  std::ifstream file("US500_prices.csv");
-  if (!file) {
-    std::cerr << "Error: Unable to open file.\n";
-    return 1;
-  }
 
-  std::vector<double> prices;
-  std::string line;
-
-  // Skip the first line (header)
-  std::getline(file, line);
-
-  // Read prices from CSV
-  while (std::getline(file, line)) {
-    std::stringstream ss(line);
-    std::string date, priceStr;
-
-    // Extract date and price
-    std::getline(ss, date, ',');     // Read first column (date)
-    std::getline(ss, priceStr, ','); // Read second column (price)
-
-    try {
-      double price = std::stod(priceStr);
-      prices.push_back(price);
-    } catch (...) {
-      std::cerr << "Skipping invalid data: " << priceStr << "\n";
-    }
-  }
-
-  file.close();
-
-  // Compute the average
-  if (prices.empty()) {
-    std::cerr << "No valid price data found.\n";
-    return 1;
-  }
-
-  double sum = 0;
-  for (double price : prices) {
-    sum += price;
-  }
-
-  double average = sum / prices.size();
+  CsvData data("US500_prices.csv");
+  std::vector<double> prices = data.LoadPrices();
 
   // Display the result
   std::cout << "Average Price: " << std::fixed << std::setprecision(2)
-            << average << "\n";
+            << data.GetAvgValue(prices) << "\n";
+
+  std::vector<double> remembered_records;
+
+  for (size_t i{0}; i < prices.size(); ++i) {
+    if (remembered_records.size() < 5) {
+      remembered_records.push_back(prices.at(i));
+    } else {
+      // remove the last record;
+    }
+  }
 
   return 0;
 }
+
+void BotSimulator::AddRecord() {}
+void BotSimulator::Buy() {}
+void BotSimulator::Sell() {}
+void BotSimulator::CheckTrend() {}

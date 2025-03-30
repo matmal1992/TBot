@@ -6,9 +6,10 @@
             "type": "shell",
             "command": "g++",
             "args": [
-                "main.cpp", // Your C++ file
+                "main.cpp",
+                "LoadCsvData.cpp", // Your C++ file
                 "-o",
-                "main" // Output file
+                "bot_simulator" // Output file
             ],
             "group": {
                 "kind": "build",
@@ -18,7 +19,7 @@
         {
             "label": "Run C++ Program",
             "type": "shell",
-            "command": "./main", // Command to run the compiled program
+            "command": "./bot_simulator", // Command to run the compiled program
             "dependsOn": [
                 "Compile and Run C++"
             ]
