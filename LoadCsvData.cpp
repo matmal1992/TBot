@@ -71,15 +71,29 @@ void CsvData::PrintGraph() {
 
   // Write data to a temporary file for gnuplot
   std::ofstream tempFile("plot_data.txt");
+  std::ofstream highlightFile("highlight_data.txt"); // New file for markers
+
   for (size_t i = 0; i < time.size(); i++) {
     tempFile << i << " " << price[i]
              << "\n"; // Use index instead of time for x-axis
+
+    // Save every 5th point for highlighting
+    if (i % 60 == 0) {
+      highlightFile << i << " " << price[i] << "\n";
+    }
   }
   tempFile.close();
+  highlightFile.close();
 
-  // Generate gnuplot command
-  std::string command = "gnuplot -e \"plot 'plot_data.txt' using 1:2 with "
-                        "lines title 'US500 Price'; pause -1\"";
+  // Generate gnuplot command with markers
+  std::string command =
+      "gnuplot -e \""
+      "set title 'US500 Price'; "
+      "set grid; "
+      "plot 'plot_data.txt' using 1:2 with lines title 'Price', "
+      "'highlight_data.txt' using 1:2 with points pointtype 7 pointsize 1.5 lc "
+      "rgb 'green' title '5-min Markers'; "
+      "pause -1\"";
   system(command.c_str());
 }
 
