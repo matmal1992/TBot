@@ -7,9 +7,9 @@
             "command": "g++",
             "args": [
                 "main.cpp",
-                "src/LoadCsvData.cpp", // Your C++ file
+                "src/LoadCsvData.cpp",
                 "-o",
-                "bot_simulator" // Output file
+                "bot_simulator"
             ],
             "group": {
                 "kind": "build",
@@ -19,10 +19,22 @@
         {
             "label": "Run C++ Program",
             "type": "shell",
-            "command": "./bot_simulator", // Command to run the compiled program
+            "command": "./bot_simulator",
             "dependsOn": [
                 "Compile and Run C++"
             ]
+        },
+        {
+            "label": "Build with CMake",
+            "type": "shell",
+            "command": [
+                "rm ./build -r -force;",
+                "mkdir build; cd build; cmake .. -G 'MinGW Makefiles'; cmake --build ."
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
         }
     ]
 }
