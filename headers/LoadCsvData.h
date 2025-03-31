@@ -7,7 +7,8 @@
 #include <sstream>
 #include <vector>
 
-class CsvData {
+class CsvData
+{
 public:
   CsvData(const std::string &path);
   std::vector<double> LoadPrices();

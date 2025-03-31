@@ -1,7 +1,8 @@
 #include "headers\LoadCsvData.h"
 #include <iomanip>
 
-int main() {
+int main()
+{
   CsvData data("US500_prices.csv");
   std::vector<double> prices = data.LoadPrices();
 

@@ -2,7 +2,8 @@
 
 #include <deque>
 
-class BotSimulator {
+class BotSimulator
+{
 public:
   BotSimulator(const std::vector<double> &prices);
 

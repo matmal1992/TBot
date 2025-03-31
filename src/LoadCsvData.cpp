@@ -2,12 +2,14 @@
 
 CsvData::CsvData(const std::string &path) : path_(path) { ; }
 
-std::vector<double> CsvData::LoadPrices() {
+std::vector<double> CsvData::LoadPrices()
+{
 
   std::vector<double> prices;
 
   std::ifstream file(path_);
-  if (!file) {
+  if (!file)
+  {
     std::cerr << "Error: Unable to open file.\n";
     return prices;
   }
@@ -18,7 +20,8 @@ std::vector<double> CsvData::LoadPrices() {
   std::getline(file, line);
 
   // Read prices from CSV
-  while (std::getline(file, line)) {
+  while (std::getline(file, line))
+  {
     std::stringstream ss(line);
     std::string date, priceStr;
 
@@ -26,10 +29,13 @@ std::vector<double> CsvData::LoadPrices() {
     std::getline(ss, date, ',');     // Read first column (date)
     std::getline(ss, priceStr, ','); // Read second column (price)
 
-    try {
+    try
+    {
       double price = std::stod(priceStr);
       prices.push_back(price);
-    } catch (...) {
+    }
+    catch (...)
+    {
       std::cerr << "Skipping invalid data: " << priceStr << "\n";
     }
   }
@@ -38,9 +44,11 @@ std::vector<double> CsvData::LoadPrices() {
   return prices;
 }
 
-void CsvData::PrintGraph() {
+void CsvData::PrintGraph()
+{
   std::ifstream file("US500_prices.csv");
-  if (!file) {
+  if (!file)
+  {
     std::cerr << "Error: Unable to open file.\n";
   }
 
@@ -52,17 +60,22 @@ void CsvData::PrintGraph() {
   std::getline(file, line);
 
   // Read data
-  while (std::getline(file, line)) {
+  while (std::getline(file, line))
+  {
     size_t commaPos = line.find(',');
-    if (commaPos != std::string::npos) {
+    if (commaPos != std::string::npos)
+    {
       timestamp = line.substr(0, commaPos);
       priceStr = line.substr(commaPos + 1);
 
-      try {
+      try
+      {
         double priceValue = std::stod(priceStr);
         time.push_back(timestamp);
         price.push_back(priceValue);
-      } catch (...) {
+      }
+      catch (...)
+      {
         continue;
       }
     }
@@ -73,12 +86,14 @@ void CsvData::PrintGraph() {
   std::ofstream tempFile("plot_data.txt");
   std::ofstream highlightFile("highlight_data.txt"); // New file for markers
 
-  for (size_t i = 0; i < time.size(); i++) {
+  for (size_t i = 0; i < time.size(); i++)
+  {
     tempFile << i << " " << price[i]
              << "\n"; // Use index instead of time for x-axis
 
     // Save every 5th point for highlighting
-    if (i % 60 == 0) {
+    if (i % 60 == 0)
+    {
       highlightFile << i << " " << price[i] << "\n";
     }
   }
@@ -97,14 +112,17 @@ void CsvData::PrintGraph() {
   system(command.c_str());
 }
 
-double CsvData::GetAvgValue(std::vector<double> data) {
-  if (data.empty()) {
+double CsvData::GetAvgValue(std::vector<double> data)
+{
+  if (data.empty())
+  {
     std::cerr << "No valid price data found.\n";
     return 0;
   }
 
   double sum = 0;
-  for (double price : data) {
+  for (double price : data)
+  {
     sum += price;
   }
 
