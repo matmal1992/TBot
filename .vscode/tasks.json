@@ -40,17 +40,12 @@
             "label": "Run Google Tests",
             "type": "shell",
             "command": [
-                "cd /d ${workspaceFolder}; ctest --verbose"
+                "cd /d ${workspaceFolder}/build; cmake --build .; ctest --verbose"
             ],
             "group": {
                 "kind": "test",
                 "isDefault": true
             }
-            // "presentation": {
-            //     "reveal": "always",
-            //     "panel": "shared",
-            //     "focus": true
-            // }
         }
     ]
 }

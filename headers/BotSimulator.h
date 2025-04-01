@@ -4,10 +4,12 @@
 
 class BotSimulator
 {
+  // friend class BotSimulatorTest;
+
 public:
   BotSimulator(const std::vector<double> &prices);
 
-private:
+  // private:
   void AddRecord(int record_index);
   void CheckTrend();
   void Buy();
