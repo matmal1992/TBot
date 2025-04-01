@@ -7,6 +7,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # Include headers directory
 include_directories(headers)
+add_subdirectory(tests)
 
 # Add executable (main.cpp + all .cpp files in src/)
 file(GLOB SRC_FILES "src/*.cpp")
