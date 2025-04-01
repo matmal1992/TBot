@@ -1,10 +1,22 @@
-# enable_testing()
+enable_testing()
 
-# find_package(GTest REQUIRED)
-# include_directories(${GTEST_INCLUDE_DIRS})
+# Google Test
+add_subdirectory(../googletest-src googletest-build)
 
-# add_executable(run_tests tests/test_main.cpp)
-# target_link_libraries(run_tests ${GTEST_LIBRARIES} pthread)
+# Test sources
+set(TEST_SOURCES
+    BotSimulatorTest.cpp
+    # LoadCsvDataTest.cpp
+)
 
-# Register tests
-# add_test(NAME MyTests COMMAND run_tests)
+# Test executable
+add_executable(TBotTests ${TEST_SOURCES})
+
+# Link Google Test and project files
+target_link_libraries(TBotTests gtest gtest_main)
+
+# Include headers
+target_include_directories(TBotTests PRIVATE ../headers)
+
+# Register the tests
+add_test(NAME TBotTests COMMAND TBotTests)
