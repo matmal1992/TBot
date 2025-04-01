@@ -35,6 +35,22 @@
                 "kind": "build",
                 "isDefault": true
             }
+        },
+        {
+            "label": "Run Google Tests",
+            "type": "shell",
+            "command": [
+                "cd /d ${workspaceFolder}; ctest --verbose"
+            ],
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            }
+            // "presentation": {
+            //     "reveal": "always",
+            //     "panel": "shared",
+            //     "focus": true
+            // }
         }
     ]
 }
