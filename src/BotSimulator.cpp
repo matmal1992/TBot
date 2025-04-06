@@ -3,6 +3,10 @@
 BotSimulator::BotSimulator(const std::vector<double> &prices)
     : prices_(prices) {}
 
+BotSimulator::BotSimulator()
+{
+}
+
 void BotSimulator::AddRecord(int record_index)
 {
   if (current_records.size() < 5)
