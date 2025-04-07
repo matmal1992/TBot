@@ -16,9 +16,10 @@ class CsvData
 {
 public:
   CsvData(const std::string &path);
+
   LoadedData LoadDataFromFile();
   double GetAvgValue(std::vector<double> data);
-  void PrintGraph(const LoadedData &data);
+  void PrintGraph(const LoadedData &data, const std::vector<bool> &opens);
 
 private:
   std::string path_;

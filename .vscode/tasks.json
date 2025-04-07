@@ -2,28 +2,9 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Compile and Run C++",
-            "type": "shell",
-            "command": "g++",
-            "args": [
-                "main.cpp",
-                "src/LoadCsvData.cpp",
-                "-o",
-                "bot_simulator"
-            ],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            }
-        },
-        {
             "label": "Run C++ Program",
             "type": "shell",
-            "command": "./bot_simulator",
-            "dependsOn": [
-                "Compile and Run C++"
-            ],
-            "problemMatcher": []
+            "command": "./build/src/TBotSimulator",
         },
         {
             "label": "Build with CMake",
