@@ -26,35 +26,29 @@ LoadedData CsvData::LoadDataFromFile()
     std::getline(ss, date, ',');     // Read first column (date)
     std::getline(ss, priceStr, ','); // Read second column (price)
 
-    try
-    {
-      double price = std::stod(priceStr);
-      data.prices.push_back(price);
-      data.times.push_back(date);
-    }
-    catch (...)
-    {
-      std::cerr << "Skipping invalid data: " << priceStr << "\n";
-    }
+    double price = std::stod(priceStr);
+    data.prices.push_back(price);
+    data.times.push_back(date);
+    // to do: invalid data hadndling
   }
 
   file.close();
   return data;
 }
 
-void CsvData::PrintGraph(const LoadedData &data)
+void CsvData::PrintGraph(const LoadedData &data, const std::vector<bool> &opens)
 {
   // Write data to a temporary file for gnuplot
   std::ofstream tempFile("plot_data.txt");
   std::ofstream highlightFile("highlight_data.txt"); // New file for markers
 
-  for (size_t i = 0; i < data.times.size(); i++)
+  for (size_t i = 0; i < data.times.size(); ++i)
   {
     tempFile << i << " " << data.prices[i]
              << "\n"; // Use index instead of time for x-axis
 
-    // Save every 5th point for highlighting
-    if (i % 60 == 0)
+    // Save every 60th point for highlighting
+    if (opens.at(i) == true)
     {
       highlightFile << i << " " << data.prices[i] << "\n";
     }

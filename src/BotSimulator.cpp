@@ -69,17 +69,20 @@ void BotSimulator::Iterate()
   for (size_t i{0}; i < prices_.size(); ++i)
   {
     AddRecord(i);
-    if (IsConstantRise() or IsSuddenRise())
+    if (/*IsConstantRise() or */ IsSuddenRise())
     {
-      OpenPosition();
+      actions.opens.at(i) = true;
+      actions.closes.at(i) = false;
     }
-    else if (IsConstantFall() or IsSuddenFall())
-    {
-      ClosePosition();
-    }
+    // else if (/*IsConstantFall() or */ IsSuddenFall())
+    // {
+    //   actions.opens.at(i) = false;
+    //   actions.closes.at(i) = true;
+    // }
   }
 }
 
-void BotSimulator::CheckTrend() {}
-void BotSimulator::OpenPosition() {}
-void BotSimulator::ClosePosition() {}
+Actions BotSimulator::GetActions()
+{
+  return actions;
+}
