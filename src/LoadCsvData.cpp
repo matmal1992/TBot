@@ -2,16 +2,15 @@
 
 CsvData::CsvData(const std::string &path) : path_(path) { ; }
 
-std::vector<double> CsvData::LoadPrices()
+LoadedData CsvData::LoadDataFromFile()
 {
-
-  std::vector<double> prices;
+  LoadedData data;
 
   std::ifstream file(path_);
   if (!file)
   {
     std::cerr << "Error: Unable to open file.\n";
-    return prices;
+    return data; // to do: better error hadndling
   }
 
   std::string line;
@@ -19,20 +18,19 @@ std::vector<double> CsvData::LoadPrices()
   // Skip the first line (header)
   std::getline(file, line);
 
-  // Read prices from CSV
   while (std::getline(file, line))
   {
     std::stringstream ss(line);
     std::string date, priceStr;
 
-    // Extract date and price
     std::getline(ss, date, ',');     // Read first column (date)
     std::getline(ss, priceStr, ','); // Read second column (price)
 
     try
     {
       double price = std::stod(priceStr);
-      prices.push_back(price);
+      data.prices.push_back(price);
+      data.times.push_back(date);
     }
     catch (...)
     {
@@ -41,60 +39,24 @@ std::vector<double> CsvData::LoadPrices()
   }
 
   file.close();
-  return prices;
+  return data;
 }
 
-void CsvData::PrintGraph()
+void CsvData::PrintGraph(const LoadedData &data)
 {
-  std::ifstream file("US500_prices.csv");
-  if (!file)
-  {
-    std::cerr << "Error: Unable to open file.\n";
-  }
-
-  std::vector<std::string> time;
-  std::vector<double> price;
-  std::string line, timestamp, priceStr;
-
-  // Skip the first line (header)
-  std::getline(file, line);
-
-  // Read data
-  while (std::getline(file, line))
-  {
-    size_t commaPos = line.find(',');
-    if (commaPos != std::string::npos)
-    {
-      timestamp = line.substr(0, commaPos);
-      priceStr = line.substr(commaPos + 1);
-
-      try
-      {
-        double priceValue = std::stod(priceStr);
-        time.push_back(timestamp);
-        price.push_back(priceValue);
-      }
-      catch (...)
-      {
-        continue;
-      }
-    }
-  }
-  file.close();
-
   // Write data to a temporary file for gnuplot
   std::ofstream tempFile("plot_data.txt");
   std::ofstream highlightFile("highlight_data.txt"); // New file for markers
 
-  for (size_t i = 0; i < time.size(); i++)
+  for (size_t i = 0; i < data.times.size(); i++)
   {
-    tempFile << i << " " << price[i]
+    tempFile << i << " " << data.prices[i]
              << "\n"; // Use index instead of time for x-axis
 
     // Save every 5th point for highlighting
     if (i % 60 == 0)
     {
-      highlightFile << i << " " << price[i] << "\n";
+      highlightFile << i << " " << data.prices[i] << "\n";
     }
   }
   tempFile.close();
