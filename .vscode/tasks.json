@@ -22,7 +22,8 @@
             "command": "./bot_simulator",
             "dependsOn": [
                 "Compile and Run C++"
-            ]
+            ],
+            "problemMatcher": []
         },
         {
             "label": "Build with CMake",

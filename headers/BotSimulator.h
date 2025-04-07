@@ -8,17 +8,17 @@ class BotSimulator
 {
 public:
   BotSimulator(const std::vector<double> &prices);
-  BotSimulator();
 
 private:
   void AddRecord(int record_index);
   void CheckTrend();
-  void Buy();
-  void Sell();
+  void OpenPosition();
+  void ClosePosition();
   bool IsConstantFall();
   bool IsConstantRise();
   bool IsSuddenFall();
   bool IsSuddenRise();
+  void Iterate();
 
   std::vector<double> prices_;
   std::deque<double> current_records;

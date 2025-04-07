@@ -3,10 +3,6 @@
 BotSimulator::BotSimulator(const std::vector<double> &prices)
     : prices_(prices) {}
 
-BotSimulator::BotSimulator()
-{
-}
-
 void BotSimulator::AddRecord(int record_index)
 {
   if (current_records.size() < 5)
@@ -68,6 +64,22 @@ bool BotSimulator::IsSuddenFall()
   return false;
 }
 
+void BotSimulator::Iterate()
+{
+  for (size_t i{0}; i < prices_.size(); ++i)
+  {
+    AddRecord(i);
+    if (IsConstantRise() or IsSuddenRise())
+    {
+      OpenPosition();
+    }
+    else if (IsConstantFall() or IsSuddenFall())
+    {
+      ClosePosition();
+    }
+  }
+}
+
 void BotSimulator::CheckTrend() {}
-void BotSimulator::Buy() {}
-void BotSimulator::Sell() {}
+void BotSimulator::OpenPosition() {}
+void BotSimulator::ClosePosition() {}
