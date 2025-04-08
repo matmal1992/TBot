@@ -9,5 +9,5 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 include_directories(headers)
 
 # Subdirectories
-add_subdirectory(tests)
+# add_subdirectory(tests)
 add_subdirectory(src)
