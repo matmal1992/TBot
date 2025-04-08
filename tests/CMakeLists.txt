@@ -3,7 +3,7 @@ enable_testing()
 # Google Test
 add_subdirectory(../googletest-src googletest-build)
 
-# Test sources
+Test sources
 set(TEST_SOURCES
     BotSimulatorTest.cpp
     # LoadCsvDataTest.cpp

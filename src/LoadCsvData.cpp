@@ -63,17 +63,45 @@ void CsvData::PrintGraph(const LoadedData &data,
   system(command.c_str());
 }
 
-double CsvData::GetAvgValue(std::vector<double> data) {
-  if (data.empty()) {
-    std::cerr << "No valid price data found.\n";
+double CsvData::GetAvgValue(const std::vector<double> &num_data) {
+  if (num_data.empty()) {
+    std::cerr << "No valid data found.\n";
     return 0;
   }
 
-  double sum = 0;
-  for (double price : data) {
-    sum += price;
+  double sum{0};
+  for (double num : num_data) {
+    sum += num;
   }
 
-  double average = sum / data.size();
+  double average = sum / num_data.size();
   return average;
+}
+
+double CsvData::GetBiggestDifference(const std::vector<double> &num_data) {
+  if (num_data.empty()) {
+    std::cerr << "No valid data found.\n";
+    return 0;
+  }
+
+  double difference{0}, tmp_difference{0};
+
+  for (size_t i{1}; i < num_data.size(); ++i) {
+    double diff = num_data.at(i) > num_data.at(i - 1)
+                      ? num_data.at(i) - num_data.at(i - 1)
+                      : num_data.at(i - 1) - num_data.at(i);
+    if (std::abs(diff) > difference) {
+      difference = diff;
+    }
+  }
+
+  return difference;
+}
+
+DiagnosticData CsvData::GetDiagnosticData(const std::vector<double> &prices) {
+  DiagnosticData data;
+  data.avg_price = GetAvgValue(prices);
+  data.biggest_difference = GetBiggestDifference(prices);
+
+  return data;
 }
