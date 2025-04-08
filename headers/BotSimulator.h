@@ -4,13 +4,11 @@
 #include "LoadCsvData.h"
 #include <deque>
 
-struct Actions
-{
+struct Actions {
   std::vector<bool> opens;
   std::vector<bool> closes;
 };
-class BotSimulator
-{
+class BotSimulator {
 public:
   BotSimulator(const std::vector<double> &prices);
 

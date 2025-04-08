@@ -1,8 +1,7 @@
 #include "headers\BotSimulator.h"
 #include <iomanip>
 
-int main()
-{
+int main() {
   CsvData data("US500_prices.csv");
   LoadedData prices = data.LoadDataFromFile();
   BotSimulator bot_simulator(prices.prices);

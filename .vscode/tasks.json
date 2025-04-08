@@ -5,6 +5,7 @@
             "label": "Run C++ Program",
             "type": "shell",
             "command": "./build/src/TBotSimulator",
+            "problemMatcher": []
         },
         {
             "label": "Build with CMake",
