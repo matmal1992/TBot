@@ -2,13 +2,13 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Run C++ Program",
+            "label": "Run executable",
             "type": "shell",
             "command": "./build/src/TBotSimulator",
             "problemMatcher": []
         },
         {
-            "label": "Build with CMake",
+            "label": "Build project",
             "type": "shell",
             "command": [
                 "rm ./build -r -force;",
@@ -20,13 +20,28 @@
             }
         },
         {
-            "label": "Run Google Tests",
+            "label": "Run tests",
             "type": "shell",
             "command": [
                 "cd /d ${workspaceFolder}/build; cmake --build .; ctest --verbose"
             ],
             "group": {
                 "kind": "test",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Format all files",
+            "type": "shell",
+            "command": [
+                "@('./src/', './headers/', './tests/', './main.cpp') |",
+                "ForEach-Object { $files = Get-ChildItem -Recurse -Path $_ -Include *.hpp, *.cpp, *.h |",
+                "ForEach-Object { $_.FullName };",
+                "if ($files) {",
+                "clang-format -i $files } };",
+            ],
+            "group": {
+                "kind": "build",
                 "isDefault": true
             }
         }
