@@ -13,7 +13,8 @@ int main()
 
     std::cout << "Average Price: " << diagnostic_data.avg_price << std::endl;
     std::cout << "Biggest difference: " << diagnostic_data.biggest_difference << std::endl;
-    std::cout << "Index of difference: " << std::endl;
+    std::cout << "Average difference: " << diagnostic_data.avg_difference << std::endl;
+    std::cout << "Index of the biggest difference: " << std::endl;
     data.PrintGraph(prices, opens);
 
     return 0;
