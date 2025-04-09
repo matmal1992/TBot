@@ -93,19 +93,46 @@ double CsvData::GetBiggestDifference(const std::vector<double>& num_data)
         return 0;
     }
 
+    std::vector<double> differences;
+
     double difference {0}, tmp_difference {0};
+    int index {0};
 
     for (size_t i {1}; i < num_data.size(); ++i)
     {
         double diff = num_data.at(i) > num_data.at(i - 1) ? num_data.at(i) - num_data.at(i - 1)
                                                           : num_data.at(i - 1) - num_data.at(i);
+
+        differences.push_back(std::abs(diff));
         if (std::abs(diff) > difference)
         {
             difference = diff;
+            index = i; // move biggest diff and its index to separate struct
         }
     }
 
     return difference;
+}
+
+double CsvData::GetAvgDifference(const std::vector<double>& num_data)
+{
+    if (num_data.empty())
+    {
+        std::cerr << "No valid data found.\n";
+        return 0;
+    }
+
+    double sum_of_differences {0}, difference {0};
+
+    for (size_t i {1}; i < num_data.size(); ++i)
+    {
+        difference = num_data.at(i) > num_data.at(i - 1) ? num_data.at(i) - num_data.at(i - 1)
+                                                         : num_data.at(i - 1) - num_data.at(i);
+        sum_of_differences += std::abs(difference);
+    }
+
+    double diff_avg = sum_of_differences / num_data.size();
+    return diff_avg;
 }
 
 DiagnosticData CsvData::GetDiagnosticData(const std::vector<double>& prices)
@@ -113,6 +140,7 @@ DiagnosticData CsvData::GetDiagnosticData(const std::vector<double>& prices)
     DiagnosticData data;
     data.avg_price = GetAvgValue(prices);
     data.biggest_difference = GetBiggestDifference(prices);
+    data.avg_difference = GetAvgDifference(prices);
 
     return data;
 }
