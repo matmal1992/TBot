@@ -3,7 +3,6 @@
 CsvData::CsvData(const std::string& path)
     : path_(path)
 {
-    ;
 }
 
 LoadedData CsvData::LoadDataFromFile()
@@ -27,8 +26,8 @@ LoadedData CsvData::LoadDataFromFile()
         std::stringstream ss(line);
         std::string date, priceStr;
 
-        std::getline(ss, date, ','); // Read first column (date)
-        std::getline(ss, priceStr, ','); // Read second column (price)
+        std::getline(ss, date, ',');
+        std::getline(ss, priceStr, ',');
 
         double price = std::stod(priceStr);
         data.prices.push_back(price);
@@ -40,7 +39,8 @@ LoadedData CsvData::LoadDataFromFile()
     return data;
 }
 
-void CsvData::PrintGraph(const LoadedData& data, const std::vector<bool>& opens, const std::vector<bool>& closes)
+void CsvData::PrintGraph(const LoadedData& data, const DiagnosticData& diag_data, const std::vector<bool>& opens,
+                         const std::vector<bool>& closes)
 {
     // Write data to a temporary file for gnuplot
     std::ofstream tempFile("plot_data.txt");
@@ -51,7 +51,6 @@ void CsvData::PrintGraph(const LoadedData& data, const std::vector<bool>& opens,
     {
         tempFile << i << " " << data.prices[i] << "\n"; // Use index instead of time for x-axis
 
-        // Save every 60th point for highlighting
         if (opens.at(i) == true)
         {
             highlightOpensFile << i << " " << data.prices[i] << "\n";
@@ -65,10 +64,19 @@ void CsvData::PrintGraph(const LoadedData& data, const std::vector<bool>& opens,
     highlightOpensFile.close();
     highlightClosesFile.close();
 
-    // Generate gnuplot command with markers
-    std::string command
-        = "gnuplot -e \""
-          "set title 'US500 Price'; "
+    std::ostringstream titleStream;
+    titleStream << "            AVG value: " << diag_data.avg_price
+                << "                        AVG diff: " << diag_data.avg_difference
+                << "            MAX diff: " << diag_data.biggest_difference
+                << "            MAX diff index: " << diag_data.biggest_difference_index
+                << "                        AVG dev: " << diag_data.avg_deviation
+                << "            MAX dev: " << diag_data.biggest_deviation
+                << "            MAX dev index: " << diag_data.biggest_deviation_index;
+
+    std::string command = "gnuplot -e \""
+                          "set title '"
+        + titleStream.str()
+        + "'; "
           "set grid; "
           "plot 'plot_data.txt' using 1:2 with lines title 'Price', "
           "'highlight_opens_data.txt' using 1:2 with points pointtype 7 pointsize 1.0 lc rgb 'green' title 'Opens', "
