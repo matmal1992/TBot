@@ -29,7 +29,7 @@ private:
     size_t amount_of_current_records = 5;
     double percentage_profit = 0.05;
     double percentage_loss = 0.05;
-    double percentage_peak_profit = 1.2;
+    double percentage_peak_profit = 1.001;
     double percentage_peak_loss = 0.2;
     size_t investing_value = 5000;
 

@@ -2,10 +2,16 @@
 
 int main()
 {
+    std::vector<double> test_prices {1, 2, 3, 4, 5, 4, 5, 6, 7, 8, 7, 8, 9, 10, 9, 10, 11, 12, 13};
+    std::vector<std::string> test_dates {"1",  "2",  "3",  "4",  "5",  "6",  "7",  "8",  "9", "10",
+                                         "11", "12", "13", "14", "15", "16", "17", "18", "19"};
     CsvData data("US500_prices.csv");
-    LoadedData prices = data.LoadDataFromFile();
-    BotSimulator bot_simulator(prices.prices);
-    DiagnosticData diagnostic_data = data.GetDiagnosticData(prices.prices);
+    // LoadedData prices = data.LoadDataFromFile();
+    LoadedData prices {test_prices, test_dates};
+    // BotSimulator bot_simulator(prices.prices);
+    BotSimulator bot_simulator(test_prices);
+    // DiagnosticData diagnostic_data = data.GetDiagnosticData(prices.prices);
+    DiagnosticData diagnostic_data = data.GetDiagnosticData(test_prices);
 
     bot_simulator.Iterate();
 
@@ -21,7 +27,7 @@ int main()
     std::cout << "Biggest deviation: " << diagnostic_data.biggest_deviation << std::endl;
     std::cout << "Biggest deviation index: " << diagnostic_data.biggest_difference_index << std::endl;
 
-    data.PrintGraph(prices, opens);
+    data.PrintGraph(prices, opens); // to do: rescale y axis 10x smaller
 
     return 0;
 }
