@@ -16,7 +16,7 @@ struct LoadedData
 struct DiagnosticData
 {
     std::vector<double> differences;
-    double biggest_difference {}; // done
+    double biggest_difference {};
     double avg_difference {};
 
     std::vector<double> deviations;
@@ -24,6 +24,8 @@ struct DiagnosticData
     double avg_deviation {};
 
     double avg_price {};
+    int biggest_difference_index {0};
+    int biggest_deviation_index {0};
 };
 
 class CsvData
@@ -36,11 +38,6 @@ public:
     void PrintGraph(const LoadedData& data, const std::vector<bool>& opens);
 
 private:
-    double GetAvgValue(const std::vector<double>& num_data);
-    double GetBiggestDifference(const std::vector<double>& num_data);
-    double GetAvgDifference(const std::vector<double>& num_data);
-    std::vector<double> GetDifferences(const std::vector<double>& num_data);
-    std::vector<double> GetDeviations(const std::vector<double>& num_data);
     std::string path_;
 };
 
