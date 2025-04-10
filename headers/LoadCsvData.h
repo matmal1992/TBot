@@ -15,12 +15,14 @@ struct LoadedData
 
 struct DiagnosticData
 {
-    std::vector<double> deviations;
     std::vector<double> differences;
     double biggest_difference {}; // done
     double avg_difference {};
+
+    std::vector<double> deviations;
     double biggest_deviation {};
     double avg_deviation {};
+
     double avg_price {};
 };
 
@@ -37,6 +39,8 @@ private:
     double GetAvgValue(const std::vector<double>& num_data);
     double GetBiggestDifference(const std::vector<double>& num_data);
     double GetAvgDifference(const std::vector<double>& num_data);
+    std::vector<double> GetDifferences(const std::vector<double>& num_data);
+    std::vector<double> GetDeviations(const std::vector<double>& num_data);
     std::string path_;
 };
 
