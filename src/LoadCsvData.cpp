@@ -70,123 +70,48 @@ void CsvData::PrintGraph(const LoadedData& data, const std::vector<bool>& opens)
     system(command.c_str());
 }
 
-double CsvData::GetAvgValue(const std::vector<double>& num_data)
-{
-    if (num_data.empty())
-    {
-        std::cerr << "No valid data found.\n";
-        return 0;
-    }
-
-    double sum {0};
-    for (double num : num_data) { sum += num; }
-
-    double average = sum / num_data.size();
-    return average;
-}
-
-double CsvData::GetBiggestDifference(const std::vector<double>& num_data)
-{
-    if (num_data.empty())
-    {
-        std::cerr << "No valid data found.\n";
-        return 0;
-    }
-
-    std::vector<double> differences;
-
-    double difference {0}, tmp_difference {0};
-    int index {0};
-
-    for (size_t i {1}; i < num_data.size(); ++i)
-    {
-        double diff = num_data.at(i) > num_data.at(i - 1) ? num_data.at(i) - num_data.at(i - 1)
-                                                          : num_data.at(i - 1) - num_data.at(i);
-
-        differences.push_back(std::abs(diff));
-        if (std::abs(diff) > difference)
-        {
-            difference = diff;
-            index = i; // move biggest diff and its index to separate struct
-        }
-    }
-
-    return difference;
-}
-
-double CsvData::GetAvgDifference(const std::vector<double>& num_data)
-{
-    if (num_data.empty())
-    {
-        std::cerr << "No valid data found.\n";
-        return 0;
-    }
-
-    double sum_of_differences {0}, difference {0};
-
-    for (size_t i {1}; i < num_data.size(); ++i)
-    {
-        difference = num_data.at(i) > num_data.at(i - 1) ? num_data.at(i) - num_data.at(i - 1)
-                                                         : num_data.at(i - 1) - num_data.at(i);
-        sum_of_differences += std::abs(difference);
-    }
-
-    double diff_avg = sum_of_differences / num_data.size();
-    return diff_avg;
-}
-
-std::vector<double> CsvData::GetDifferences(const std::vector<double>& num_data)
-{
-    std::vector<double> differences;
-    if (num_data.empty())
-    {
-        std::cerr << "No valid data found.\n";
-        return differences;
-    }
-
-    double difference {0};
-
-    for (size_t i {1}; i < num_data.size(); ++i)
-    {
-        difference = num_data.at(i) > num_data.at(i - 1) ? num_data.at(i) - num_data.at(i - 1)
-                                                         : num_data.at(i - 1) - num_data.at(i);
-        differences.push_back(std::abs(difference));
-    }
-
-    return differences;
-}
-
-std::vector<double> CsvData::GetDeviations(const std::vector<double>& num_data)
-{
-    std::vector<double> deviations;
-    if (num_data.empty())
-    {
-        std::cerr << "No valid data found.\n";
-        return deviations;
-    }
-
-    double deviation {0}, difference {0};
-
-    for (size_t i {1}; i < num_data.size(); ++i)
-    {
-        difference = num_data.at(i) > num_data.at(i - 1) ? num_data.at(i) - num_data.at(i - 1)
-                                                         : num_data.at(i - 1) - num_data.at(i);
-
-        deviation = (std::abs(difference) / num_data.at(i) * 100);
-        deviations.push_back(std::abs(deviation));
-    }
-
-    return deviations;
-}
-
 DiagnosticData CsvData::GetDiagnosticData(const std::vector<double>& prices)
 {
     DiagnosticData data;
-    data.avg_price = GetAvgValue(prices);
-    data.biggest_difference = GetBiggestDifference(prices);
-    data.avg_difference = GetAvgDifference(prices);
-    data.differences = GetDifferences(prices);
-    data.deviations = GetDeviations(prices);
+
+    if (prices.empty())
+    {
+        std::cerr << "No valid data found.\n";
+        return data;
+    }
+
+    double sum_of_differences {0}, sum_of_deviations {0}, biggest_difference {0}, sum_of_prices {0},
+        biggest_deviation {0};
+
+    for (size_t i {1}; i < prices.size(); ++i)
+    {
+        double difference
+            = prices.at(i) > prices.at(i - 1) ? (prices.at(i) - prices.at(i - 1)) : (prices.at(i - 1) - prices.at(i));
+
+        double deviation = (std::abs(difference) / prices.at(i)) * 100; // abs() probably not necessary everywhere
+
+        sum_of_differences += std::abs(difference);
+        sum_of_deviations += std::abs(deviation);
+        data.differences.push_back(std::abs(difference));
+        data.deviations.push_back(std::abs(deviation));
+        sum_of_prices += prices.at(i);
+
+        if (std::abs(difference) > biggest_difference)
+        {
+            biggest_difference = difference;
+            data.biggest_difference_index = i;
+        }
+
+        if (deviation > biggest_deviation)
+        {
+            biggest_deviation = deviation;
+            data.biggest_deviation_index = i;
+        }
+    }
+
+    data.avg_difference = sum_of_differences / prices.size();
+    data.avg_deviation = sum_of_deviations / prices.size();
+    data.avg_price = sum_of_prices / prices.size();
 
     return data;
 }
