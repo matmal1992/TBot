@@ -35,7 +35,7 @@ public:
 
     LoadedData LoadDataFromFile();
     DiagnosticData GetDiagnosticData(const std::vector<double>& prices);
-    void PrintGraph(const LoadedData& data, const std::vector<bool>& opens);
+    void PrintGraph(const LoadedData& data, const std::vector<bool>& opens, const std::vector<bool>& closes);
 
 private:
     std::string path_;

@@ -16,6 +16,7 @@ int main()
     bot_simulator.Iterate();
 
     std::vector<bool> opens = bot_simulator.GetActions().opens;
+    std::vector<bool> closes = bot_simulator.GetActions().closes;
 
     std::cout << "Average Price: " << diagnostic_data.avg_price << std::endl;
 
@@ -27,7 +28,7 @@ int main()
     std::cout << "Biggest deviation: " << diagnostic_data.biggest_deviation << std::endl;
     std::cout << "Biggest deviation index: " << diagnostic_data.biggest_difference_index << std::endl;
 
-    data.PrintGraph(prices, opens); // to do: rescale y axis 10x smaller
+    data.PrintGraph(prices, opens, closes); // to do: rescale y axis 10x smaller
 
     return 0;
 }
