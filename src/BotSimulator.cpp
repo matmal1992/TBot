@@ -22,24 +22,24 @@ bool BotSimulator::IsConstantFall()
 {
     for (size_t i = 1; i < current_records.size(); ++i)
     {
-        if (current_records[i] < current_records[i - 1])
+        if (current_records[i] < current_records[i - 1] and current_records[i - 1] < current_records[i - 2])
         {
-            return false;
+            return true;
         }
     }
-    return true;
+    return false;
 }
 
 bool BotSimulator::IsConstantRise()
 {
-    for (size_t i = 1; i < current_records.size(); ++i)
+    for (size_t i = 2; i < current_records.size(); ++i)
     {
-        if (current_records[i] > current_records[i - 1])
+        if (current_records[i] > current_records[i - 1] and current_records[i - 1] > current_records[i - 2])
         {
-            return false;
+            return true;
         }
     }
-    return true;
+    return false;
 }
 
 bool BotSimulator::IsSuddenRise()
@@ -66,32 +66,59 @@ bool BotSimulator::IsSuddenFall()
     }
     return false;
 }
+bool BotSimulator::SingleFallDetected()
+{
+    for (size_t i = 1; i < current_records.size(); ++i)
+    {
+        if (current_records[i] < current_records[i - 1])
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool BotSimulator::SingleRiseDetected()
+{
+    for (size_t i = 1; i < current_records.size(); ++i)
+    {
+        if (current_records[i] > current_records[i - 1])
+        {
+            return true;
+        }
+    }
+    return false;
+}
 
 void BotSimulator::Iterate()
 {
-    int amount_of_opens {0};
+    int amount_of_opens {0}, amount_of_colses {0};
 
     for (size_t i {0}; i < prices_.size(); ++i)
     {
         AddRecord(i);
-        if (/*IsConstantRise() or */ IsSuddenRise())
+        if ((IsConstantRise() or IsSuddenRise()) and not opened)
         {
             actions.opens.push_back(true);
             actions.closes.push_back(false);
+            opened = true;
             amount_of_opens++;
+        }
+        else if ((IsConstantFall() or IsSuddenFall()) and opened)
+        {
+            actions.opens.push_back(false);
+            actions.closes.push_back(true);
+            opened = false;
+            amount_of_colses++;
         }
         else
         {
             actions.opens.push_back(false);
             actions.closes.push_back(false);
         }
-        // else if (/*IsConstantFall() or */ IsSuddenFall())
-        // {
-        //   actions.opens.at(i) = false;
-        //   actions.closes.at(i) = true;
-        // }
     }
     std::cout << "Size of opens after iteration: " << amount_of_opens << std::endl;
+    std::cout << "Size of closes after iteration: " << amount_of_colses << std::endl;
 }
 
 Actions BotSimulator::GetActions()

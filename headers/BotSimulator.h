@@ -23,15 +23,19 @@ private:
     bool IsConstantRise();
     bool IsSuddenFall();
     bool IsSuddenRise();
+    bool SingleRiseDetected();
+    bool SingleFallDetected();
 
     std::vector<double> prices_;
     std::deque<double> current_records;
     size_t amount_of_current_records = 5;
     double percentage_profit = 0.05;
     double percentage_loss = 0.05;
-    double percentage_peak_profit = 1.001;
-    double percentage_peak_loss = 0.2;
+    double percentage_peak_profit = 1.9;
+    double percentage_peak_loss = 1.9;
     size_t investing_value = 5000;
+
+    bool opened {false};
 
     double balance {0};
     size_t buys {0}, sells {0};

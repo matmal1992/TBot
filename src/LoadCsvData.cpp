@@ -40,11 +40,12 @@ LoadedData CsvData::LoadDataFromFile()
     return data;
 }
 
-void CsvData::PrintGraph(const LoadedData& data, const std::vector<bool>& opens)
+void CsvData::PrintGraph(const LoadedData& data, const std::vector<bool>& opens, const std::vector<bool>& closes)
 {
     // Write data to a temporary file for gnuplot
     std::ofstream tempFile("plot_data.txt");
-    std::ofstream highlightFile("highlight_data.txt"); // New file for markers
+    std::ofstream highlightOpensFile("highlight_opens_data.txt");
+    std::ofstream highlightClosesFile("highlight_closes_data.txt");
 
     for (size_t i = 0; i < data.times.size(); ++i)
     {
@@ -53,20 +54,27 @@ void CsvData::PrintGraph(const LoadedData& data, const std::vector<bool>& opens)
         // Save every 60th point for highlighting
         if (opens.at(i) == true)
         {
-            highlightFile << i << " " << data.prices[i] << "\n";
+            highlightOpensFile << i << " " << data.prices[i] << "\n";
+        }
+        if (closes.at(i) == true)
+        {
+            highlightClosesFile << i << " " << data.prices[i] << "\n";
         }
     }
     tempFile.close();
-    highlightFile.close();
+    highlightOpensFile.close();
+    highlightClosesFile.close();
 
     // Generate gnuplot command with markers
-    std::string command = "gnuplot -e \""
-                          "set title 'US500 Price'; "
-                          "set grid; "
-                          "plot 'plot_data.txt' using 1:2 with lines title 'Price', "
-                          "'highlight_data.txt' using 1:2 with points pointtype 7 pointsize 1.5 lc "
-                          "rgb 'green' title '60-min Markers'; "
-                          "pause -1\"";
+    std::string command
+        = "gnuplot -e \""
+          "set title 'US500 Price'; "
+          "set grid; "
+          "plot 'plot_data.txt' using 1:2 with lines title 'Price', "
+          "'highlight_opens_data.txt' using 1:2 with points pointtype 7 pointsize 1.0 lc rgb 'green' title 'Opens', "
+          "'highlight_closes_data.txt' using 1:2 with points pointtype 7 pointsize 1.0 lc rgb 'red' title 'Closes'; "
+          "pause -1\"";
+
     system(command.c_str());
 }
 
@@ -96,15 +104,15 @@ DiagnosticData CsvData::GetDiagnosticData(const std::vector<double>& prices)
         data.deviations.push_back(std::abs(deviation));
         sum_of_prices += prices.at(i);
 
-        if (std::abs(difference) > biggest_difference)
+        if (difference > biggest_difference)
         {
-            biggest_difference = difference;
+            data.biggest_difference = difference;
             data.biggest_difference_index = i;
         }
 
         if (deviation > biggest_deviation)
         {
-            biggest_deviation = deviation;
+            data.biggest_deviation = deviation;
             data.biggest_deviation_index = i;
         }
     }
