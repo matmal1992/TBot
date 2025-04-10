@@ -135,12 +135,58 @@ double CsvData::GetAvgDifference(const std::vector<double>& num_data)
     return diff_avg;
 }
 
+std::vector<double> CsvData::GetDifferences(const std::vector<double>& num_data)
+{
+    std::vector<double> differences;
+    if (num_data.empty())
+    {
+        std::cerr << "No valid data found.\n";
+        return differences;
+    }
+
+    double difference {0};
+
+    for (size_t i {1}; i < num_data.size(); ++i)
+    {
+        difference = num_data.at(i) > num_data.at(i - 1) ? num_data.at(i) - num_data.at(i - 1)
+                                                         : num_data.at(i - 1) - num_data.at(i);
+        differences.push_back(std::abs(difference));
+    }
+
+    return differences;
+}
+
+std::vector<double> CsvData::GetDeviations(const std::vector<double>& num_data)
+{
+    std::vector<double> deviations;
+    if (num_data.empty())
+    {
+        std::cerr << "No valid data found.\n";
+        return deviations;
+    }
+
+    double deviation {0}, difference {0};
+
+    for (size_t i {1}; i < num_data.size(); ++i)
+    {
+        difference = num_data.at(i) > num_data.at(i - 1) ? num_data.at(i) - num_data.at(i - 1)
+                                                         : num_data.at(i - 1) - num_data.at(i);
+
+        deviation = (std::abs(difference) / num_data.at(i) * 100);
+        deviations.push_back(std::abs(deviation));
+    }
+
+    return deviations;
+}
+
 DiagnosticData CsvData::GetDiagnosticData(const std::vector<double>& prices)
 {
     DiagnosticData data;
     data.avg_price = GetAvgValue(prices);
     data.biggest_difference = GetBiggestDifference(prices);
     data.avg_difference = GetAvgDifference(prices);
+    data.differences = GetDifferences(prices);
+    data.deviations = GetDeviations(prices);
 
     return data;
 }
