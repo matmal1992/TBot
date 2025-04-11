@@ -26,6 +26,9 @@ private:
     bool SingleRiseDetected();
     bool SingleFallDetected();
 
+    void ActWithMoerComplicatedStrategy();
+    void ActWithSimpleStrategy();
+
     std::vector<double> prices_;
     std::deque<double> current_records;
     size_t amount_of_current_records = 5;
