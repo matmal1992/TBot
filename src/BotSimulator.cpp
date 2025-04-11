@@ -68,10 +68,15 @@ bool BotSimulator::IsSuddenFall()
 }
 bool BotSimulator::SingleFallDetected()
 {
+    PrintVector(current_records);
+
     for (size_t i = 1; i < current_records.size(); ++i)
     {
         if (current_records[i] < current_records[i - 1])
         {
+            std::cout << std::endl << "Single fall detected" << std::endl;
+            std::cout << "current_records[i]: " << current_records[i] << std::endl;
+            std::cout << "current_records[i - 1]: " << current_records[i - 1] << std::endl << std::endl;
             return true;
         }
     }
@@ -92,8 +97,6 @@ bool BotSimulator::SingleRiseDetected()
 
 void BotSimulator::Iterate()
 {
-    int amount_of_opens {0}, amount_of_colses {0};
-
     for (size_t i {0}; i < prices_.size(); ++i)
     {
         AddRecord(i);
@@ -146,4 +149,15 @@ void BotSimulator::ActWithMoerComplicatedStrategy()
 Actions BotSimulator::GetActions()
 {
     return actions;
+}
+
+void BotSimulator::PrintVector(const std::deque<double>& vec)
+{
+    std::cout << "current_records: ";
+    for (auto c : vec)
+    {
+        std::cout << c;
+        std::cout << " ";
+    }
+    std::cout << std::endl;
 }

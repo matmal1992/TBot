@@ -29,6 +29,8 @@ private:
     void ActWithMoerComplicatedStrategy();
     void ActWithSimpleStrategy();
 
+    void PrintVector(const std::deque<double>& vec);
+
     std::vector<double> prices_;
     std::deque<double> current_records;
     size_t amount_of_current_records = 5;
