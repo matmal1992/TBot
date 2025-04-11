@@ -7,12 +7,6 @@
 #include <sstream>
 #include <vector>
 
-struct LoadedData
-{
-    std::vector<double> prices;
-    std::vector<std::string> times;
-};
-
 struct DiagnosticData
 {
     std::vector<double> differences;
@@ -33,13 +27,15 @@ class CsvData
 public:
     CsvData(const std::string& path);
 
-    LoadedData LoadDataFromFile();
     DiagnosticData GetDiagnosticData(const std::vector<double>& prices);
-    void PrintGraph(const LoadedData& data, const DiagnosticData&, const std::vector<bool>& opens,
-                    const std::vector<bool>& closes);
+    void PrintGraph(const DiagnosticData&, const std::vector<bool>& opens, const std::vector<bool>& closes);
 
 private:
+    void ReadDataFromFile();
+
     std::string path_;
+    std::vector<double> prices;
+    std::vector<std::string> times;
 };
 
 #endif
