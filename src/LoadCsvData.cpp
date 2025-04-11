@@ -73,7 +73,7 @@ void CsvData::PrintGraph(const LoadedData& data, const DiagnosticData& diag_data
                 << "            MAX dev: " << diag_data.biggest_deviation
                 << "            MAX dev index: " << diag_data.biggest_deviation_index;
 
-    std::string command = "gnuplot -e \""
+    std::string command = "start \"\" gnuplot -e \""
                           "set title '"
         + titleStream.str()
         + "'; "
