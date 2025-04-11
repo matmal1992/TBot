@@ -97,28 +97,50 @@ void BotSimulator::Iterate()
     for (size_t i {0}; i < prices_.size(); ++i)
     {
         AddRecord(i);
-        if ((IsConstantRise() or IsSuddenRise()) and not opened)
-        {
-            actions.opens.push_back(true);
-            actions.closes.push_back(false);
-            opened = true;
-            amount_of_opens++;
-        }
-        else if ((IsConstantFall() or IsSuddenFall()) and opened)
-        {
-            actions.opens.push_back(false);
-            actions.closes.push_back(true);
-            opened = false;
-            amount_of_colses++;
-        }
-        else
-        {
-            actions.opens.push_back(false);
-            actions.closes.push_back(false);
-        }
+        ActWithSimpleStrategy();
     }
-    std::cout << "Size of opens after iteration: " << amount_of_opens << std::endl;
-    std::cout << "Size of closes after iteration: " << amount_of_colses << std::endl;
+}
+
+void BotSimulator::ActWithSimpleStrategy()
+{
+    if (SingleRiseDetected() and not opened)
+    {
+        actions.opens.push_back(true);
+        actions.closes.push_back(false);
+        opened = true;
+    }
+    else if (SingleFallDetected() and opened)
+    {
+        actions.opens.push_back(false);
+        actions.closes.push_back(true);
+        opened = false;
+    }
+    else
+    {
+        actions.opens.push_back(false);
+        actions.closes.push_back(false);
+    }
+}
+
+void BotSimulator::ActWithMoerComplicatedStrategy()
+{
+    if ((IsConstantRise() or IsSuddenRise()) and not opened)
+    {
+        actions.opens.push_back(true);
+        actions.closes.push_back(false);
+        opened = true;
+    }
+    else if ((IsConstantFall() or IsSuddenFall()) and opened)
+    {
+        actions.opens.push_back(false);
+        actions.closes.push_back(true);
+        opened = false;
+    }
+    else
+    {
+        actions.opens.push_back(false);
+        actions.closes.push_back(false);
+    }
 }
 
 Actions BotSimulator::GetActions()
