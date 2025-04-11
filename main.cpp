@@ -7,19 +7,11 @@ int main()
     for (int i {0}; i < test_prices.size(); ++i) { test_dates.push_back(std::to_string(i)); }
 
     CsvData data("US500_prices.csv");
-    // LoadedData prices = data.LoadDataFromFile();
-    LoadedData prices {test_prices, test_dates};
-    // BotSimulator bot_simulator(prices.prices);
     BotSimulator bot_simulator(test_prices);
-    // DiagnosticData diagnostic_data = data.GetDiagnosticData(prices.prices);
     DiagnosticData diagnostic_data = data.GetDiagnosticData(test_prices);
 
-    bot_simulator.Iterate();
-
-    std::vector<bool> opens = bot_simulator.GetActions().opens;
-    std::vector<bool> closes = bot_simulator.GetActions().closes;
-
-    data.PrintGraph(prices, diagnostic_data, opens, closes); // to do: rescale y axis 10x smaller
+    // data.PrintGraph(diagnostic_data, bot_simulator.GetOpens(), bot_simulator.GetCloses());
+    data.PrintGraph(diagnostic_data, bot_simulator.GetOpens(), bot_simulator.GetCloses());
 
     return 0;
 }

@@ -3,23 +3,20 @@
 CsvData::CsvData(const std::string& path)
     : path_(path)
 {
+    ReadDataFromFile();
 }
 
-LoadedData CsvData::LoadDataFromFile()
+void CsvData::ReadDataFromFile()
 {
-    LoadedData data;
-
     std::ifstream file(path_);
     if (!file)
     {
         std::cerr << "Error: Unable to open file.\n";
-        return data; // to do: better error hadndling
+        return; // to do: better error hadndling
     }
 
     std::string line;
-
-    // Skip the first line (header)
-    std::getline(file, line);
+    std::getline(file, line); // Skip the first line (header)
 
     while (std::getline(file, line))
     {
@@ -30,34 +27,32 @@ LoadedData CsvData::LoadDataFromFile()
         std::getline(ss, priceStr, ',');
 
         double price = std::stod(priceStr);
-        data.prices.push_back(price);
-        data.times.push_back(date);
+        prices.push_back(price);
+        times.push_back(date);
         // to do: invalid data hadndling
     }
 
     file.close();
-    return data;
 }
 
-void CsvData::PrintGraph(const LoadedData& data, const DiagnosticData& diag_data, const std::vector<bool>& opens,
+void CsvData::PrintGraph(const DiagnosticData& diag_data, const std::vector<bool>& opens,
                          const std::vector<bool>& closes)
 {
-    // Write data to a temporary file for gnuplot
     std::ofstream tempFile("plot_data.txt");
     std::ofstream highlightOpensFile("highlight_opens_data.txt");
     std::ofstream highlightClosesFile("highlight_closes_data.txt");
 
-    for (size_t i = 0; i < data.times.size(); ++i)
+    for (size_t i {0}; i < times.size(); ++i)
     {
-        tempFile << i << " " << data.prices[i] << "\n"; // Use index instead of time for x-axis
+        tempFile << i << " " << prices.at(i) << "\n";
 
         if (opens.at(i) == true)
         {
-            highlightOpensFile << i << " " << data.prices[i] << "\n";
+            highlightOpensFile << i << " " << prices.at(i) << "\n";
         }
         if (closes.at(i) == true)
         {
-            highlightClosesFile << i << " " << data.prices[i] << "\n";
+            highlightClosesFile << i << " " << prices.at(i) << "\n";
         }
     }
     tempFile.close();
@@ -73,6 +68,7 @@ void CsvData::PrintGraph(const LoadedData& data, const DiagnosticData& diag_data
                 << "            MAX dev: " << diag_data.biggest_deviation
                 << "            MAX dev index: " << diag_data.biggest_deviation_index;
 
+    // to do: rescale y axis 10x smaller
     std::string command = "start \"\" gnuplot -e \""
                           "set title '"
         + titleStream.str()

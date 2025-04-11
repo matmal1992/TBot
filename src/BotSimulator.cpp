@@ -3,6 +3,7 @@
 BotSimulator::BotSimulator(const std::vector<double>& prices)
     : prices_(prices)
 {
+    Iterate();
 }
 
 void BotSimulator::AddRecord(int record_index)
@@ -85,10 +86,15 @@ bool BotSimulator::SingleFallDetected()
 
 bool BotSimulator::SingleRiseDetected()
 {
+    PrintVector(current_records);
+
     for (size_t i = 1; i < current_records.size(); ++i)
     {
         if (current_records[i] > current_records[i - 1])
         {
+            std::cout << std::endl << "Single rise detected" << std::endl;
+            std::cout << "current_records[i]: " << current_records[i] << std::endl;
+            std::cout << "current_records[i - 1]: " << current_records[i - 1] << std::endl << std::endl;
             return true;
         }
     }
@@ -106,49 +112,44 @@ void BotSimulator::Iterate()
 
 void BotSimulator::ActWithSimpleStrategy()
 {
-    if (SingleRiseDetected() and not opened)
+    if (SingleRiseDetected() and not position_opened)
     {
-        actions.opens.push_back(true);
-        actions.closes.push_back(false);
-        opened = true;
+        opens.push_back(true);
+        closes.push_back(false);
+        position_opened = true;
     }
-    else if (SingleFallDetected() and opened)
+    else if (SingleFallDetected() and position_opened)
     {
-        actions.opens.push_back(false);
-        actions.closes.push_back(true);
-        opened = false;
+        opens.push_back(false);
+        closes.push_back(true);
+        position_opened = false;
     }
     else
     {
-        actions.opens.push_back(false);
-        actions.closes.push_back(false);
+        opens.push_back(false);
+        closes.push_back(false);
     }
 }
 
 void BotSimulator::ActWithMoerComplicatedStrategy()
 {
-    if ((IsConstantRise() or IsSuddenRise()) and not opened)
+    if ((IsConstantRise() or IsSuddenRise()) and not position_opened)
     {
-        actions.opens.push_back(true);
-        actions.closes.push_back(false);
-        opened = true;
+        opens.push_back(true);
+        closes.push_back(false);
+        position_opened = true;
     }
-    else if ((IsConstantFall() or IsSuddenFall()) and opened)
+    else if ((IsConstantFall() or IsSuddenFall()) and position_opened)
     {
-        actions.opens.push_back(false);
-        actions.closes.push_back(true);
-        opened = false;
+        opens.push_back(false);
+        closes.push_back(true);
+        position_opened = false;
     }
     else
     {
-        actions.opens.push_back(false);
-        actions.closes.push_back(false);
+        opens.push_back(false);
+        closes.push_back(false);
     }
-}
-
-Actions BotSimulator::GetActions()
-{
-    return actions;
 }
 
 void BotSimulator::PrintVector(const std::deque<double>& vec)
@@ -160,4 +161,14 @@ void BotSimulator::PrintVector(const std::deque<double>& vec)
         std::cout << " ";
     }
     std::cout << std::endl;
+}
+
+std::vector<bool> BotSimulator::GetOpens()
+{
+    return opens;
+}
+
+std::vector<bool> BotSimulator::GetCloses()
+{
+    return closes;
 }

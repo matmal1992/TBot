@@ -4,21 +4,15 @@
 #include "LoadCsvData.h"
 #include <deque>
 
-struct Actions
-{
-    std::vector<bool> opens;
-    std::vector<bool> closes;
-};
 class BotSimulator
 {
 public:
     BotSimulator(const std::vector<double>& prices);
 
-    void Iterate();
-    Actions GetActions();
+    std::vector<bool> GetOpens();
+    std::vector<bool> GetCloses();
 
 private:
-    void AddRecord(int record_index);
     bool IsConstantFall();
     bool IsConstantRise();
     bool IsSuddenFall();
@@ -26,9 +20,10 @@ private:
     bool SingleRiseDetected();
     bool SingleFallDetected();
 
+    void Iterate();
+    void AddRecord(int record_index);
     void ActWithMoerComplicatedStrategy();
     void ActWithSimpleStrategy();
-
     void PrintVector(const std::deque<double>& vec);
 
     std::vector<double> prices_;
@@ -40,11 +35,10 @@ private:
     double percentage_peak_loss = 1.9;
     size_t investing_value = 5000;
 
-    bool opened {false};
-
+    bool position_opened {false};
     double balance {0};
-    size_t buys {0}, sells {0};
-    Actions actions;
+    std::vector<bool> opens;
+    std::vector<bool> closes;
 };
 
 #endif
