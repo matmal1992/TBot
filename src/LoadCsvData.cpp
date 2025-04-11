@@ -78,9 +78,11 @@ void CsvData::PrintGraph(const LoadedData& data, const DiagnosticData& diag_data
         + titleStream.str()
         + "'; "
           "set grid; "
-          "plot 'plot_data.txt' using 1:2 with lines title 'Price', "
-          "'highlight_opens_data.txt' using 1:2 with points pointtype 7 pointsize 1.0 lc rgb 'green' title 'Opens', "
-          "'highlight_closes_data.txt' using 1:2 with points pointtype 7 pointsize 1.0 lc rgb 'red' title 'Closes'; "
+          "unset key; "
+          "set xtics 1; "
+          "plot 'plot_data.txt' using 1:2 with lines, "
+          "'highlight_opens_data.txt' using 1:2 with points pointtype 7 pointsize 1.0 lc rgb 'green', "
+          "'highlight_closes_data.txt' using 1:2 with points pointtype 7 pointsize 1.0 lc rgb 'red'; "
           "pause -1\"";
 
     system(command.c_str());
