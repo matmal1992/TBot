@@ -8,9 +8,7 @@ class BotSimulator
 {
 public:
     BotSimulator(const std::vector<double>& prices);
-
-    std::vector<bool> GetOpens();
-    std::vector<bool> GetCloses();
+    std::vector<std::pair<bool, bool>> GetActions();
 
 private:
     bool IsConstantFall();
@@ -22,7 +20,7 @@ private:
 
     void Iterate();
     void AddRecord(int record_index);
-    void ActWithMoerComplicatedStrategy();
+    // void ActWithMoerComplicatedStrategy();
     void ActWithSimpleStrategy();
     void PrintVector(const std::deque<double>& vec);
 
@@ -37,8 +35,9 @@ private:
 
     bool position_opened {false};
     double balance {0};
-    std::vector<bool> opens;
-    std::vector<bool> closes;
+
+    // first -> open_pos | second -> close_pos
+    std::vector<std::pair<bool, bool>> actions;
 };
 
 #endif

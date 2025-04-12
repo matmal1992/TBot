@@ -6,6 +6,15 @@ CsvData::CsvData(const std::string& path)
     ReadDataFromFile();
 }
 
+CsvData::CsvData(const std::vector<double>& test_data)
+    : prices(test_data)
+{
+    if (test_data.empty())
+    {
+        std::cerr << "No valid data found.\n";
+    }
+}
+
 void CsvData::ReadDataFromFile()
 {
     std::ifstream file(path_);
@@ -28,29 +37,28 @@ void CsvData::ReadDataFromFile()
 
         double price = std::stod(priceStr);
         prices.push_back(price);
-        times.push_back(date);
+        // times.push_back(date); leave to release version
         // to do: invalid data hadndling
     }
 
     file.close();
 }
 
-void CsvData::PrintGraph(const DiagnosticData& diag_data, const std::vector<bool>& opens,
-                         const std::vector<bool>& closes)
+void CsvData::PrintGraph(const DiagnosticData& diag_data, const std::vector<std::pair<bool, bool>>& actions)
 {
     std::ofstream tempFile("plot_data.txt");
     std::ofstream highlightOpensFile("highlight_opens_data.txt");
     std::ofstream highlightClosesFile("highlight_closes_data.txt");
 
-    for (size_t i {0}; i < times.size(); ++i)
+    for (size_t i {0}; i < prices.size(); ++i)
     {
         tempFile << i << " " << prices.at(i) << "\n";
 
-        if (opens.at(i) == true)
+        if (actions.at(i).first == true)
         {
             highlightOpensFile << i << " " << prices.at(i) << "\n";
         }
-        if (closes.at(i) == true)
+        if (actions.at(i).second == true)
         {
             highlightClosesFile << i << " " << prices.at(i) << "\n";
         }
@@ -84,7 +92,7 @@ void CsvData::PrintGraph(const DiagnosticData& diag_data, const std::vector<bool
     system(command.c_str());
 }
 
-DiagnosticData CsvData::GetDiagnosticData(const std::vector<double>& prices)
+DiagnosticData CsvData::GetDiagnosticData()
 {
     DiagnosticData data;
 

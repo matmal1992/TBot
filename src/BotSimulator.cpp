@@ -69,15 +69,15 @@ bool BotSimulator::IsSuddenFall()
 }
 bool BotSimulator::SingleFallDetected()
 {
-    PrintVector(current_records);
+    // PrintVector(current_records);
 
     for (size_t i = 1; i < current_records.size(); ++i)
     {
         if (current_records[i] < current_records[i - 1])
         {
-            std::cout << std::endl << "Single fall detected" << std::endl;
-            std::cout << "current_records[i]: " << current_records[i] << std::endl;
-            std::cout << "current_records[i - 1]: " << current_records[i - 1] << std::endl << std::endl;
+            // std::cout << std::endl << "Single fall detected" << std::endl;
+            // std::cout << "current_records[i]: " << current_records[i] << std::endl;
+            // std::cout << "current_records[i - 1]: " << current_records[i - 1] << std::endl << std::endl;
             return true;
         }
     }
@@ -86,15 +86,15 @@ bool BotSimulator::SingleFallDetected()
 
 bool BotSimulator::SingleRiseDetected()
 {
-    PrintVector(current_records);
+    // PrintVector(current_records);
 
     for (size_t i = 1; i < current_records.size(); ++i)
     {
         if (current_records[i] > current_records[i - 1])
         {
-            std::cout << std::endl << "Single rise detected" << std::endl;
-            std::cout << "current_records[i]: " << current_records[i] << std::endl;
-            std::cout << "current_records[i - 1]: " << current_records[i - 1] << std::endl << std::endl;
+            // std::cout << std::endl << "Single rise detected" << std::endl;
+            // std::cout << "current_records[i]: " << current_records[i] << std::endl;
+            // std::cout << "current_records[i - 1]: " << current_records[i - 1] << std::endl << std::endl;
             return true;
         }
     }
@@ -114,43 +114,40 @@ void BotSimulator::ActWithSimpleStrategy()
 {
     if (SingleRiseDetected() and not position_opened)
     {
-        opens.push_back(true);
-        closes.push_back(false);
+        actions.push_back(std::pair(true, false));
         position_opened = true;
     }
     else if (SingleFallDetected() and position_opened)
     {
-        opens.push_back(false);
-        closes.push_back(true);
+        actions.push_back(std::pair(false, true));
         position_opened = false;
     }
     else
     {
-        opens.push_back(false);
-        closes.push_back(false);
+        actions.push_back(std::pair(false, false));
     }
 }
 
-void BotSimulator::ActWithMoerComplicatedStrategy()
-{
-    if ((IsConstantRise() or IsSuddenRise()) and not position_opened)
-    {
-        opens.push_back(true);
-        closes.push_back(false);
-        position_opened = true;
-    }
-    else if ((IsConstantFall() or IsSuddenFall()) and position_opened)
-    {
-        opens.push_back(false);
-        closes.push_back(true);
-        position_opened = false;
-    }
-    else
-    {
-        opens.push_back(false);
-        closes.push_back(false);
-    }
-}
+// void BotSimulator::ActWithMoerComplicatedStrategy()
+// {
+//     if ((IsConstantRise() or IsSuddenRise()) and not position_opened)
+//     {
+//         opens.push_back(true);
+//         closes.push_back(false);
+//         position_opened = true;
+//     }
+//     else if ((IsConstantFall() or IsSuddenFall()) and position_opened)
+//     {
+//         opens.push_back(false);
+//         closes.push_back(true);
+//         position_opened = false;
+//     }
+//     else
+//     {
+//         opens.push_back(false);
+//         closes.push_back(false);
+//     }
+// }
 
 void BotSimulator::PrintVector(const std::deque<double>& vec)
 {
@@ -163,12 +160,7 @@ void BotSimulator::PrintVector(const std::deque<double>& vec)
     std::cout << std::endl;
 }
 
-std::vector<bool> BotSimulator::GetOpens()
+std::vector<std::pair<bool, bool>> BotSimulator::GetActions()
 {
-    return opens;
-}
-
-std::vector<bool> BotSimulator::GetCloses()
-{
-    return closes;
+    return actions;
 }

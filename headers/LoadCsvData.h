@@ -26,16 +26,17 @@ class CsvData
 {
 public:
     CsvData(const std::string& path);
+    CsvData(const std::vector<double>& test_data);
 
-    DiagnosticData GetDiagnosticData(const std::vector<double>& prices);
-    void PrintGraph(const DiagnosticData&, const std::vector<bool>& opens, const std::vector<bool>& closes);
+    DiagnosticData GetDiagnosticData();
+    void PrintGraph(const DiagnosticData& diag_data, const std::vector<std::pair<bool, bool>>& actions);
 
 private:
     void ReadDataFromFile();
 
     std::string path_;
     std::vector<double> prices;
-    std::vector<std::string> times;
+    // std::vector<std::string> times; // leave times for release version
 };
 
 #endif
