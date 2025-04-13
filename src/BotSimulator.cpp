@@ -148,21 +148,23 @@ void BotSimulator::Iterate()
     for (size_t i {0}; i < prices_.size(); ++i)
     {
         AddRecord(i);
-        ActWithSimpleStrategy();
+        ActWithSimpleStrategy(i);
     }
 }
 
-void BotSimulator::ActWithSimpleStrategy()
+void BotSimulator::ActWithSimpleStrategy(size_t price_index)
 {
-    if (TwoRisesInRow() and not position_opened)
+    if (SingleRise() and not position_opened)
     {
         actions.push_back(std::pair(true, false));
         position_opened = true;
+        open_value = prices_.at(price_index);
     }
     else if (SingleFall() and position_opened)
     {
         actions.push_back(std::pair(false, true));
         position_opened = false;
+        balance += prices_.at(price_index) - open_value;
     }
     else
     {
@@ -205,4 +207,9 @@ void BotSimulator::PrintVector(const std::deque<double>& vec)
 std::vector<std::pair<bool, bool>> BotSimulator::GetActions()
 {
     return actions;
+}
+
+double BotSimulator::GetBalance()
+{
+    return balance;
 }
