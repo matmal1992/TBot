@@ -83,7 +83,7 @@ void CsvData::PrintGraph(const DiagnosticData& diag_data, const std::vector<std:
         + "'; "
           "set grid; "
           "unset key; "
-          "set xtics 1; "
+          //   "set xtics 1; "
           "plot 'plot_data.txt' using 1:2 with lines, "
           "'highlight_opens_data.txt' using 1:2 with points pointtype 7 pointsize 1.0 lc rgb 'green', "
           "'highlight_closes_data.txt' using 1:2 with points pointtype 7 pointsize 1.0 lc rgb 'red'; "
@@ -136,4 +136,9 @@ DiagnosticData CsvData::GetDiagnosticData()
     data.avg_price = sum_of_prices / prices.size();
 
     return data;
+}
+
+std::vector<double> CsvData::GetPrices()
+{
+    return prices;
 }
