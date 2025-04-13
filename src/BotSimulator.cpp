@@ -1,14 +1,16 @@
 #include "..\headers\BotSimulator.h"
 
-BotSimulator::BotSimulator(const std::vector<double>& prices)
+BotSimulator::BotSimulator(const std::vector<double>& prices, const int short_period, const int long_period)
     : prices_(prices)
+    , short_period_(short_period)
+    , long_period_(long_period)
 {
     Iterate();
 }
 
 void BotSimulator::AddRecord(int record_index)
 {
-    if (current_records.size() < 5)
+    if (current_records.size() < long_period_)
     {
         current_records.push_back(prices_.at(record_index));
     }
@@ -67,20 +69,7 @@ bool BotSimulator::IsSuddenFall()
     }
     return false;
 }
-// bool BotSimulator::SingleFallDetected()
-// {
-//     for (size_t i = 1; i < current_records.size(); ++i)
-//     {
-//         if (current_records[i] < current_records[i - 1])
-//         {
-//             std::cout << "Single fall detected" << std::endl;
-//             std::cout << "current_records[i]: " << current_records[i] << std::endl;
-//             std::cout << "current_records[i - 1]: " << current_records[i - 1] << std::endl;
-//             return true;
-//         }
-//     }
-//     return false;
-// }
+
 bool BotSimulator::SingleFall()
 {
     size_t size = current_records.size();
@@ -104,21 +93,6 @@ bool BotSimulator::TwoFallsInRow()
 
     return false;
 }
-
-// bool BotSimulator::SingleRiseDetected()
-// {
-//     for (size_t i = 1; i < current_records.size(); ++i)
-//     {
-//         if (current_records[i] > current_records[i - 1])
-//         {
-//             std::cout << "Single rise detected" << std::endl;
-//             std::cout << "current_records[i]: " << current_records[i] << std::endl;
-//             std::cout << "current_records[i - 1]: " << current_records[i - 1] << std::endl;
-//             return true;
-//         }
-//     }
-//     return false;
-// }
 
 bool BotSimulator::SingleRise()
 {
@@ -148,7 +122,8 @@ void BotSimulator::Iterate()
     for (size_t i {0}; i < prices_.size(); ++i)
     {
         AddRecord(i);
-        ActWithSimpleStrategy(i);
+        // ActWithSimpleStrategy(i);
+        ActWithLongAndShortStrategy();
     }
 }
 
@@ -172,26 +147,33 @@ void BotSimulator::ActWithSimpleStrategy(size_t price_index)
     }
 }
 
-// void BotSimulator::ActWithMoerComplicatedStrategy()
-// {
-//     if ((IsConstantRise() or IsSuddenRise()) and not position_opened)
-//     {
-//         opens.push_back(true);
-//         closes.push_back(false);
-//         position_opened = true;
-//     }
-//     else if ((IsConstantFall() or IsSuddenFall()) and position_opened)
-//     {
-//         opens.push_back(false);
-//         closes.push_back(true);
-//         position_opened = false;
-//     }
-//     else
-//     {
-//         opens.push_back(false);
-//         closes.push_back(false);
-//     }
-// }
+void BotSimulator::ActWithLongAndShortStrategy()
+{
+    double short_period_avg = CalculateAverage(short_period_);
+    double long_period_avg = CalculateAverage(long_period_);
+
+    if (current_records.size() < long_period_)
+    {
+        return;
+    }
+
+    if (short_period_avg > long_period_avg)
+    {
+        actions.push_back(std::pair(true, false));
+        position_opened = true;
+        open_value = current_records.at(current_records.size() - 1); // end()
+    }
+    else if (short_period_avg < long_period_avg)
+    {
+        actions.push_back(std::pair(false, true));
+        position_opened = false;
+        balance += current_records.at(current_records.size() - 1) - open_value;
+    }
+    else
+    {
+        actions.push_back(std::pair(false, false));
+    }
+}
 
 void BotSimulator::PrintVector(const std::deque<double>& vec)
 {
@@ -212,4 +194,16 @@ std::vector<std::pair<bool, bool>> BotSimulator::GetActions()
 double BotSimulator::GetBalance()
 {
     return balance;
+}
+
+double BotSimulator::CalculateAverage(int period)
+{
+    if (current_records.size() < period)
+    {
+        return 0.0;
+    }
+    else
+    {
+        return std::accumulate(current_records.end() - period, current_records.end(), 0.0) / period;
+    }
 }
