@@ -67,36 +67,54 @@ bool BotSimulator::IsSuddenFall()
     }
     return false;
 }
+// bool BotSimulator::SingleFallDetected()
+// {
+//     for (size_t i = 1; i < current_records.size(); ++i)
+//     {
+//         if (current_records[i] < current_records[i - 1])
+//         {
+//             std::cout << "Single fall detected" << std::endl;
+//             std::cout << "current_records[i]: " << current_records[i] << std::endl;
+//             std::cout << "current_records[i - 1]: " << current_records[i - 1] << std::endl;
+//             return true;
+//         }
+//     }
+//     return false;
+// }
 bool BotSimulator::SingleFallDetected()
 {
-    // PrintVector(current_records);
+    size_t size = current_records.size();
 
-    for (size_t i = 1; i < current_records.size(); ++i)
+    if (size > 1 and (current_records.at(size - 1) < current_records.at(size - 2)))
     {
-        if (current_records[i] < current_records[i - 1])
-        {
-            // std::cout << std::endl << "Single fall detected" << std::endl;
-            // std::cout << "current_records[i]: " << current_records[i] << std::endl;
-            // std::cout << "current_records[i - 1]: " << current_records[i - 1] << std::endl << std::endl;
-            return true;
-        }
+        return true;
     }
+
     return false;
 }
 
+// bool BotSimulator::SingleRiseDetected()
+// {
+//     for (size_t i = 1; i < current_records.size(); ++i)
+//     {
+//         if (current_records[i] > current_records[i - 1])
+//         {
+//             std::cout << "Single rise detected" << std::endl;
+//             std::cout << "current_records[i]: " << current_records[i] << std::endl;
+//             std::cout << "current_records[i - 1]: " << current_records[i - 1] << std::endl;
+//             return true;
+//         }
+//     }
+//     return false;
+// }
+
 bool BotSimulator::SingleRiseDetected()
 {
-    // PrintVector(current_records);
+    size_t size = current_records.size();
 
-    for (size_t i = 1; i < current_records.size(); ++i)
+    if (size > 1 and (current_records.at(size - 1) > current_records.at(size - 2)))
     {
-        if (current_records[i] > current_records[i - 1])
-        {
-            // std::cout << std::endl << "Single rise detected" << std::endl;
-            // std::cout << "current_records[i]: " << current_records[i] << std::endl;
-            // std::cout << "current_records[i - 1]: " << current_records[i - 1] << std::endl << std::endl;
-            return true;
-        }
+        return true;
     }
     return false;
 }
@@ -105,6 +123,7 @@ void BotSimulator::Iterate()
 {
     for (size_t i {0}; i < prices_.size(); ++i)
     {
+        PrintVector(current_records);
         AddRecord(i);
         ActWithSimpleStrategy();
     }
@@ -151,7 +170,7 @@ void BotSimulator::ActWithSimpleStrategy()
 
 void BotSimulator::PrintVector(const std::deque<double>& vec)
 {
-    std::cout << "current_records: ";
+    std::cout << std::endl << "current_records: ";
     for (auto c : vec)
     {
         std::cout << c;
