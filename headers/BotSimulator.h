@@ -15,8 +15,10 @@ private:
     bool IsConstantRise();
     bool IsSuddenFall();
     bool IsSuddenRise();
-    bool SingleRiseDetected();
-    bool SingleFallDetected();
+    bool SingleRise();
+    bool SingleFall();
+    bool TwoRisesInRow();
+    bool TwoFallsInRow();
 
     void Iterate();
     void AddRecord(int record_index);

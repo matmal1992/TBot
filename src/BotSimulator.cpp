@@ -81,11 +81,23 @@ bool BotSimulator::IsSuddenFall()
 //     }
 //     return false;
 // }
-bool BotSimulator::SingleFallDetected()
+bool BotSimulator::SingleFall()
 {
     size_t size = current_records.size();
 
     if (size > 1 and (current_records.at(size - 1) < current_records.at(size - 2)))
+    {
+        return true;
+    }
+
+    return false;
+}
+
+bool BotSimulator::TwoFallsInRow()
+{
+    size_t size = current_records.size();
+
+    if (size > 2 and (current_records.at(size - 1) < current_records.at(size - 2)))
     {
         return true;
     }
@@ -108,7 +120,7 @@ bool BotSimulator::SingleFallDetected()
 //     return false;
 // }
 
-bool BotSimulator::SingleRiseDetected()
+bool BotSimulator::SingleRise()
 {
     size_t size = current_records.size();
 
@@ -119,11 +131,22 @@ bool BotSimulator::SingleRiseDetected()
     return false;
 }
 
+bool BotSimulator::TwoRisesInRow()
+{
+    size_t size = current_records.size();
+
+    if (size > 2 and (current_records.at(size - 1) > current_records.at(size - 2))
+        and (current_records.at(size - 2) > current_records.at(size - 3)))
+    {
+        return true;
+    }
+    return false;
+}
+
 void BotSimulator::Iterate()
 {
     for (size_t i {0}; i < prices_.size(); ++i)
     {
-        PrintVector(current_records);
         AddRecord(i);
         ActWithSimpleStrategy();
     }
@@ -131,12 +154,12 @@ void BotSimulator::Iterate()
 
 void BotSimulator::ActWithSimpleStrategy()
 {
-    if (SingleRiseDetected() and not position_opened)
+    if (TwoRisesInRow() and not position_opened)
     {
         actions.push_back(std::pair(true, false));
         position_opened = true;
     }
-    else if (SingleFallDetected() and position_opened)
+    else if (SingleFall() and position_opened)
     {
         actions.push_back(std::pair(false, true));
         position_opened = false;
