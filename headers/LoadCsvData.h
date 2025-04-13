@@ -25,7 +25,7 @@ struct DiagnosticData
 class CsvData
 {
 public:
-    CsvData(const std::string& path);
+    CsvData(const std::string& path, const int time_interval = 0);
     CsvData(const std::vector<double>& test_data);
 
     DiagnosticData GetDiagnosticData();
@@ -37,6 +37,7 @@ private:
 
     std::string path_;
     std::vector<double> prices;
+    int time_interval_;
     // std::vector<std::string> times; // for release version
 };
 
