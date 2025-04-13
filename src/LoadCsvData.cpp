@@ -1,7 +1,8 @@
 #include "../headers/LoadCsvData.h"
 
-CsvData::CsvData(const std::string& path)
+CsvData::CsvData(const std::string& path, const int time_interval)
     : path_(path)
+    , time_interval_(time_interval)
 {
     ReadDataFromFile();
 }
@@ -27,6 +28,8 @@ void CsvData::ReadDataFromFile()
     std::string line;
     std::getline(file, line); // Skip the first line (header)
 
+    int counter {0};
+
     while (std::getline(file, line))
     {
         std::stringstream ss(line);
@@ -36,9 +39,14 @@ void CsvData::ReadDataFromFile()
         std::getline(ss, priceStr, ',');
 
         double price = std::stod(priceStr);
-        prices.push_back(price);
-        // times.push_back(date); leave to release version
-        // to do: invalid data hadndling
+
+        if (counter % time_interval_ == 0)
+        {
+            prices.push_back(price);
+            // times.push_back(date); leave to release version
+            // to do: invalid data hadndling
+        }
+        counter++;
     }
 
     file.close();
