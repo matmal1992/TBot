@@ -10,14 +10,14 @@
 struct DiagnosticData
 {
     std::vector<double> differences;
-    double biggest_difference {};
-    double avg_difference {};
+    double biggest_difference {0};
+    double avg_difference {0};
 
     std::vector<double> deviations;
-    double biggest_deviation {};
-    double avg_deviation {};
+    double biggest_deviation {0};
+    double avg_deviation {0};
 
-    double avg_price {};
+    double avg_price {0};
     int biggest_difference_index {0};
     int biggest_deviation_index {0};
 };
@@ -36,7 +36,7 @@ private:
 
     std::string path_;
     std::vector<double> prices;
-    // std::vector<std::string> times; // leave times for release version
+    // std::vector<std::string> times; // for release version
 };
 
 #endif
