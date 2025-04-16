@@ -24,7 +24,7 @@ private:
 
     void Iterate();
     void AddRecord(int record_index);
-    double CalculateAverage(int period);
+    double CalculateAverage(size_t period);
     void ActWithLongAndShortStrategy();
     void ActWithSimpleStrategy(size_t prizc_index);
     void PrintVector(const std::deque<double>& vec);
@@ -39,7 +39,7 @@ private:
 
     bool position_opened {false};
     double open_value {0}, balance {0};
-    int short_period_, long_period_;
+    size_t short_period_, long_period_;
 
     // first -> open_pos | second -> close_pos
     std::vector<std::pair<bool, bool>> actions;

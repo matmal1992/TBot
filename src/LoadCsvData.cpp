@@ -18,10 +18,16 @@ CsvData::CsvData(const std::vector<double>& test_data)
 
 void CsvData::ReadDataFromFile()
 {
+    if (!std::filesystem::exists(path_))
+    {
+        std::cerr << "Error: File does not exist at path: " << path_ << "\n";
+        return;
+    }
+
     std::ifstream file(path_);
     if (!file)
     {
-        std::cerr << "Error: Unable to open file.\n";
+        std::cerr << "Error: Unable to open file: " << path_ << "\n";
         return; // to do: better error hadndling
     }
 
@@ -58,7 +64,10 @@ void CsvData::PrintGraph(const DiagnosticData& diag_data, const std::vector<std:
     std::ofstream highlightOpensFile("highlight_opens_data.txt");
     std::ofstream highlightClosesFile("highlight_closes_data.txt");
 
-    for (size_t i {0}; i < prices.size(); ++i)
+    std::cout << "actions.size(): " << actions.size() << std::endl;
+    std::cout << "prices.size(): " << prices.size() << std::endl;
+
+    for (size_t i {0}; i < prices.size() - 4; ++i)
     {
         tempFile << i << " " << prices.at(i) << "\n";
 
