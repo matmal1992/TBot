@@ -157,13 +157,13 @@ void BotSimulator::ActWithLongAndShortStrategy()
         return;
     }
 
-    if (short_period_avg > long_period_avg)
+    if (short_period_avg > long_period_avg and not position_opened)
     {
         actions.push_back(std::pair(true, false));
         position_opened = true;
         open_value = current_records.at(current_records.size() - 1); // end()
     }
-    else if (short_period_avg < long_period_avg)
+    else if (short_period_avg < long_period_avg and position_opened)
     {
         actions.push_back(std::pair(false, true));
         position_opened = false;
@@ -196,7 +196,7 @@ double BotSimulator::GetBalance()
     return balance;
 }
 
-double BotSimulator::CalculateAverage(int period)
+double BotSimulator::CalculateAverage(size_t period)
 {
     if (current_records.size() < period)
     {
