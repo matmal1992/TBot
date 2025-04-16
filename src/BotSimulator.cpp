@@ -152,7 +152,7 @@ void BotSimulator::ActWithLongAndShortStrategy()
     double short_period_avg = CalculateAverage(short_period_);
     double long_period_avg = CalculateAverage(long_period_);
 
-    if (current_records.size() < long_period_)
+    if (current_records.size() < long_period_) // add peak check. Reset average or sth, while peak detected
     {
         return;
     }
@@ -161,13 +161,13 @@ void BotSimulator::ActWithLongAndShortStrategy()
     {
         actions.push_back(std::pair(true, false));
         position_opened = true;
-        open_value = current_records.at(current_records.size() - 1); // end()
+        open_value = current_records.back();
     }
     else if (short_period_avg < long_period_avg and position_opened)
     {
         actions.push_back(std::pair(false, true));
         position_opened = false;
-        balance += current_records.at(current_records.size() - 1) - open_value;
+        balance += current_records.back() - open_value;
     }
     else
     {
