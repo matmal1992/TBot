@@ -94,6 +94,7 @@ void CsvData::PrintGraph(const DiagnosticData& diag_data, const std::vector<std:
                 << "            MAX dev index: " << diag_data.biggest_deviation_index;
 
     // to do: rescale y axis 10x smaller
+    // to do: draw short/long period avg lines
     std::string command = "start \"\" gnuplot -e \""
                           "set title '"
         + titleStream.str()
@@ -158,4 +159,10 @@ DiagnosticData CsvData::GetDiagnosticData()
 std::vector<double> CsvData::GetPrices()
 {
     return prices;
+}
+
+void CsvData::TrimPricesVector(size_t begin, size_t end)
+{
+    std::vector<double> trimmed_prices(prices.begin() + begin, prices.begin() + end);
+    prices = trimmed_prices;
 }
