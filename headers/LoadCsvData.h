@@ -32,6 +32,7 @@ public:
     DiagnosticData GetDiagnosticData();
     void PrintGraph(const DiagnosticData& diag_data, const std::vector<std::pair<bool, bool>>& actions);
     std::vector<double> GetPrices();
+    void TrimPricesVector(size_t begin, size_t end);
 
 private:
     void ReadDataFromFile();
