@@ -4,9 +4,4 @@ Testing/*
 
 # files
 .vscode/settings.json
-US500_prices.csv
-bot_simulator.exe
 *.txts
-
-
-
