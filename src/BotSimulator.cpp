@@ -154,6 +154,7 @@ void BotSimulator::ActWithLongAndShortStrategy()
 
     if (current_records.size() < long_period_) // add peak check. Reset average or sth, while peak detected
     {
+        actions.push_back(std::pair(false, false));
         return;
     }
 
