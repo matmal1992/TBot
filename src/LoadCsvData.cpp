@@ -18,6 +18,9 @@ CsvData::CsvData(const std::vector<double>& test_data)
 
 void CsvData::ReadDataFromFile()
 {
+    std::cerr << "Absolute path: " << std::filesystem::absolute(path_) << "\n";
+    std::cout << "Current working directory: " << std::filesystem::current_path() << "\n";
+
     if (!std::filesystem::exists(path_))
     {
         std::cerr << "Error: File does not exist at path: " << path_ << "\n";
