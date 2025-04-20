@@ -8,7 +8,6 @@ int main()
     // std::reverse(test_prices.begin(), test_prices.end());
 
     CsvData data("US500_prices.csv", 1);
-    // CsvData data("US500_prices.csv", 1);
     // CsvData data(test_prices);
     BotSimulator bot_simulator(data.GetPrices(), 2, 8);
     std::cout << "Balance: " << bot_simulator.GetBalance() << std::endl;

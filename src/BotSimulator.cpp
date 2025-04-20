@@ -122,8 +122,8 @@ void BotSimulator::Iterate()
     for (size_t i {0}; i < prices_.size(); ++i)
     {
         AddRecord(i);
-        // ActWithSimpleStrategy(i);
-        ActWithLongAndShortStrategy();
+        ActWithSimpleStrategy(i);
+        // ActWithLongAndShortStrategy();
     }
 }
 
