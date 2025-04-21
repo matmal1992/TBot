@@ -8,7 +8,7 @@ from datetime import datetime
 pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 
 # === Region of the BUY button (x, y, width, height) ===
-PRICE_REGION = (830, 260, 80, 60)
+PRICE_REGION = (1007, 478, 62, 60)
 
 CSV_FILE = "us500_prices.csv"
 
