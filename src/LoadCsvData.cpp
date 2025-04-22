@@ -42,20 +42,30 @@ void CsvData::ReadDataFromFile()
     while (std::getline(file, line))
     {
         std::stringstream ss(line);
-        std::string date, priceStr;
+        std::string priceStr;
+        std::getline(ss, priceStr);
 
-        std::getline(ss, date, ',');
-        std::getline(ss, priceStr, ',');
-
-        double price = std::stod(priceStr);
-
-        if (counter % time_interval_ == 0)
+        try
         {
-            prices.push_back(price);
-            // times.push_back(date); leave to release version
-            // to do: invalid data hadndling
+            double price = std::stod(priceStr);
+
+            if (counter % time_interval_ == 0)
+            {
+                prices.push_back(price);
+                // times.push_back(date); // leave for release
+            }
+            counter++;
         }
-        counter++;
+        catch (const std::invalid_argument& e)
+        {
+            std::cerr << "Warning: Invalid data on line " << counter + 2 << ": " << line << "\n";
+            continue; // skip invalid line
+        }
+        catch (const std::out_of_range& e)
+        {
+            std::cerr << "Warning: Out-of-range value on line " << counter + 2 << ": " << line << "\n";
+            continue;
+        }
     }
 
     file.close();
