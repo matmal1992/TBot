@@ -139,7 +139,7 @@ void BotSimulator::ActWithSimpleStrategy(size_t price_index)
     {
         actions.push_back(std::pair(false, true));
         position_opened = false;
-        balance += prices_.at(price_index) - open_value;
+        balance += prices_.at(price_index) - open_value - spread;
     }
     else
     {
@@ -168,7 +168,7 @@ void BotSimulator::ActWithLongAndShortStrategy()
     {
         actions.push_back(std::pair(false, true));
         position_opened = false;
-        balance += current_records.back() - open_value;
+        balance += current_records.back() - open_value - spread;
     }
     else
     {

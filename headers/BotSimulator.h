@@ -38,7 +38,7 @@ private:
     size_t investing_value = 5000;
 
     bool position_opened {false};
-    double open_value {0}, balance {0};
+    double open_value {0}, balance {0}, spread {1};
     size_t short_period_, long_period_;
 
     // first -> open_pos | second -> close_pos
