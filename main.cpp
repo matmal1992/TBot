@@ -11,8 +11,9 @@ int main()
     // CsvData data(test_prices);
     BotSimulator bot_simulator(data.GetPrices(), 2, 8);
     std::cout << "Balance: " << bot_simulator.GetBalance() << std::endl;
+    std::cout << "GetShortAvg size: " << bot_simulator.GetShortAvg().size() << std::endl;
 
-    data.PrintGraph(data.GetDiagnosticData(), bot_simulator.GetActions());
+    data.PrintGraph(data.GetDiagnosticData(), bot_simulator.GetActions(), bot_simulator.GetShortAvg());
 
     return 0;
 }

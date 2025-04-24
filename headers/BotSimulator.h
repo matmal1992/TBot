@@ -11,6 +11,8 @@ public:
     BotSimulator(const std::vector<double>& prices, const int short_period = 0, const int long_period = 0);
     std::vector<std::pair<bool, bool>> GetActions();
     double GetBalance();
+    std::vector<double> GetLongAvg();
+    std::vector<double> GetShortAvg();
 
 private:
     bool IsConstantFall();
@@ -30,6 +32,8 @@ private:
     void PrintVector(const std::deque<double>& vec);
 
     std::vector<double> prices_;
+    std::vector<double> short_averages_;
+    std::vector<double> long_averages_;
     std::deque<double> current_records;
     double percentage_profit = 0.05;
     double percentage_loss = 0.05;

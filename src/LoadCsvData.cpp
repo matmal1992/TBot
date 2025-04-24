@@ -71,7 +71,8 @@ void CsvData::ReadDataFromFile()
     file.close();
 }
 
-void CsvData::PrintGraph(const DiagnosticData& diag_data, const std::vector<std::pair<bool, bool>>& actions)
+void CsvData::PrintGraph(const DiagnosticData& diag_data, const std::vector<std::pair<bool, bool>>& actions,
+                         const std::vector<double>& avg)
 {
     std::ofstream tempFile("plot_data.txt");
     std::ofstream highlightOpensFile("highlight_opens_data.txt");
@@ -93,6 +94,11 @@ void CsvData::PrintGraph(const DiagnosticData& diag_data, const std::vector<std:
             highlightClosesFile << i << " " << prices.at(i) << "\n";
         }
     }
+
+    std::ofstream avgFile("avg_data.txt");
+    for (size_t i = 0; i < avg.size(); ++i) { avgFile << i << " " << avg.at(i) << "\n"; }
+    avgFile.close();
+
     tempFile.close();
     highlightOpensFile.close();
     highlightClosesFile.close();
@@ -116,6 +122,7 @@ void CsvData::PrintGraph(const DiagnosticData& diag_data, const std::vector<std:
           "unset key; "
           //   "set xtics 1; "
           "plot 'plot_data.txt' using 1:2 with lines, "
+          "'avg_data.txt' using 1:2 with lines lc rgb 'blue', "
           "'highlight_opens_data.txt' using 1:2 with points pointtype 7 pointsize 1.0 lc rgb 'green', "
           "'highlight_closes_data.txt' using 1:2 with points pointtype 7 pointsize 1.0 lc rgb 'red'; "
           "pause -1\"";

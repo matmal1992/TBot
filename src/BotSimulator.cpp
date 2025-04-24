@@ -122,8 +122,8 @@ void BotSimulator::Iterate()
     for (size_t i {0}; i < prices_.size(); ++i)
     {
         AddRecord(i);
-        ActWithSimpleStrategy(i);
-        // ActWithLongAndShortStrategy();
+        // ActWithSimpleStrategy(i);
+        ActWithLongAndShortStrategy();
     }
 }
 
@@ -151,6 +151,10 @@ void BotSimulator::ActWithLongAndShortStrategy()
 {
     double short_period_avg = CalculateAverage(short_period_);
     double long_period_avg = CalculateAverage(long_period_);
+    // std::cout << "short_period_avg: " << short_period_avg << std::endl;
+    // std::cout << "long_period_avg: " << long_period_avg << std::endl << std::endl;
+    short_averages_.push_back(short_period_avg);
+    long_averages_.push_back(long_period_avg);
 
     if (current_records.size() < long_period_) // add peak check. Reset average or sth, while peak detected
     {
@@ -201,10 +205,20 @@ double BotSimulator::CalculateAverage(size_t period)
 {
     if (current_records.size() < period)
     {
-        return 0.0;
+        return std::accumulate(current_records.begin(), current_records.end(), 0.0) / current_records.size();
     }
     else
     {
         return std::accumulate(current_records.end() - period, current_records.end(), 0.0) / period;
     }
+}
+
+std::vector<double> BotSimulator::GetLongAvg()
+{
+    return long_averages_;
+}
+
+std::vector<double> BotSimulator::GetShortAvg()
+{
+    return short_averages_;
 }
