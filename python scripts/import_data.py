@@ -10,7 +10,7 @@ df = yf.download(ticker, period="7d", interval="1m")
 prices = df[['Close']].round(2)
 
 # Save to CSV
-prices.to_csv("data/US500_prices.csv", header=["Price"])
+prices.to_csv("testing_data/US500_prices.csv", header=["Price"])
 
 print("Data saved successfully!")
 print(prices.head())  # Show first few rows

@@ -74,9 +74,9 @@ void CsvData::ReadDataFromFile()
 void CsvData::PrintGraph(const DiagnosticData& diag_data, const std::vector<std::pair<bool, bool>>& actions,
                          const std::vector<double>& avg)
 {
-    std::ofstream tempFile("data/plot_data.txt");
-    std::ofstream highlightOpensFile("data/highlight_opens_data.txt");
-    std::ofstream highlightClosesFile("data/highlight_closes_data.txt");
+    std::ofstream tempFile("testing_data/plot_data.txt");
+    std::ofstream highlightOpensFile("testing_data/highlight_opens_data.txt");
+    std::ofstream highlightClosesFile("testing_data/highlight_closes_data.txt");
 
     std::cout << "actions.size(): " << actions.size() << std::endl;
     std::cout << "prices.size(): " << prices.size() << std::endl;
@@ -95,7 +95,7 @@ void CsvData::PrintGraph(const DiagnosticData& diag_data, const std::vector<std:
         }
     }
 
-    std::ofstream avgFile("data/avg_data.txt");
+    std::ofstream avgFile("testing_data/avg_data.txt");
     for (size_t i = 0; i < avg.size(); ++i) { avgFile << i << " " << avg.at(i) << "\n"; }
     avgFile.close();
 
@@ -122,9 +122,9 @@ void CsvData::PrintGraph(const DiagnosticData& diag_data, const std::vector<std:
           "unset key; "
           //   "set xtics 1; "
           "plot 'plot_data.txt' using 1:2 with lines, "
-          "'data/avg_data.txt' using 1:2 with lines lc rgb 'blue', "
-          "'data/highlight_opens_data.txt' using 1:2 with points pointtype 7 pointsize 1.0 lc rgb 'green', "
-          "'data/highlight_closes_data.txt' using 1:2 with points pointtype 7 pointsize 1.0 lc rgb 'red'; "
+          "'testing_data/avg_data.txt' using 1:2 with lines lc rgb 'blue', "
+          "'testing_data/highlight_opens_data.txt' using 1:2 with points pointtype 7 pointsize 1.0 lc rgb 'green', "
+          "'testing_data/highlight_closes_data.txt' using 1:2 with points pointtype 7 pointsize 1.0 lc rgb 'red'; "
           "pause -1\"";
 
     system(command.c_str());
