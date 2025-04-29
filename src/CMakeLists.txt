@@ -2,6 +2,7 @@
 set(SOURCES
     BotSimulator.cpp
     LoadCsvData.cpp
+    Patterns.cpp
 )
 
 # Create the main executable

@@ -21,102 +21,6 @@ void BotSimulator::AddRecord(int record_index)
     }
 }
 
-bool BotSimulator::IsConstantFall()
-{
-    for (size_t i = 1; i < current_records.size(); ++i)
-    {
-        if (current_records[i] < current_records[i - 1] and current_records[i - 1] < current_records[i - 2])
-        {
-            return true;
-        }
-    }
-    return false;
-}
-
-bool BotSimulator::IsConstantRise()
-{
-    for (size_t i = 2; i < current_records.size(); ++i)
-    {
-        if (current_records[i] > current_records[i - 1] and current_records[i - 1] > current_records[i - 2])
-        {
-            return true;
-        }
-    }
-    return false;
-}
-
-bool BotSimulator::IsSuddenRise()
-{
-    for (size_t i = 1; i < current_records.size(); ++i)
-    {
-        if (current_records[current_records.size() - 1]
-            > current_records[current_records.size() - 2] * percentage_peak_profit)
-        {
-            return true;
-        }
-    }
-    return false;
-}
-
-bool BotSimulator::IsSuddenFall()
-{
-    for (size_t i = 1; i < current_records.size(); ++i)
-    {
-        if (current_records[i] > current_records[i - 1] * percentage_peak_profit)
-        {
-            return true;
-        }
-    }
-    return false;
-}
-
-bool BotSimulator::SingleFall()
-{
-    size_t size = current_records.size();
-
-    if (size > 1 and (current_records.at(size - 1) < current_records.at(size - 2)))
-    {
-        return true;
-    }
-
-    return false;
-}
-
-bool BotSimulator::TwoFallsInRow()
-{
-    size_t size = current_records.size();
-
-    if (size > 2 and (current_records.at(size - 1) < current_records.at(size - 2)))
-    {
-        return true;
-    }
-
-    return false;
-}
-
-bool BotSimulator::SingleRise()
-{
-    size_t size = current_records.size();
-
-    if (size > 1 and (current_records.at(size - 1) > current_records.at(size - 2)))
-    {
-        return true;
-    }
-    return false;
-}
-
-bool BotSimulator::TwoRisesInRow()
-{
-    size_t size = current_records.size();
-
-    if (size > 2 and (current_records.at(size - 1) > current_records.at(size - 2))
-        and (current_records.at(size - 2) > current_records.at(size - 3)))
-    {
-        return true;
-    }
-    return false;
-}
-
 void BotSimulator::Iterate()
 {
     for (size_t i {0}; i < prices_.size(); ++i)
@@ -129,13 +33,13 @@ void BotSimulator::Iterate()
 
 void BotSimulator::ActWithSimpleStrategy(size_t price_index)
 {
-    if (SingleRise() and not position_opened)
+    if (SingleRise(current_records) and not position_opened)
     {
         actions.push_back(std::pair(true, false));
         position_opened = true;
         open_value = prices_.at(price_index);
     }
-    else if (SingleFall() and position_opened)
+    else if (SingleFall(current_records) and position_opened)
     {
         actions.push_back(std::pair(false, true));
         position_opened = false;
