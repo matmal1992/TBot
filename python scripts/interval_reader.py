@@ -10,7 +10,7 @@ pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tessera
 # === Region of the BUY button (x, y, width, height) ===
 PRICE_REGION = (1007, 478, 62, 60)
 
-CSV_FILE = "us500_prices.csv"
+CSV_FILE = "data/us500_prices.csv"
 
 start_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 with open(CSV_FILE, mode='w', newline='') as file:

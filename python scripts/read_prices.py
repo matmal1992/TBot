@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 
 # Load the CSV file
-df = pd.read_csv("US500_prices.csv")
+df = pd.read_csv("data/US500_prices.csv")
 
 # Extract the "Price" column (assuming it's named "Price" in the CSV)
 prices = df["Price"].tolist()

@@ -1,7 +1,8 @@
 # dirs
 build/*
 Testing/*
+data/*
 
 # files
 .vscode/settings.json
-*.txts
+GodBoltQuickTesting.cpp
