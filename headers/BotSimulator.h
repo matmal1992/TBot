@@ -10,21 +10,13 @@ class BotSimulator
 {
 public:
     BotSimulator(const std::vector<double>& prices, const int short_period = 0, const int long_period = 0);
+
     std::vector<std::pair<bool, bool>> GetActions();
-    double GetBalance();
     std::vector<double> GetLongAvg();
     std::vector<double> GetShortAvg();
+    double GetBalance();
 
 private:
-    // bool IsConstantFall();
-    // bool IsConstantRise();
-    // bool IsSuddenFall();
-    // bool IsSuddenRise();
-    // bool SingleRise();
-    // bool SingleFall();
-    // bool TwoRisesInRow();
-    // bool TwoFallsInRow();
-
     void Iterate();
     void AddRecord(int record_index);
     double CalculateAverage(size_t period);
@@ -32,22 +24,15 @@ private:
     void ActWithSimpleStrategy(size_t prizc_index);
     void PrintVector(const std::deque<double>& vec);
 
-    std::vector<double> prices_;
-    std::vector<double> short_averages_;
-    std::vector<double> long_averages_;
+    // first -> open_pos | second -> close_pos
+    std::vector<std::pair<bool, bool>> actions;
+    std::vector<double> prices_, short_averages_, long_averages_;
     std::deque<double> current_records;
-    // double percentage_profit = 0.05;
-    // double percentage_loss = 0.05;
-    // double percentage_peak_profit = 1.9;
-    // double percentage_peak_loss = 1.9;
-    size_t investing_value = 5000;
+    size_t initial_deposit = 5000;
 
     bool position_opened {false};
     double open_value {0}, balance {0}, spread {1};
     size_t short_period_, long_period_;
-
-    // first -> open_pos | second -> close_pos
-    std::vector<std::pair<bool, bool>> actions;
 };
 
 #endif

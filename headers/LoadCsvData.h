@@ -30,8 +30,8 @@ public:
     CsvData(const std::vector<double>& test_data);
 
     DiagnosticData GetDiagnosticData();
-    void PrintGraph(const DiagnosticData& diag_data, const std::vector<std::pair<bool, bool>>& actions,
-                    const std::vector<double>& avg);
+    // void PrintGraph(const DiagnosticData& diag_data, const std::vector<std::pair<bool, bool>>& actions,
+    //                 const std::vector<double>& avg);
     std::vector<double> GetPrices();
     void TrimPricesVector(size_t begin, size_t end);
 

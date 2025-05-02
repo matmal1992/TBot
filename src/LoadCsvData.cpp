@@ -71,64 +71,64 @@ void CsvData::ReadDataFromFile()
     file.close();
 }
 
-void CsvData::PrintGraph(const DiagnosticData& diag_data, const std::vector<std::pair<bool, bool>>& actions,
-                         const std::vector<double>& avg)
-{
-    std::ofstream tempFile("testing_data/plot_data.txt");
-    std::ofstream highlightOpensFile("testing_data/highlight_opens_data.txt");
-    std::ofstream highlightClosesFile("testing_data/highlight_closes_data.txt");
+// void CsvData::PrintGraph(const DiagnosticData& diag_data, const std::vector<std::pair<bool, bool>>& actions,
+//                          const std::vector<double>& avg)
+// {
+//     std::ofstream tempFile("testing_data/plot_data.txt");
+//     std::ofstream highlightOpensFile("testing_data/highlight_opens_data.txt");
+//     std::ofstream highlightClosesFile("testing_data/highlight_closes_data.txt");
 
-    std::cout << "actions.size(): " << actions.size() << std::endl;
-    std::cout << "prices.size(): " << prices.size() << std::endl;
+//     std::cout << "actions.size(): " << actions.size() << std::endl;
+//     std::cout << "prices.size(): " << prices.size() << std::endl;
 
-    for (size_t i {0}; i < prices.size() - 4; ++i)
-    {
-        tempFile << i << " " << prices.at(i) << "\n";
+//     for (size_t i {0}; i < prices.size() - 4; ++i)
+//     {
+//         tempFile << i << " " << prices.at(i) << "\n";
 
-        if (actions.at(i).first == true)
-        {
-            highlightOpensFile << i << " " << prices.at(i) << "\n";
-        }
-        if (actions.at(i).second == true)
-        {
-            highlightClosesFile << i << " " << prices.at(i) << "\n";
-        }
-    }
+//         if (actions.at(i).first == true)
+//         {
+//             highlightOpensFile << i << " " << prices.at(i) << "\n";
+//         }
+//         if (actions.at(i).second == true)
+//         {
+//             highlightClosesFile << i << " " << prices.at(i) << "\n";
+//         }
+//     }
 
-    std::ofstream avgFile("testing_data/avg_data.txt");
-    for (size_t i = 0; i < avg.size(); ++i) { avgFile << i << " " << avg.at(i) << "\n"; }
-    avgFile.close();
+//     std::ofstream avgFile("testing_data/avg_data.txt");
+//     for (size_t i = 0; i < avg.size(); ++i) { avgFile << i << " " << avg.at(i) << "\n"; }
+//     avgFile.close();
 
-    tempFile.close();
-    highlightOpensFile.close();
-    highlightClosesFile.close();
+//     tempFile.close();
+//     highlightOpensFile.close();
+//     highlightClosesFile.close();
 
-    std::ostringstream titleStream;
-    titleStream << "            AVG value: " << diag_data.avg_price
-                << "                        AVG diff: " << diag_data.avg_difference
-                << "            MAX diff: " << diag_data.biggest_difference
-                << "            MAX diff index: " << diag_data.biggest_difference_index
-                << "                        AVG dev: " << diag_data.avg_deviation
-                << "            MAX dev: " << diag_data.biggest_deviation
-                << "            MAX dev index: " << diag_data.biggest_deviation_index;
+//     std::ostringstream titleStream;
+//     titleStream << "            AVG value: " << diag_data.avg_price
+//                 << "                        AVG diff: " << diag_data.avg_difference
+//                 << "            MAX diff: " << diag_data.biggest_difference
+//                 << "            MAX diff index: " << diag_data.biggest_difference_index
+//                 << "                        AVG dev: " << diag_data.avg_deviation
+//                 << "            MAX dev: " << diag_data.biggest_deviation
+//                 << "            MAX dev index: " << diag_data.biggest_deviation_index;
 
-    // to do: rescale y axis 10x smaller
-    // to do: draw short/long period avg lines
-    std::string command = "start \"\" gnuplot -e \""
-                          "set title '"
-        + titleStream.str()
-        + "'; "
-          "set grid; "
-          "unset key; "
-          //   "set xtics 1; "
-          "plot 'plot_data.txt' using 1:2 with lines, "
-          "'testing_data/avg_data.txt' using 1:2 with lines lc rgb 'blue', "
-          "'testing_data/highlight_opens_data.txt' using 1:2 with points pointtype 7 pointsize 1.0 lc rgb 'green', "
-          "'testing_data/highlight_closes_data.txt' using 1:2 with points pointtype 7 pointsize 1.0 lc rgb 'red'; "
-          "pause -1\"";
+//     // to do: rescale y axis 10x smaller
+//     // to do: draw short/long period avg lines
+//     std::string command = "start \"\" gnuplot -e \""
+//                           "set title '"
+//         + titleStream.str()
+//         + "'; "
+//           "set grid; "
+//           "unset key; "
+//           //   "set xtics 1; "
+//           "plot 'plot_data.txt' using 1:2 with lines, "
+//           "'testing_data/avg_data.txt' using 1:2 with lines lc rgb 'blue', "
+//           "'testing_data/highlight_opens_data.txt' using 1:2 with points pointtype 7 pointsize 1.0 lc rgb 'green', "
+//           "'testing_data/highlight_closes_data.txt' using 1:2 with points pointtype 7 pointsize 1.0 lc rgb 'red'; "
+//           "pause -1\"";
 
-    system(command.c_str());
-}
+//     system(command.c_str());
+// }
 
 DiagnosticData CsvData::GetDiagnosticData()
 {
