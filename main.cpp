@@ -21,12 +21,12 @@ int main()
     DiagnosticData diag_data = data.GetDiagnosticData();
     std::vector<std::pair<bool, bool>> actions = bot_simulator.GetActions();
     std::vector<double> short_avg = bot_simulator.GetShortAvg();
+    std::vector<double> long_avg = bot_simulator.GetLongAvg();
     std::vector<double> prices = data.GetPrices();
 
-    // Graph graph(data.GetDiagnosticData(), bot_simulator.GetActions(), bot_simulator.GetShortAvg(), data.GetPrices());
-    Graph graph(diag_data, actions, short_avg, prices);
-    graph.PrintActions();
-    // data.PrintGraph(data.GetDiagnosticData(), bot_simulator.GetActions(), bot_simulator.GetShortAvg());
+    Graph graph(diag_data, actions, short_avg, long_avg, prices);
+    // graph.PrintActions();
+    graph.PrintAverages();
 
     return 0;
 }

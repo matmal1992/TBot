@@ -11,7 +11,7 @@ class Graph
 {
 public:
     Graph(const DiagnosticData& diag_data, const std::vector<std::pair<bool, bool>>& actions,
-          const std::vector<double>& avg, const std::vector<double>& prices);
+          const std::vector<double>& short_avg, const std::vector<double>& long_avg, const std::vector<double>& prices);
 
     void PrintActions();
     void PrintAverages();
@@ -24,7 +24,7 @@ public:
 private:
     const DiagnosticData diag_data_;
     const std::vector<std::pair<bool, bool>> actions_;
-    const std::vector<double> average_;
+    const std::vector<double> short_avg_, long_avg_;
     const std::vector<double> prices_;
 };
 
