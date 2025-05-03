@@ -25,8 +25,8 @@ int main()
     std::vector<double> prices = data.GetPrices();
 
     Graph graph(diag_data, actions, short_avg, long_avg, prices);
-    // graph.PrintActions();
-    graph.PrintAverages();
+    graph.PrintActions();
+    // graph.PrintAverages();
 
     return 0;
 }
