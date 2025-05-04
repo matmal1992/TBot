@@ -55,8 +55,7 @@ void BotSimulator::ActWithLongAndShortStrategy()
 {
     double short_period_avg = CalculateAverage(short_period_);
     double long_period_avg = CalculateAverage(long_period_);
-    // std::cout << "short_period_avg: " << short_period_avg << std::endl;
-    // std::cout << "long_period_avg: " << long_period_avg << std::endl << std::endl;
+
     short_averages_.push_back(short_period_avg);
     long_averages_.push_back(long_period_avg);
 
