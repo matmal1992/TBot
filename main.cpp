@@ -26,8 +26,9 @@ int main()
     Graph graph(diag_data, actions, short_avg, long_avg, prices);
     graph.PrintActions();
     graph.PrintAverages();
-    graph.PrintDifferencesHistogram();
-    graph.PrintDeviationsHistogram();
+    graph.PrintActionsAndAvg();
+    // graph.PrintDifferencesHistogram();
+    // graph.PrintDeviationsHistogram();
 
     return 0;
 }

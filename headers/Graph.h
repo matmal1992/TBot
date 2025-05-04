@@ -12,12 +12,13 @@ public:
 
     void PrintActions();
     void PrintAverages();
+    void PrintActionsAndAvg();
     void PrintDifferencesHistogram();
     void PrintDeviationsHistogram();
 
 private:
     std::string SetTitle();
-    std::string SetCommand(const std::string& data_to_print_1, const std::string& data_to_print_2);
+    std::string SetCommand(const std::string& data_command);
 
     const DiagnosticData diag_data_;
     const std::vector<std::pair<bool, bool>> actions_;
