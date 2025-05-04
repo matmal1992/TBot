@@ -27,6 +27,7 @@ int main()
     graph.PrintActions();
     graph.PrintAverages();
     graph.PrintDifferencesHistogram();
+    graph.PrintDeviationsHistogram();
 
     return 0;
 }

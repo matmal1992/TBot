@@ -106,6 +106,53 @@ void Graph::PrintDifferencesHistogram()
     system(command.c_str());
 }
 
+void Graph::PrintDeviationsHistogram()
+{
+    const double max_value = 0.01;
+    const double bin_size = 0.001;
+    const int bin_count = static_cast<int>(max_value / bin_size);
+    std::vector<int> histogram(bin_count, 0);
+
+    // Count how many values fall into each bin
+    for (double val : diag_data_.deviations)
+    {
+        if (val >= 0.0 and val < max_value)
+        {
+            int bin_index = static_cast<int>(val / bin_size);
+            ++histogram.at(bin_index);
+        }
+        else if (val >= max_value)
+        {
+            ++histogram.at(bin_count - 1); // put max values in the last bin
+        }
+    }
+
+    std::ofstream hist_dev_file(histogram_dev_path);
+
+    for (int i = 0; i < bin_count; ++i)
+    {
+        double bin_start = i * bin_size;
+        double bin_mid = bin_start + bin_size / 2.0;
+        hist_dev_file << bin_mid << " " << histogram.at(i) << "\n";
+    }
+
+    hist_dev_file.close();
+
+    std::string command = "start \"\" gnuplot -e \""
+                          "set title 'Deviations Histogram'; "
+                          "set boxwidth 0.04; "
+                          "set style fill solid; "
+                          "set grid; unset key; "
+                          "set xlabel 'Difference'; "
+                          "set ylabel 'Count'; "
+                          "plot '"
+        + histogram_dev_path
+        + "' using 1:2 with boxes lc rgb 'skyblue'; "
+          "pause -1\"";
+
+    system(command.c_str());
+}
+
 std::string Graph::SetTitle()
 {
     std::string title;
