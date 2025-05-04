@@ -37,7 +37,7 @@ private:
     void ReadDataFromFile();
 
     std::string path_;
-    std::vector<double> prices;
+    std::vector<double> prices_;
     int time_interval_;
 };
 

@@ -12,6 +12,7 @@ public:
 
     void PrintActions();
     void PrintAverages();
+    void PrintDifferencesHistogram();
 
 private:
     std::string SetTitle();
@@ -27,6 +28,7 @@ private:
     const std::string closes_path_ {"testing_data/highlight_closes_data.txt"};
     const std::string short_avg_path_ {"testing_data/short_avg_data.txt"};
     const std::string long_avg_path_ {"testing_data/long_avg_data.txt"};
+    const std::string histogram_diff_path = "testing_data/differences_histogram.txt";
 };
 
 #endif
