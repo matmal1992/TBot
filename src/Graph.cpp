@@ -13,9 +13,9 @@ Graph::Graph(const DiagnosticData& diag_data, const std::vector<std::pair<bool, 
 
 void Graph::PrintActions()
 {
-    std::ofstream prices_file(prices_path_);
-    std::ofstream open_points_file(opens_path_);
-    std::ofstream closes_points_file(closes_path_);
+    std::ofstream prices_file(paths::prices);
+    std::ofstream open_points_file(paths::opens);
+    std::ofstream closes_points_file(paths::closes);
 
     for (size_t i {0}; i < prices_.size() - 4; ++i)
     {
@@ -35,19 +35,19 @@ void Graph::PrintActions()
     open_points_file.close();
     closes_points_file.close();
 
-    std::string opens_data = "'" + opens_path_ + "' using 1:2 with points pointtype 7 pointsize 1.0 lc rgb 'green',";
-    std::string closes_data = "'" + closes_path_ + "' using 1:2 with points pointtype 7 pointsize 1.0 lc rgb 'red'; ";
+    std::string opens_data = "'" + paths::opens + "' using 1:2 with points pointtype 7 pointsize 1.0 lc rgb 'green',";
+    std::string closes_data = "'" + paths::closes + "' using 1:2 with points pointtype 7 pointsize 1.0 lc rgb 'red'; ";
     std::string data_command = opens_data + closes_data;
     system(SetCommand(data_command).c_str());
 }
 
 void Graph::PrintActionsAndAvg()
 {
-    std::ofstream prices_file(prices_path_);
-    std::ofstream open_points_file(opens_path_);
-    std::ofstream closes_points_file(closes_path_);
-    std::ofstream short_avg_file(short_avg_path_);
-    std::ofstream long_avg_file(long_avg_path_);
+    std::ofstream prices_file(paths::prices);
+    std::ofstream open_points_file(paths::opens);
+    std::ofstream closes_points_file(paths::closes);
+    std::ofstream short_avg_file(paths::short_avg);
+    std::ofstream long_avg_file(paths::long_avg);
 
     for (size_t i {0}; i < prices_.size() - 4; ++i)
     {
@@ -72,19 +72,19 @@ void Graph::PrintActionsAndAvg()
     short_avg_file.close();
     long_avg_file.close();
 
-    std::string opens_data = "'" + opens_path_ + "' using 1:2 with points pointtype 7 pointsize 1.0 lc rgb 'green',";
-    std::string closes_data = "'" + closes_path_ + "' using 1:2 with points pointtype 7 pointsize 1.0 lc rgb 'red', ";
-    std::string short_avg = "'" + short_avg_path_ + "' using 1:2 with lines lc rgb 'blue',";
-    std::string long_avg = "'" + long_avg_path_ + "' using 1:2 with lines lc rgb 'green'; ";
+    std::string opens_data = "'" + paths::opens + "' using 1:2 with points pointtype 7 pointsize 1.0 lc rgb 'green',";
+    std::string closes_data = "'" + paths::closes + "' using 1:2 with points pointtype 7 pointsize 1.0 lc rgb 'red', ";
+    std::string short_avg = "'" + paths::short_avg + "' using 1:2 with lines lc rgb 'blue',";
+    std::string long_avg = "'" + paths::long_avg + "' using 1:2 with lines lc rgb 'green'; ";
     std::string data_command = opens_data + closes_data + short_avg + long_avg;
     system(SetCommand(data_command).c_str());
 }
 
 void Graph::PrintAverages()
 {
-    std::ofstream prices_file(prices_path_);
-    std::ofstream short_avg_file(short_avg_path_);
-    std::ofstream long_avg_file(long_avg_path_);
+    std::ofstream prices_file(paths::prices);
+    std::ofstream short_avg_file(paths::short_avg);
+    std::ofstream long_avg_file(paths::long_avg);
 
     for (size_t i {0}; i < prices_.size(); ++i) { prices_file << i << " " << prices_.at(i) << "\n"; }
     for (size_t i {0}; i < short_avg_.size(); ++i) { short_avg_file << i << " " << short_avg_.at(i) << "\n"; }
@@ -94,8 +94,8 @@ void Graph::PrintAverages()
     long_avg_file.close();
     prices_file.close();
 
-    std::string short_avg = "'" + short_avg_path_ + "' using 1:2 with lines lc rgb 'blue',";
-    std::string long_avg = "'" + long_avg_path_ + "' using 1:2 with lines lc rgb 'green'; ";
+    std::string short_avg = "'" + paths::short_avg + "' using 1:2 with lines lc rgb 'blue',";
+    std::string long_avg = "'" + paths::long_avg + "' using 1:2 with lines lc rgb 'green'; ";
     std::string data_command = short_avg + long_avg;
     system(SetCommand(data_command).c_str());
 }
@@ -121,7 +121,7 @@ void Graph::PrintDifferencesHistogram()
         }
     }
 
-    std::ofstream hist_diff_file(histogram_diff_path);
+    std::ofstream hist_diff_file(paths::histogram_diff);
 
     for (int i = 0; i < bin_count; ++i)
     {
@@ -140,7 +140,7 @@ void Graph::PrintDifferencesHistogram()
                           "set xlabel 'Difference'; "
                           "set ylabel 'Count'; "
                           "plot '"
-        + histogram_diff_path
+        + paths::histogram_diff
         + "' using 1:2 with boxes lc rgb 'skyblue'; "
           "pause -1\"";
 
@@ -168,7 +168,7 @@ void Graph::PrintDeviationsHistogram()
         }
     }
 
-    std::ofstream hist_dev_file(histogram_dev_path);
+    std::ofstream hist_dev_file(paths::histogram_dev);
 
     for (int i = 0; i < bin_count; ++i)
     {
@@ -187,7 +187,7 @@ void Graph::PrintDeviationsHistogram()
                           "set xlabel 'Difference'; "
                           "set ylabel 'Count'; "
                           "plot '"
-        + histogram_dev_path
+        + paths::histogram_dev
         + "' using 1:2 with boxes lc rgb 'skyblue'; "
           "pause -1\"";
 
