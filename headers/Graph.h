@@ -13,7 +13,7 @@ public:
 
     void PrintActions();
     void PrintAverages();
-    void PrintActionsAndAvg();
+    void PrintActionsAndAvg(const int avg_type);
     void PrintDifferencesHistogram();
     void PrintDeviationsHistogram();
 

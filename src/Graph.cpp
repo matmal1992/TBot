@@ -41,7 +41,7 @@ void Graph::PrintActions()
     system(SetCommand(data_command).c_str());
 }
 
-void Graph::PrintActionsAndAvg()
+void Graph::PrintActionsAndAvg(const int avg_type)
 {
     std::ofstream prices_file(paths::prices);
     std::ofstream open_points_file(paths::opens);
@@ -72,11 +72,29 @@ void Graph::PrintActionsAndAvg()
     short_avg_file.close();
     long_avg_file.close();
 
-    std::string opens_data = "'" + paths::opens + "' using 1:2 with points pointtype 7 pointsize 1.0 lc rgb 'green',";
-    std::string closes_data = "'" + paths::closes + "' using 1:2 with points pointtype 7 pointsize 1.0 lc rgb 'red', ";
-    std::string short_avg = "'" + paths::short_avg + "' using 1:2 with lines lc rgb 'blue',";
-    std::string long_avg = "'" + paths::long_avg + "' using 1:2 with lines lc rgb 'green'; ";
-    std::string data_command = opens_data + closes_data + short_avg + long_avg;
+    std::string opens_data = "'" + paths::opens + "' using 1:2 with points pointtype 7 pointsize 1.0 lc rgb 'green'";
+    std::string closes_data = "'" + paths::closes + "' using 1:2 with points pointtype 7 pointsize 1.0 lc rgb 'red'";
+    std::string short_avg = "'" + paths::short_avg + "' using 1:2 with lines lc rgb 'blue'";
+    std::string long_avg = "'" + paths::long_avg + "' using 1:2 with lines lc rgb 'green'";
+    std::string data_command;
+
+    if (avg_type == graph_type::no_avg)
+    {
+        data_command = opens_data + ", " + closes_data + "; ";
+    }
+    else if (avg_type == graph_type::short_avg)
+    {
+        data_command = opens_data + ", " + closes_data + ", " + short_avg + "; ";
+    }
+    else if (avg_type == graph_type::long_avg)
+    {
+        data_command = opens_data + ", " + closes_data + ", " + long_avg + "; ";
+    }
+    else if (avg_type == graph_type::both_avg)
+    {
+        data_command = opens_data + ", " + closes_data + ", " + short_avg + ", " + long_avg + "; ";
+    }
+
     system(SetCommand(data_command).c_str());
 }
 
