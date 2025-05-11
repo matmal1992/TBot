@@ -9,113 +9,90 @@ Graph::Graph(const DiagnosticData& diag_data, const std::vector<std::pair<bool, 
     , long_avg_(long_avg)
     , prices_(prices)
 {
+    SetDataCommands();
 }
 
-void Graph::PrintActions()
+void Graph::PrintLinearGraph(const int graph_type)
 {
-    std::ofstream prices_file(paths::prices);
+    WriteLinearDataToFile(prices_, paths::prices);
+    WriteActionsToFile();
+    WriteLinearDataToFile(short_avg_, paths::short_avg);
+    WriteLinearDataToFile(long_avg_, paths::long_avg);
+
+    system(GetCommand(graph_type).c_str());
+}
+
+void Graph::WriteLinearDataToFile(const std::vector<double>& data, const std::string& path)
+{
+    std::ofstream file_to_write(path);
+    for (size_t i {0}; i < data.size(); ++i) file_to_write << i << " " << data.at(i) << "\n";
+    file_to_write.close();
+}
+
+void Graph::WriteActionsToFile()
+{
     std::ofstream open_points_file(paths::opens);
     std::ofstream closes_points_file(paths::closes);
 
     for (size_t i {0}; i < prices_.size() - 4; ++i)
     {
-        prices_file << i << " " << prices_.at(i) << "\n";
-
         if (actions_.at(i).first == true)
         {
             open_points_file << i << " " << prices_.at(i) << "\n";
         }
-        if (actions_.at(i).second == true)
+        else if (actions_.at(i).second == true)
         {
             closes_points_file << i << " " << prices_.at(i) << "\n";
         }
     }
 
-    prices_file.close();
     open_points_file.close();
     closes_points_file.close();
-
-    std::string opens_data = "'" + paths::opens + "' using 1:2 with points pointtype 7 pointsize 1.0 lc rgb 'green',";
-    std::string closes_data = "'" + paths::closes + "' using 1:2 with points pointtype 7 pointsize 1.0 lc rgb 'red'; ";
-    std::string data_command = opens_data + closes_data;
-    system(SetCommand(data_command).c_str());
 }
 
-void Graph::PrintActionsAndAvg(const int avg_type)
+std::string Graph::GetTitle()
 {
-    std::ofstream prices_file(paths::prices);
-    std::ofstream open_points_file(paths::opens);
-    std::ofstream closes_points_file(paths::closes);
-    std::ofstream short_avg_file(paths::short_avg);
-    std::ofstream long_avg_file(paths::long_avg);
+    std::string title;
 
-    for (size_t i {0}; i < prices_.size() - 4; ++i)
-    {
-        prices_file << i << " " << prices_.at(i) << "\n";
+    title.append("AVG diff: " + std::to_string(diag_data_.avg_difference)).append(40, ' ');
+    title.append("MAX diff: " + std::to_string(diag_data_.biggest_difference)).append(40, ' ');
+    title.append("MAX diff index: " + std::to_string(diag_data_.biggest_difference_index) + "\\n");
 
-        if (actions_.at(i).first == true)
-        {
-            open_points_file << i << " " << prices_.at(i) << "\n";
-        }
-        if (actions_.at(i).second == true)
-        {
-            closes_points_file << i << " " << prices_.at(i) << "\n";
-        }
-    }
+    title.append("AVG dev: " + std::to_string(diag_data_.avg_deviation)).append(40, ' ');
+    title.append("MAX dev: " + std::to_string(diag_data_.biggest_deviation)).append(40, ' ');
+    title.append("MAX dev index: " + std::to_string(diag_data_.biggest_deviation_index));
+    return title;
+}
 
-    for (size_t i {0}; i < short_avg_.size(); ++i) { short_avg_file << i << " " << short_avg_.at(i) << "\n"; }
-    for (size_t i {0}; i < long_avg_.size(); ++i) { long_avg_file << i << " " << long_avg_.at(i) << "\n"; }
-
-    prices_file.close();
-    open_points_file.close();
-    closes_points_file.close();
-    short_avg_file.close();
-    long_avg_file.close();
-
-    std::string opens_data = "'" + paths::opens + "' using 1:2 with points pointtype 7 pointsize 1.0 lc rgb 'green'";
-    std::string closes_data = "'" + paths::closes + "' using 1:2 with points pointtype 7 pointsize 1.0 lc rgb 'red'";
-    std::string short_avg = "'" + paths::short_avg + "' using 1:2 with lines lc rgb 'blue'";
-    std::string long_avg = "'" + paths::long_avg + "' using 1:2 with lines lc rgb 'green'";
+std::string Graph::GetCommand(const int graph_type)
+{
     std::string data_command;
-
-    if (avg_type == graph_type::no_avg)
+    switch (graph_type)
     {
-        data_command = opens_data + ", " + closes_data + "; ";
-    }
-    else if (avg_type == graph_type::short_avg)
-    {
-        data_command = opens_data + ", " + closes_data + ", " + short_avg + "; ";
-    }
-    else if (avg_type == graph_type::long_avg)
-    {
-        data_command = opens_data + ", " + closes_data + ", " + long_avg + "; ";
-    }
-    else if (avg_type == graph_type::both_avg)
-    {
-        data_command = opens_data + ", " + closes_data + ", " + short_avg + ", " + long_avg + "; ";
+        case graph_type::short_avg: data_command = short_avg_comm_ + ", " + long_avg_comm_; break;
+        case graph_type::long_avg: data_command = actions_comm_ + ", " + long_avg_comm_; break;
+        case graph_type::both_avg: data_command = actions_comm_ + ", " + short_avg_comm_ + ", " + long_avg_comm_; break;
+        case graph_type::only_avgs: data_command = short_avg_comm_ + ", " + long_avg_comm_; break;
+        case graph_type::only_actions: data_command = actions_comm_; break;
     }
 
-    system(SetCommand(data_command).c_str());
+    std::string final_command;
+    final_command.append("start \"\" gnuplot -e \"");
+    final_command.append("set title \\\"" + GetTitle() + "\\\" enhanced; ");
+    final_command.append("set grid; unset key; ");
+    final_command.append("plot 'testing_data/prices_data.txt' using 1:2 with lines, ");
+    final_command.append(data_command.append("; "));
+    final_command.append("pause -1\"");
+
+    return final_command;
 }
 
-void Graph::PrintAverages()
+void Graph::SetDataCommands()
 {
-    std::ofstream prices_file(paths::prices);
-    std::ofstream short_avg_file(paths::short_avg);
-    std::ofstream long_avg_file(paths::long_avg);
-
-    for (size_t i {0}; i < prices_.size(); ++i) { prices_file << i << " " << prices_.at(i) << "\n"; }
-    for (size_t i {0}; i < short_avg_.size(); ++i) { short_avg_file << i << " " << short_avg_.at(i) << "\n"; }
-    for (size_t i {0}; i < long_avg_.size(); ++i) { long_avg_file << i << " " << long_avg_.at(i) << "\n"; }
-
-    short_avg_file.close();
-    long_avg_file.close();
-    prices_file.close();
-
-    std::string short_avg = "'" + paths::short_avg + "' using 1:2 with lines lc rgb 'blue',";
-    std::string long_avg = "'" + paths::long_avg + "' using 1:2 with lines lc rgb 'green'; ";
-    std::string data_command = short_avg + long_avg;
-    system(SetCommand(data_command).c_str());
+    short_avg_comm_ = "'" + paths::short_avg + "' using 1:2 with lines lc rgb 'blue'";
+    long_avg_comm_ = "'" + paths::long_avg + "' using 1:2 with lines lc rgb 'green'";
+    actions_comm_ = "'" + paths::opens + "' using 1:2 with points pointtype 7 pointsize 1.0 lc rgb 'green', '"
+        + paths::closes + "' using 1:2 with points pointtype 7 pointsize 1.0 lc rgb 'red'";
 }
 
 void Graph::PrintDifferencesHistogram()
@@ -210,32 +187,4 @@ void Graph::PrintDeviationsHistogram()
           "pause -1\"";
 
     system(command.c_str());
-}
-
-std::string Graph::SetTitle()
-{
-    std::string title;
-
-    title.append("AVG diff: " + std::to_string(diag_data_.avg_difference)).append(40, ' ');
-    title.append("MAX diff: " + std::to_string(diag_data_.biggest_difference)).append(40, ' ');
-    title.append("MAX diff index: " + std::to_string(diag_data_.biggest_difference_index) + "\\n");
-
-    title.append("AVG dev: " + std::to_string(diag_data_.avg_deviation)).append(40, ' ');
-    title.append("MAX dev: " + std::to_string(diag_data_.biggest_deviation)).append(40, ' ');
-    title.append("MAX dev index: " + std::to_string(diag_data_.biggest_deviation_index));
-    return title;
-}
-
-std::string Graph::SetCommand(const std::string& data_command)
-{
-    std::string command;
-
-    command.append("start \"\" gnuplot -e \"");
-    command.append("set title \\\"" + SetTitle() + "\\\" enhanced; ");
-    command.append("set grid; unset key; ");
-    command.append("plot 'testing_data/prices_data.txt' using 1:2 with lines, ");
-    command.append(data_command);
-    command.append("pause -1\"");
-
-    return command;
 }

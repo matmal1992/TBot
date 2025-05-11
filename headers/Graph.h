@@ -11,20 +11,21 @@ public:
     Graph(const DiagnosticData& diag_data, const std::vector<std::pair<bool, bool>>& actions,
           const std::vector<double>& short_avg, const std::vector<double>& long_avg, const std::vector<double>& prices);
 
-    void PrintActions();
-    void PrintAverages();
-    void PrintActionsAndAvg(const int avg_type);
+    void PrintLinearGraph(const int graph_type);
     void PrintDifferencesHistogram();
     void PrintDeviationsHistogram();
 
 private:
-    std::string SetTitle();
-    std::string SetCommand(const std::string& data_command);
+    std::string GetTitle();
+    std::string GetCommand(const int graph_type);
+    void SetDataCommands();
+    void WriteLinearDataToFile(const std::vector<double>& data, const std::string& path);
+    void WriteActionsToFile();
 
     const DiagnosticData diag_data_;
     const std::vector<std::pair<bool, bool>> actions_;
-    const std::vector<double> short_avg_, long_avg_;
-    const std::vector<double> prices_;
+    const std::vector<double> short_avg_, long_avg_, prices_;
+    std::string actions_comm_, short_avg_comm_, long_avg_comm_;
 };
 
 #endif

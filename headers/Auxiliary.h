@@ -5,10 +5,12 @@
 
 namespace graph_type
 {
-const int no_avg = 1;
-const int short_avg = 2;
-const int long_avg = 3;
-const int both_avg = 4;
+// to refactor: bitset or sth
+const int short_avg = 1;
+const int long_avg = 2;
+const int both_avg = 3;
+const int only_avgs = 4;
+const int only_actions = 5;
 } // namespace graph_type
 
 namespace paths
