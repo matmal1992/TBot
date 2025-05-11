@@ -12,8 +12,7 @@ public:
           const std::vector<double>& short_avg, const std::vector<double>& long_avg, const std::vector<double>& prices);
 
     void PrintLinearGraph(const int graph_type);
-    void PrintDifferencesHistogram();
-    void PrintDeviationsHistogram();
+    void PrintHistogram(const int histogram_type);
 
 private:
     std::string GetTitle();

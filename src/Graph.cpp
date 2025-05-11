@@ -95,15 +95,36 @@ void Graph::SetDataCommands()
         + paths::closes + "' using 1:2 with points pointtype 7 pointsize 1.0 lc rgb 'red'";
 }
 
-void Graph::PrintDifferencesHistogram()
+void Graph::PrintHistogram(const int hist_type)
 {
-    const double max_value = 1.5;
-    const double bin_size = 0.05;
-    const int bin_count = static_cast<int>(max_value / bin_size);
+    double max_value {0}, bin_size {0};
+    int bin_count {0};
+    std::string histogram_path, final_command, type, colour;
+    std::vector<double> histogram_data;
+
+    if (hist_type == histogram_type::diffs)
+    {
+        max_value = 1.5;
+        bin_size = 0.05;
+        histogram_path = paths::histogram_diff;
+        histogram_data = diag_data_.differences;
+        type = "Difference";
+        colour = "skyblue";
+    }
+    else
+    {
+        max_value = 0.01;
+        bin_size = 0.001;
+        histogram_path = paths::histogram_dev;
+        histogram_data = diag_data_.deviations;
+        type = "Deviation";
+        colour = "orange";
+    }
+
+    bin_count = static_cast<int>(max_value / bin_size);
     std::vector<int> histogram(bin_count, 0);
 
-    // Count how many values fall into each bin
-    for (double val : diag_data_.differences)
+    for (double val : histogram_data)
     {
         if (val >= 0.0 and val < max_value)
         {
@@ -112,79 +133,27 @@ void Graph::PrintDifferencesHistogram()
         }
         else if (val >= max_value)
         {
-            ++histogram.at(bin_count - 1); // put max values in the last bin
+            ++histogram.at(bin_count - 1);
         }
     }
 
-    std::ofstream hist_diff_file(paths::histogram_diff);
+    std::ofstream hist_file(histogram_path);
 
     for (int i = 0; i < bin_count; ++i)
     {
         double bin_start = i * bin_size;
         double bin_mid = bin_start + bin_size / 2.0;
-        hist_diff_file << bin_mid << " " << histogram.at(i) << "\n";
+        hist_file << bin_mid << " " << histogram.at(i) << "\n";
     }
 
-    hist_diff_file.close();
+    hist_file.close();
 
-    std::string command = "start \"\" gnuplot -e \""
-                          "set title 'Differences Histogram'; "
-                          "set boxwidth 0.04; "
-                          "set style fill solid; "
-                          "set grid; unset key; "
-                          "set xlabel 'Difference'; "
-                          "set ylabel 'Count'; "
-                          "plot '"
-        + paths::histogram_diff
-        + "' using 1:2 with boxes lc rgb 'skyblue'; "
-          "pause -1\"";
+    final_command.append("start \"\" gnuplot -e \"");
+    final_command.append("set title '" + type + " histogram'; ");
+    final_command.append("set style fill solid; set grid; unset key; ");
+    final_command.append("set xlabel '" + type + "'; set ylabel 'Count'; ");
+    final_command.append("plot '" + histogram_path + "' using 1:2 with boxes lc rgb '" + colour + "'; ");
+    final_command.append("pause -1\"");
 
-    system(command.c_str());
-}
-
-void Graph::PrintDeviationsHistogram()
-{
-    const double max_value = 0.01;
-    const double bin_size = 0.001;
-    const int bin_count = static_cast<int>(max_value / bin_size);
-    std::vector<int> histogram(bin_count, 0);
-
-    // Count how many values fall into each bin
-    for (double val : diag_data_.deviations)
-    {
-        if (val >= 0.0 and val < max_value)
-        {
-            int bin_index = static_cast<int>(val / bin_size);
-            ++histogram.at(bin_index);
-        }
-        else if (val >= max_value)
-        {
-            ++histogram.at(bin_count - 1); // put max values in the last bin
-        }
-    }
-
-    std::ofstream hist_dev_file(paths::histogram_dev);
-
-    for (int i = 0; i < bin_count; ++i)
-    {
-        double bin_start = i * bin_size;
-        double bin_mid = bin_start + bin_size / 2.0;
-        hist_dev_file << bin_mid << " " << histogram.at(i) << "\n";
-    }
-
-    hist_dev_file.close();
-
-    std::string command = "start \"\" gnuplot -e \""
-                          "set title 'Deviations Histogram'; "
-                          "set boxwidth 0.04; "
-                          "set style fill solid; "
-                          "set grid; unset key; "
-                          "set xlabel 'Difference'; "
-                          "set ylabel 'Count'; "
-                          "plot '"
-        + paths::histogram_dev
-        + "' using 1:2 with boxes lc rgb 'skyblue'; "
-          "pause -1\"";
-
-    system(command.c_str());
+    system(final_command.c_str());
 }

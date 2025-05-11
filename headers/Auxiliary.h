@@ -13,6 +13,13 @@ const int only_avgs = 4;
 const int only_actions = 5;
 } // namespace graph_type
 
+namespace histogram_type
+{
+// to refactor: bitset or sth
+const int diffs = 1;
+const int devs = 2;
+} // namespace histogram_type
+
 namespace paths
 {
 const std::string prices {"testing_data/prices_data.txt"};
