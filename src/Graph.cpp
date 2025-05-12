@@ -19,7 +19,7 @@ void Graph::PrintLinearGraph(const int graph_type)
     WriteLinearDataToFile(short_avg_, paths::short_avg);
     WriteLinearDataToFile(long_avg_, paths::long_avg);
 
-    system(GetCommand(graph_type).c_str());
+    system(BuildGraphCommand(graph_type).c_str());
 }
 
 void Graph::WriteLinearDataToFile(const std::vector<double>& data, const std::string& path)
@@ -64,7 +64,7 @@ std::string Graph::GetTitle()
     return title;
 }
 
-std::string Graph::GetCommand(const int graph_type)
+std::string Graph::BuildGraphCommand(const int graph_type)
 {
     std::string data_command;
     switch (graph_type)
@@ -97,63 +97,39 @@ void Graph::SetDataCommands()
 
 void Graph::PrintHistogram(const int hist_type)
 {
-    double max_value {0}, bin_size {0};
-    int bin_count {0};
-    std::string histogram_path, final_command, type, colour;
-    std::vector<double> histogram_data;
+    const std::map<int, HistogramConfig> configs
+        = {{histogram_type::diffs, {1.5, 0.05, paths::histogram_diff, diag_data_.differences, "Difference", "skyblue"}},
+           {histogram_type::devs, {0.01, 0.001, paths::histogram_dev, diag_data_.deviations, "Deviation", "orange"}}};
 
-    if (hist_type == histogram_type::diffs)
-    {
-        max_value = 1.5;
-        bin_size = 0.05;
-        histogram_path = paths::histogram_diff;
-        histogram_data = diag_data_.differences;
-        type = "Difference";
-        colour = "skyblue";
-    }
-    else
-    {
-        max_value = 0.01;
-        bin_size = 0.001;
-        histogram_path = paths::histogram_dev;
-        histogram_data = diag_data_.deviations;
-        type = "Deviation";
-        colour = "orange";
-    }
-
-    bin_count = static_cast<int>(max_value / bin_size);
+    const auto& cfg = configs.at(hist_type);
+    int bin_count = static_cast<int>(cfg.max_value / cfg.bin_size);
     std::vector<int> histogram(bin_count, 0);
 
-    for (double val : histogram_data)
+    for (double val : cfg.data)
     {
-        if (val >= 0.0 and val < max_value)
-        {
-            int bin_index = static_cast<int>(val / bin_size);
-            ++histogram.at(bin_index);
-        }
-        else if (val >= max_value)
-        {
-            ++histogram.at(bin_count - 1);
-        }
+        int bin_index = static_cast<int>(std::min(val, cfg.max_value - 1e-9) / cfg.bin_size);
+        ++histogram.at(bin_index);
     }
 
-    std::ofstream hist_file(histogram_path);
-
+    std::ofstream hist_file(cfg.path);
     for (int i = 0; i < bin_count; ++i)
     {
-        double bin_start = i * bin_size;
-        double bin_mid = bin_start + bin_size / 2.0;
-        hist_file << bin_mid << " " << histogram.at(i) << "\n";
+        double bin_mid = i * cfg.bin_size + cfg.bin_size / 2.0;
+        hist_file << bin_mid << " " << histogram[i] << "\n";
     }
-
     hist_file.close();
 
-    final_command.append("start \"\" gnuplot -e \"");
-    final_command.append("set title '" + type + " histogram'; ");
-    final_command.append("set style fill solid; set grid; unset key; ");
-    final_command.append("set xlabel '" + type + "'; set ylabel 'Count'; ");
-    final_command.append("plot '" + histogram_path + "' using 1:2 with boxes lc rgb '" + colour + "'; ");
-    final_command.append("pause -1\"");
+    system(BuildHistogramCommand(cfg.label, cfg.path, cfg.color).c_str());
+}
 
-    system(final_command.c_str());
+std::string Graph::BuildHistogramCommand(const std::string& title, const std::string& path, const std::string& color)
+{
+    std::string cmd;
+    cmd.append("start \"\" gnuplot -e \"");
+    cmd.append("set title '" + title + " histogram'; ");
+    cmd.append("set style fill solid; set grid; unset key; ");
+    cmd.append("set xlabel '" + title + "'; set ylabel 'Count'; ");
+    cmd.append("plot '" + path + "' using 1:2 with boxes lc rgb '" + color + "'; ");
+    cmd.append("pause -1\"");
+    return cmd;
 }

@@ -24,11 +24,8 @@ int main()
     std::vector<double> prices = data.GetPrices();
 
     Graph graph(diag_data, actions, short_avg, long_avg, prices);
-    // graph.PrintActions();
-    // graph.PrintAverages();
-    // graph.PrintLinearGraph(graph_type::long_avg);
+    graph.PrintLinearGraph(graph_type::both_avg);
     graph.PrintHistogram(histogram_type::diffs);
-    // graph.PrintDeviationsHistogram();
 
     return 0;
 }
