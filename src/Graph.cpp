@@ -69,7 +69,7 @@ std::string Graph::BuildGraphCommand(const int graph_type)
     std::string data_command;
     switch (graph_type)
     {
-        case graph_type::short_avg: data_command = short_avg_comm_ + ", " + long_avg_comm_; break;
+        case graph_type::short_avg: data_command = actions_comm_ + ", " + short_avg_comm_; break;
         case graph_type::long_avg: data_command = actions_comm_ + ", " + long_avg_comm_; break;
         case graph_type::both_avg: data_command = actions_comm_ + ", " + short_avg_comm_ + ", " + long_avg_comm_; break;
         case graph_type::only_avgs: data_command = short_avg_comm_ + ", " + long_avg_comm_; break;
