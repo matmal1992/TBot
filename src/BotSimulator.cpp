@@ -36,19 +36,19 @@ void BotSimulator::ActWithSimpleStrategy(size_t price_index)
 {
     if (SingleRise(current_records) and not position_opened)
     {
-        actions.push_back(std::pair(true, false));
+        data_.actions.push_back(std::pair(true, false));
         position_opened = true;
         open_value = prices_.at(price_index);
     }
     else if (SingleFall(current_records) and position_opened)
     {
-        actions.push_back(std::pair(false, true));
+        data_.actions.push_back(std::pair(false, true));
         position_opened = false;
         balance += prices_.at(price_index) - open_value - spread;
     }
     else
     {
-        actions.push_back(std::pair(false, false));
+        data_.actions.push_back(std::pair(false, false));
     }
 }
 
@@ -56,29 +56,30 @@ void BotSimulator::ActWithSingleAvgStrategy(size_t price_index)
 {
     double short_period_avg = CalculateAverage(short_period_);
 
-    short_averages_.push_back(short_period_avg);
+    data_.short_averages.push_back(short_period_avg);
 
     if (current_records.size() < short_period_) // add peak check. Reset average or sth, while peak detected
     {
-        actions.push_back(std::pair(false, false));
+        data_.actions.push_back(std::pair(false, false));
         return;
     }
 
+    // try to add some reserve
     if (short_period_avg <= prices_.at(price_index) and not position_opened)
     {
-        actions.push_back(std::pair(true, false));
+        data_.actions.push_back(std::pair(true, false));
         position_opened = true;
         open_value = current_records.back();
     }
     else if (short_period_avg > prices_.at(price_index) and position_opened)
     {
-        actions.push_back(std::pair(false, true));
+        data_.actions.push_back(std::pair(false, true));
         position_opened = false;
         balance += current_records.back() - open_value - spread;
     }
     else
     {
-        actions.push_back(std::pair(false, false));
+        data_.actions.push_back(std::pair(false, false));
     }
 }
 
@@ -87,30 +88,30 @@ void BotSimulator::ActWithLongAndShortStrategy()
     double short_period_avg = CalculateAverage(short_period_);
     double long_period_avg = CalculateAverage(long_period_);
 
-    short_averages_.push_back(short_period_avg);
-    long_averages_.push_back(long_period_avg);
+    data_.short_averages.push_back(short_period_avg);
+    data_.long_averages.push_back(long_period_avg);
 
     if (current_records.size() < long_period_) // add peak check. Reset average or sth, while peak detected
     {
-        actions.push_back(std::pair(false, false));
+        data_.actions.push_back(std::pair(false, false));
         return;
     }
 
     if (short_period_avg > long_period_avg and not position_opened)
     {
-        actions.push_back(std::pair(true, false));
+        data_.actions.push_back(std::pair(true, false));
         position_opened = true;
         open_value = current_records.back();
     }
     else if (short_period_avg < long_period_avg and position_opened)
     {
-        actions.push_back(std::pair(false, true));
+        data_.actions.push_back(std::pair(false, true));
         position_opened = false;
         balance += current_records.back() - open_value - spread;
     }
     else
     {
-        actions.push_back(std::pair(false, false));
+        data_.actions.push_back(std::pair(false, false));
     }
 }
 
@@ -123,11 +124,6 @@ void BotSimulator::PrintVector(const std::deque<double>& vec)
         std::cout << " ";
     }
     std::cout << std::endl;
-}
-
-std::vector<std::pair<bool, bool>> BotSimulator::GetActions()
-{
-    return actions;
 }
 
 double BotSimulator::GetBalance()
@@ -147,12 +143,7 @@ double BotSimulator::CalculateAverage(size_t period)
     }
 }
 
-std::vector<double> BotSimulator::GetLongAvg()
+SimulatedData BotSimulator::GetSimulatedData()
 {
-    return long_averages_;
-}
-
-std::vector<double> BotSimulator::GetShortAvg()
-{
-    return short_averages_;
+    return data_;
 }

@@ -2,6 +2,7 @@
 #define GRAPH_H
 
 #include "Auxiliary.h"
+#include "BotSimulator.h"
 #include "LoadCsvData.h"
 #include <map>
 #include <vector>
@@ -19,8 +20,7 @@ struct HistogramConfig
 class Graph
 {
 public:
-    Graph(const DiagnosticData& diag_data, const std::vector<std::pair<bool, bool>>& actions,
-          const std::vector<double>& short_avg, const std::vector<double>& long_avg, const std::vector<double>& prices);
+    Graph(const DiagnosticData& diag_data, const SimulatedData& sim_data);
 
     void PrintLinearGraph(const int graph_type);
     void PrintHistogram(const int histogram_type);
@@ -34,8 +34,7 @@ private:
     void WriteActionsToFile();
 
     const DiagnosticData diag_data_;
-    const std::vector<std::pair<bool, bool>> actions_;
-    const std::vector<double> short_avg_, long_avg_, prices_;
+    const SimulatedData sim_data_;
     std::string actions_comm_, short_avg_comm_, long_avg_comm_;
 };
 

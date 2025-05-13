@@ -1,23 +1,18 @@
 #include "../headers/Graph.h"
 
-Graph::Graph(const DiagnosticData& diag_data, const std::vector<std::pair<bool, bool>>& actions,
-             const std::vector<double>& short_avg, const std::vector<double>& long_avg,
-             const std::vector<double>& prices)
+Graph::Graph(const DiagnosticData& diag_data, const SimulatedData& sim_data)
     : diag_data_(diag_data)
-    , actions_(actions)
-    , short_avg_(short_avg)
-    , long_avg_(long_avg)
-    , prices_(prices)
+    , sim_data_(sim_data)
 {
     SetDataCommands();
 }
 
 void Graph::PrintLinearGraph(const int graph_type)
 {
-    WriteLinearDataToFile(prices_, paths::prices);
+    WriteLinearDataToFile(diag_data_.prices, paths::prices);
     WriteActionsToFile();
-    WriteLinearDataToFile(short_avg_, paths::short_avg);
-    WriteLinearDataToFile(long_avg_, paths::long_avg);
+    WriteLinearDataToFile(sim_data_.short_averages, paths::short_avg);
+    WriteLinearDataToFile(sim_data_.long_averages, paths::long_avg);
 
     system(BuildGraphCommand(graph_type).c_str());
 }
@@ -34,15 +29,15 @@ void Graph::WriteActionsToFile()
     std::ofstream open_points_file(paths::opens);
     std::ofstream closes_points_file(paths::closes);
 
-    for (size_t i {0}; i < prices_.size() - 4; ++i)
+    for (size_t i {0}; i < diag_data_.prices.size() - 4; ++i)
     {
-        if (actions_.at(i).first == true)
+        if (sim_data_.actions.at(i).first == true)
         {
-            open_points_file << i << " " << prices_.at(i) << "\n";
+            open_points_file << i << " " << diag_data_.prices.at(i) << "\n";
         }
-        else if (actions_.at(i).second == true)
+        else if (sim_data_.actions.at(i).second == true)
         {
-            closes_points_file << i << " " << prices_.at(i) << "\n";
+            closes_points_file << i << " " << diag_data_.prices.at(i) << "\n";
         }
     }
 

@@ -6,14 +6,19 @@
 #include <deque>
 #include <numeric>
 
+struct SimulatedData
+{
+    std::vector<double> short_averages;
+    std::vector<double> long_averages;
+    std::vector<std::pair<bool, bool>> actions; // first -> open_pos | second -> close_pos
+};
+
 class BotSimulator
 {
 public:
     BotSimulator(const std::vector<double>& prices, const int short_period = 0, const int long_period = 0);
 
-    std::vector<std::pair<bool, bool>> GetActions();
-    std::vector<double> GetLongAvg();
-    std::vector<double> GetShortAvg();
+    SimulatedData GetSimulatedData();
     double GetBalance();
 
 private:
@@ -25,12 +30,10 @@ private:
     void ActWithSimpleStrategy(size_t prizc_index);
     void PrintVector(const std::deque<double>& vec);
 
-    // first -> open_pos | second -> close_pos
-    std::vector<std::pair<bool, bool>> actions;
-    std::vector<double> prices_, short_averages_, long_averages_;
+    SimulatedData data_;
+    std::vector<double> prices_;
     std::deque<double> current_records;
     size_t initial_deposit = 5000;
-
     bool position_opened {false};
     double open_value {0}, balance {0}, spread {1};
     size_t short_period_, long_period_;

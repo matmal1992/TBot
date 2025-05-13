@@ -2,21 +2,20 @@
 
 CsvData::CsvData(const std::string& path, const int time_interval)
     : path_(path)
-    , time_interval_(time_interval)
 {
-    ReadDataFromFile();
+    ReadDataFromFile(time_interval);
 }
 
 CsvData::CsvData(const std::vector<double>& test_data)
-    : prices_(test_data)
 {
+    data_.prices = test_data;
     if (test_data.empty())
     {
         std::cerr << "No valid data found.\n";
     }
 }
 
-void CsvData::ReadDataFromFile()
+void CsvData::ReadDataFromFile(const int time_interval)
 {
     std::cerr << "Absolute path: " << std::filesystem::absolute(path_) << "\n";
     std::cout << "Current working directory: " << std::filesystem::current_path() << "\n";
@@ -49,9 +48,9 @@ void CsvData::ReadDataFromFile()
         {
             double price = std::stod(priceStr);
 
-            if (counter % time_interval_ == 0)
+            if (counter % time_interval == 0)
             {
-                prices_.push_back(price);
+                data_.prices.push_back(price);
             }
             counter++;
         }
@@ -70,59 +69,56 @@ void CsvData::ReadDataFromFile()
     file.close();
 }
 
-DiagnosticData CsvData::GetDiagnosticData()
+void CsvData::SetDiagnosticData()
 {
-    DiagnosticData data;
 
-    if (prices_.empty())
+    if (data_.prices.empty())
     {
         std::cerr << "No valid data found.\n";
-        return data;
+        return;
     }
 
     double sum_of_differences {0}, sum_of_deviations {0}, biggest_difference {0}, sum_of_prices {0},
         biggest_deviation {0};
 
-    for (size_t i {1}; i < prices_.size(); ++i)
+    for (size_t i {1}; i < data_.prices.size(); ++i)
     {
-        double difference = prices_.at(i) > prices_.at(i - 1) ? (prices_.at(i) - prices_.at(i - 1))
-                                                              : (prices_.at(i - 1) - prices_.at(i));
+        double difference = data_.prices.at(i) > data_.prices.at(i - 1) ? (data_.prices.at(i) - data_.prices.at(i - 1))
+                                                                        : (data_.prices.at(i - 1) - data_.prices.at(i));
 
-        double deviation = ((difference) / prices_.at(i)) * 100;
+        double deviation = ((difference) / data_.prices.at(i)) * 100;
 
         sum_of_differences += difference;
         sum_of_deviations += deviation;
-        data.differences.push_back(difference);
-        data.deviations.push_back(deviation);
-        sum_of_prices += prices_.at(i);
+        data_.differences.push_back(difference);
+        data_.deviations.push_back(deviation);
+        sum_of_prices += data_.prices.at(i);
 
         if (difference > biggest_difference)
         {
-            data.biggest_difference = difference;
-            data.biggest_difference_index = i;
+            data_.biggest_difference = difference;
+            data_.biggest_difference_index = i;
         }
 
         if (deviation > biggest_deviation)
         {
-            data.biggest_deviation = deviation;
-            data.biggest_deviation_index = i;
+            data_.biggest_deviation = deviation;
+            data_.biggest_deviation_index = i;
         }
     }
 
-    data.avg_difference = sum_of_differences / prices_.size();
-    data.avg_deviation = sum_of_deviations / prices_.size();
-    data.avg_price = sum_of_prices / prices_.size();
-
-    return data;
+    data_.avg_difference = sum_of_differences / data_.prices.size();
+    data_.avg_deviation = sum_of_deviations / data_.prices.size();
+    data_.avg_price = sum_of_prices / data_.prices.size();
 }
 
-std::vector<double> CsvData::GetPrices()
+DiagnosticData CsvData::GetDiagnosticData()
 {
-    return prices_;
+    return data_;
 }
 
 void CsvData::TrimPricesVector(size_t begin, size_t end)
 {
-    std::vector<double> trimmed_prices(prices_.begin() + begin, prices_.begin() + end);
-    prices_ = trimmed_prices;
+    std::vector<double> trimmed_prices(data_.prices.begin() + begin, data_.prices.begin() + end);
+    data_.prices = trimmed_prices;
 }

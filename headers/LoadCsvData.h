@@ -10,14 +10,14 @@
 
 struct DiagnosticData
 {
+    std::vector<double> prices;
+    std::vector<double> deviations;
     std::vector<double> differences;
+
     double biggest_difference {0};
     double avg_difference {0};
-
-    std::vector<double> deviations;
     double biggest_deviation {0};
     double avg_deviation {0};
-
     double avg_price {0};
     int biggest_difference_index {0};
     int biggest_deviation_index {0};
@@ -30,15 +30,14 @@ public:
     CsvData(const std::vector<double>& test_data);
 
     DiagnosticData GetDiagnosticData();
-    std::vector<double> GetPrices();
     void TrimPricesVector(size_t begin, size_t end);
 
 private:
-    void ReadDataFromFile();
+    void ReadDataFromFile(const int time_interval);
+    void SetDiagnosticData();
 
+    DiagnosticData data_;
     std::string path_;
-    std::vector<double> prices_;
-    int time_interval_;
 };
 
 #endif
