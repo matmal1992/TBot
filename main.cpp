@@ -8,7 +8,7 @@ int main()
     // std::vector<double> test_prices {1, 2, 3, 4, 5, 6, 4, 5, 6, 7, 8, 9, 7, 8, 9, 10, 11, 9, 10, 11, 12, 13, 14};
     // std::reverse(test_prices.begin(), test_prices.end());
 
-    const int short_period {8};
+    const int short_period {30};
     const int long_period {24};
     const int time_interval {1};
 
@@ -24,8 +24,8 @@ int main()
     std::vector<double> prices = data.GetPrices();
 
     Graph graph(diag_data, actions, short_avg, long_avg, prices);
-    graph.PrintLinearGraph(graph_type::both_avg);
-    graph.PrintHistogram(histogram_type::diffs);
+    graph.PrintLinearGraph(graph_type::short_avg);
+    // graph.PrintHistogram(histogram_type::diffs);
 
     return 0;
 }

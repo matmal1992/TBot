@@ -21,6 +21,7 @@ private:
     void AddRecord(int record_index);
     double CalculateAverage(size_t period);
     void ActWithLongAndShortStrategy();
+    void ActWithSingleAvgStrategy(size_t price_index);
     void ActWithSimpleStrategy(size_t prizc_index);
     void PrintVector(const std::deque<double>& vec);
 
