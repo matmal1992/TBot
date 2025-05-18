@@ -95,3 +95,25 @@ bool TwoRisesInRow(const std::deque<double>& current_records)
     }
     return false;
 }
+
+bool ShortAvgDecrease(const std::vector<double>& short_averages, size_t price_index)
+{
+    size_t size = short_averages.size();
+
+    if (size > 1 and (short_averages.at(size - 1) < short_averages.at(size - 2)))
+    {
+        return true;
+    }
+    return false;
+}
+
+bool ShortAvgIncrease(const std::vector<double>& short_averages, size_t price_index)
+{
+    size_t size = short_averages.size();
+
+    if (size > 1 and (short_averages.at(size - 1) > short_averages.at(size - 2)))
+    {
+        return true;
+    }
+    return false;
+}

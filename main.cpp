@@ -27,6 +27,5 @@ int main()
     return 0;
 }
 // Concentrate at the beginning on peaks. Track various indexes - dynamic ones.
-// to do: printing multiple graphs. Averages. Trends...
 // after closing a position, wait some time - to check
-// next - more detailed diagnostics
+// track increases and decreases of averages

@@ -28,7 +28,8 @@ void BotSimulator::Iterate()
         AddRecord(i);
         // ActWithSimpleStrategy(i);
         // ActWithLongAndShortStrategy();
-        ActWithSingleAvgStrategy(i);
+        // ActWithSingleAvgStrategy(i);
+        ShortAvgTrend(i);
     }
 }
 
@@ -41,6 +42,26 @@ void BotSimulator::ActWithSimpleStrategy(size_t price_index)
         open_value = prices_.at(price_index);
     }
     else if (SingleFall(current_records) and position_opened)
+    {
+        data_.actions.push_back(std::pair(false, true));
+        position_opened = false;
+        balance += prices_.at(price_index) - open_value - spread;
+    }
+    else
+    {
+        data_.actions.push_back(std::pair(false, false));
+    }
+}
+
+void BotSimulator::ShortAvgTrend(size_t price_index)
+{
+    if (ShortAvgIncrease(data_.short_averages, price_index) and not position_opened)
+    {
+        data_.actions.push_back(std::pair(true, false));
+        position_opened = true;
+        open_value = prices_.at(price_index);
+    }
+    else if (ShortAvgDecrease(data_.short_averages, price_index) and position_opened)
     {
         data_.actions.push_back(std::pair(false, true));
         position_opened = false;

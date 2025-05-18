@@ -3,6 +3,7 @@
 
 #include <cstddef>
 #include <deque>
+#include <vector>
 
 const double percentage_profit = 0.05;
 const double percentage_loss = 0.05;
@@ -17,5 +18,7 @@ bool SingleRise(const std::deque<double>& current_records);
 bool SingleFall(const std::deque<double>& current_records);
 bool TwoRisesInRow(const std::deque<double>& current_records);
 bool TwoFallsInRow(const std::deque<double>& current_records);
+bool ShortAvgDecrease(const std::vector<double>& short_averages, size_t price_index);
+bool ShortAvgIncrease(const std::vector<double>& short_averages, size_t price_index);
 
 #endif
