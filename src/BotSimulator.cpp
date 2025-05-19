@@ -55,6 +55,9 @@ void BotSimulator::ActWithSimpleStrategy(size_t price_index)
 
 void BotSimulator::ShortAvgTrend(size_t price_index)
 {
+    double short_period_avg = CalculateAverage(short_period_);
+    data_.short_averages.push_back(short_period_avg);
+
     if (ShortAvgIncrease(data_.short_averages, price_index) and not position_opened)
     {
         data_.actions.push_back(std::pair(true, false));
