@@ -29,7 +29,7 @@ void BotSimulator::Iterate()
         // ActWithSimpleStrategy(i);
         // ActWithLongAndShortStrategy();
         // ActWithSingleAvgStrategy(i);
-        ShortAvgTrend(i);
+        ShortAvgTrend(i, 2, 2);
     }
 }
 
@@ -58,13 +58,36 @@ void BotSimulator::ShortAvgTrend(size_t price_index)
     double short_period_avg = CalculateAverage(short_period_);
     data_.short_averages.push_back(short_period_avg);
 
-    if (ShortAvgIncrease(data_.short_averages, price_index) and not position_opened)
+    if (ShortAvgDoubleIncrease(data_.short_averages, price_index) and not position_opened)
     {
         data_.actions.push_back(std::pair(true, false));
         position_opened = true;
         open_value = prices_.at(price_index);
     }
-    else if (ShortAvgDecrease(data_.short_averages, price_index) and position_opened)
+    else if (ShortAvgDoubleDecrease(data_.short_averages, price_index) and position_opened)
+    {
+        data_.actions.push_back(std::pair(false, true));
+        position_opened = false;
+        balance += prices_.at(price_index) - open_value - spread;
+    }
+    else
+    {
+        data_.actions.push_back(std::pair(false, false));
+    }
+}
+
+void BotSimulator::ShortAvgTrend(size_t price_index, size_t dec_in_row, size_t inc_in_row)
+{
+    double short_period_avg = CalculateAverage(short_period_);
+    data_.short_averages.push_back(short_period_avg);
+
+    if (ShortAvgIncrease(data_.short_averages, price_index, inc_in_row) and not position_opened)
+    {
+        data_.actions.push_back(std::pair(true, false));
+        position_opened = true;
+        open_value = prices_.at(price_index);
+    }
+    else if (ShortAvgDecrease(data_.short_averages, price_index, dec_in_row) and position_opened)
     {
         data_.actions.push_back(std::pair(false, true));
         position_opened = false;

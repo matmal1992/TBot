@@ -117,3 +117,56 @@ bool ShortAvgIncrease(const std::vector<double>& short_averages, size_t price_in
     }
     return false;
 }
+
+bool ShortAvgDoubleDecrease(const std::vector<double>& short_averages, size_t price_index)
+{
+    size_t size = short_averages.size();
+
+    if (size > 2 and (short_averages.at(size - 1) < short_averages.at(size - 2))
+        and (short_averages.at(size - 2) < short_averages.at(size - 3)))
+    {
+        return true;
+    }
+    return false;
+}
+
+bool ShortAvgDoubleIncrease(const std::vector<double>& short_averages, size_t price_index)
+{
+    size_t size = short_averages.size();
+
+    if (size > 2 and (short_averages.at(size - 1) > short_averages.at(size - 2))
+        and (short_averages.at(size - 2) > short_averages.at(size - 3)))
+    {
+        return true;
+    }
+    return false;
+}
+
+bool ShortAvgDecrease(const std::vector<double>& short_averages, size_t price_index, size_t dec_in_row)
+{
+    for (size_t i = price_index - dec_in_row + 1; i <= price_index; ++i)
+    {
+        if (i == price_index - dec_in_row + 1)
+            continue;
+        if (short_averages[i] >= short_averages[i - 1])
+        {
+            return false; 
+        }
+    }
+
+    return true;
+}
+bool ShortAvgIncrease(const std::vector<double>& short_averages, size_t price_index, size_t inc_in_row)
+{
+    for (size_t i = price_index - inc_in_row + 1; i <= price_index; ++i)
+    {
+        if (i == price_index - inc_in_row + 1)
+            continue;
+        if (short_averages[i] <= short_averages[i - 1])
+        {
+            return false;
+        }
+    }
+
+    return true;
+}

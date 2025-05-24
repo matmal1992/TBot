@@ -20,5 +20,9 @@ bool TwoRisesInRow(const std::deque<double>& current_records);
 bool TwoFallsInRow(const std::deque<double>& current_records);
 bool ShortAvgDecrease(const std::vector<double>& short_averages, size_t price_index);
 bool ShortAvgIncrease(const std::vector<double>& short_averages, size_t price_index);
+bool ShortAvgDoubleDecrease(const std::vector<double>& short_averages, size_t price_index);
+bool ShortAvgDoubleIncrease(const std::vector<double>& short_averages, size_t price_index);
+bool ShortAvgIncrease(const std::vector<double>& short_averages, size_t price_index, size_t inc_in_row);
+bool ShortAvgDecrease(const std::vector<double>& short_averages, size_t price_index, size_t dec_in_row);
 
 #endif
