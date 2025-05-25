@@ -1,8 +1,10 @@
 #ifndef BEHAVIOURS_H
 #define BEHAVIOURS_H
 
+#include <algorithm>
 #include <cstddef>
 #include <deque>
+#include <functional>
 #include <vector>
 
 const double percentage_profit = 0.05;
@@ -22,7 +24,8 @@ bool ShortAvgDecrease(const std::vector<double>& short_averages, size_t price_in
 bool ShortAvgIncrease(const std::vector<double>& short_averages, size_t price_index);
 bool ShortAvgDoubleDecrease(const std::vector<double>& short_averages, size_t price_index);
 bool ShortAvgDoubleIncrease(const std::vector<double>& short_averages, size_t price_index);
-bool ShortAvgIncrease(const std::vector<double>& short_averages, size_t price_index, size_t inc_in_row);
-bool ShortAvgDecrease(const std::vector<double>& short_averages, size_t price_index, size_t dec_in_row);
+
+bool IncreasesInRow(const std::vector<double>& short_averages, size_t inc_in_row);
+bool DecreasesInRow(const std::vector<double>& short_averages, size_t dec_in_row);
 
 #endif

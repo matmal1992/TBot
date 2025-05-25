@@ -25,11 +25,8 @@ private:
     void Iterate();
     void AddRecord(int record_index);
     double CalculateAverage(size_t period);
-    void ActWithLongAndShortStrategy();
-    void ActWithSingleAvgStrategy(size_t price_index);
-    void ActWithSimpleStrategy(size_t price_index);
-    void ShortAvgTrend(size_t price_index);
-    void PrintVector(const std::deque<double>& vec);
+    void LongAndShortAvgStrategy();
+    void SingleRiseAndFall(size_t price_index);
     void ShortAvgTrend(size_t price_index, size_t dec_in_row, size_t inc_in_row);
 
     SimulatedData data_;
@@ -37,7 +34,7 @@ private:
     std::deque<double> current_records;
     size_t initial_deposit = 5000;
     bool position_opened {false};
-    double open_value {0}, balance {0}, spread {0.5};
+    double open_value {0}, balance {0}, spread {0};
     size_t short_period_, long_period_;
 };
 

@@ -26,14 +26,14 @@ void BotSimulator::Iterate()
     for (size_t i {0}; i < prices_.size(); ++i)
     {
         AddRecord(i);
-        // ActWithSimpleStrategy(i);
-        // ActWithLongAndShortStrategy();
-        // ActWithSingleAvgStrategy(i);
+        // LongAndShortAvgStrategy();
+        // SingleRiseAndFall(i);
         ShortAvgTrend(i, 2, 2);
+        // ShortAvgTrend(i);
     }
 }
 
-void BotSimulator::ActWithSimpleStrategy(size_t price_index)
+void BotSimulator::SingleRiseAndFall(size_t price_index)
 {
     if (SingleRise(current_records) and not position_opened)
     {
@@ -53,41 +53,19 @@ void BotSimulator::ActWithSimpleStrategy(size_t price_index)
     }
 }
 
-void BotSimulator::ShortAvgTrend(size_t price_index)
-{
-    double short_period_avg = CalculateAverage(short_period_);
-    data_.short_averages.push_back(short_period_avg);
-
-    if (ShortAvgDoubleIncrease(data_.short_averages, price_index) and not position_opened)
-    {
-        data_.actions.push_back(std::pair(true, false));
-        position_opened = true;
-        open_value = prices_.at(price_index);
-    }
-    else if (ShortAvgDoubleDecrease(data_.short_averages, price_index) and position_opened)
-    {
-        data_.actions.push_back(std::pair(false, true));
-        position_opened = false;
-        balance += prices_.at(price_index) - open_value - spread;
-    }
-    else
-    {
-        data_.actions.push_back(std::pair(false, false));
-    }
-}
-
 void BotSimulator::ShortAvgTrend(size_t price_index, size_t dec_in_row, size_t inc_in_row)
 {
     double short_period_avg = CalculateAverage(short_period_);
     data_.short_averages.push_back(short_period_avg);
 
-    if (ShortAvgIncrease(data_.short_averages, price_index, inc_in_row) and not position_opened)
+    // try to add some reserve b - more notes in main
+    if (IncreasesInRow(data_.short_averages, inc_in_row) and not position_opened)
     {
         data_.actions.push_back(std::pair(true, false));
         position_opened = true;
         open_value = prices_.at(price_index);
     }
-    else if (ShortAvgDecrease(data_.short_averages, price_index, dec_in_row) and position_opened)
+    else if (DecreasesInRow(data_.short_averages, dec_in_row) and position_opened)
     {
         data_.actions.push_back(std::pair(false, true));
         position_opened = false;
@@ -99,38 +77,7 @@ void BotSimulator::ShortAvgTrend(size_t price_index, size_t dec_in_row, size_t i
     }
 }
 
-void BotSimulator::ActWithSingleAvgStrategy(size_t price_index)
-{
-    double short_period_avg = CalculateAverage(short_period_);
-
-    data_.short_averages.push_back(short_period_avg);
-
-    if (current_records.size() < short_period_) // add peak check. Reset average or sth, while peak detected
-    {
-        data_.actions.push_back(std::pair(false, false));
-        return;
-    }
-
-    // try to add some reserve
-    if (short_period_avg <= prices_.at(price_index) and not position_opened)
-    {
-        data_.actions.push_back(std::pair(true, false));
-        position_opened = true;
-        open_value = current_records.back();
-    }
-    else if (short_period_avg > prices_.at(price_index) and position_opened)
-    {
-        data_.actions.push_back(std::pair(false, true));
-        position_opened = false;
-        balance += current_records.back() - open_value - spread;
-    }
-    else
-    {
-        data_.actions.push_back(std::pair(false, false));
-    }
-}
-
-void BotSimulator::ActWithLongAndShortStrategy()
+void BotSimulator::LongAndShortAvgStrategy()
 {
     double short_period_avg = CalculateAverage(short_period_);
     double long_period_avg = CalculateAverage(long_period_);
@@ -160,17 +107,6 @@ void BotSimulator::ActWithLongAndShortStrategy()
     {
         data_.actions.push_back(std::pair(false, false));
     }
-}
-
-void BotSimulator::PrintVector(const std::deque<double>& vec)
-{
-    std::cout << std::endl << "current_records: ";
-    for (auto c : vec)
-    {
-        std::cout << c;
-        std::cout << " ";
-    }
-    std::cout << std::endl;
 }
 
 double BotSimulator::GetBalance()

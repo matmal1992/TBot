@@ -142,31 +142,37 @@ bool ShortAvgDoubleIncrease(const std::vector<double>& short_averages, size_t pr
     return false;
 }
 
-bool ShortAvgDecrease(const std::vector<double>& short_averages, size_t price_index, size_t dec_in_row)
+bool DecreasesInRow(const std::vector<double>& num_data, size_t dec_in_row)
 {
-    for (size_t i = price_index - dec_in_row + 1; i <= price_index; ++i)
+    if (num_data.size() < dec_in_row)
     {
-        if (i == price_index - dec_in_row + 1)
-            continue;
-        if (short_averages[i] >= short_averages[i - 1])
-        {
-            return false; 
-        }
+        return false; // Not enough elements
     }
 
+    auto start_index = num_data.size() - dec_in_row;
+    for (size_t i = start_index + 1; i < num_data.size(); ++i)
+    {
+        if (num_data[i] >= num_data[i - 1])
+        {
+            return false; // Not strictly decreasing
+        }
+    }
     return true;
 }
-bool ShortAvgIncrease(const std::vector<double>& short_averages, size_t price_index, size_t inc_in_row)
+bool IncreasesInRow(const std::vector<double>& num_data, size_t inc_in_row)
 {
-    for (size_t i = price_index - inc_in_row + 1; i <= price_index; ++i)
+    if (num_data.size() < inc_in_row)
     {
-        if (i == price_index - inc_in_row + 1)
-            continue;
-        if (short_averages[i] <= short_averages[i - 1])
-        {
-            return false;
-        }
+        return false; // Not enough elements
     }
 
+    auto start_index = num_data.size() - inc_in_row;
+    for (size_t i = start_index + 1; i < num_data.size(); ++i)
+    {
+        if (num_data[i] <= num_data[i - 1])
+        {
+            return false; // Not strictly increasing
+        }
+    }
     return true;
 }
