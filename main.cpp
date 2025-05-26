@@ -21,7 +21,7 @@ int main()
     std::cout << "Balance: " << bot_simulator.GetBalance() << std::endl;
 
     Graph graph(diag_data, sim_data);
-    graph.PrintLinearGraph(graph_type::short_avg);
+    graph.PrintLinearGraph(graph_type::both_avg);
     // graph.PrintHistogram(histogram_type::diffs);
 
     return 0;

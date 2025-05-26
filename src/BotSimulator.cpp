@@ -59,13 +59,13 @@ void BotSimulator::ShortAvgTrend(size_t price_index, size_t dec_in_row, size_t i
     data_.short_averages.push_back(short_period_avg);
 
     // try to add some reserve b - more notes in main
-    if (IncreasesInRow(data_.short_averages, inc_in_row) and not position_opened)
+    if (IncreasesInRow(data_.short_averages, inc_in_row) and SingleRise(current_records) and not position_opened)
     {
         data_.actions.push_back(std::pair(true, false));
         position_opened = true;
         open_value = prices_.at(price_index);
     }
-    else if (DecreasesInRow(data_.short_averages, dec_in_row) and position_opened)
+    else if (DecreasesInRow(data_.short_averages, dec_in_row) and SingleFall(current_records) and position_opened)
     {
         data_.actions.push_back(std::pair(false, true));
         position_opened = false;
