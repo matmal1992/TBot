@@ -8,7 +8,7 @@ int main()
     // std::vector<double> test_prices {1, 2, 3, 4, 5, 6, 4, 5, 6, 7, 8, 9, 7, 8, 9, 10, 11, 9, 10, 11, 12, 13, 14};
     // std::reverse(test_prices.begin(), test_prices.end());
 
-    const int short_period {8};
+    const int short_period {30};
     const int long_period {24};
     const int time_interval {1};
 
@@ -30,3 +30,4 @@ int main()
 // after closing a position, wait some time - to check
 // track increases and decreases of averages
 // track avg devs and diffs of long and short avgs. Also max values.
+// try to add 3 or 4 averages, and track their diffs and devs.
