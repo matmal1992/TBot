@@ -31,3 +31,4 @@ int main()
 // track increases and decreases of averages
 // track avg devs and diffs of long and short avgs. Also max values.
 // try to add 3 or 4 averages, and track their diffs and devs.
+// peaks - buy when short crosses, sell when long crosses. (ptyhon script: short - 5, long - 15). Try with diff values.
