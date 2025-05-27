@@ -5,23 +5,22 @@
 
 int main()
 {
-    // std::vector<double> test_prices {1, 2, 3, 4, 5, 6, 4, 5, 6, 7, 8, 9, 7, 8, 9, 10, 11, 9, 10, 11, 12, 13, 14};
-    // std::reverse(test_prices.begin(), test_prices.end());
-
-    const int short_period {30};
+    const int short_period {10};
     const int long_period {24};
     const int time_interval {1};
 
     CsvData data("testing_data/US500_prices.csv", time_interval);
     DiagnosticData diag_data = data.GetDiagnosticData();
 
-    // CsvData data(test_prices);
     BotSimulator bot_simulator(diag_data.prices, short_period, long_period);
     SimulatedData sim_data = bot_simulator.GetSimulatedData();
-    std::cout << "Balance: " << bot_simulator.GetBalance() << std::endl;
+    
+    std::cout << "Sells: " << sim_data.closes << std::endl;
+    std::cout << "Buys: " << sim_data.opens << std::endl;
+    std::cout << "Balance: " << sim_data.balance << std::endl;
 
     Graph graph(diag_data, sim_data);
-    graph.PrintLinearGraph(graph_type::both_avg);
+    graph.PrintLinearGraph(graph_type::only_avgs);
     // graph.PrintHistogram(histogram_type::diffs);
 
     return 0;
