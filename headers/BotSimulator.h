@@ -29,6 +29,8 @@ private:
     void LongAndShortAvgStrategy();
     void SingleRiseAndFall(size_t price_index);
     void ShortAvgTrend(size_t price_index, size_t dec_in_row, size_t inc_in_row);
+    void OpenPosition();
+    void ClosePOsition();
 
     SimulatedData data_;
     std::vector<double> prices_;

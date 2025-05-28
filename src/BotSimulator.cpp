@@ -29,28 +29,35 @@ void BotSimulator::Iterate()
     for (size_t i {0}; i < prices_.size(); ++i)
     {
         AddRecord(i);
-        // LongAndShortAvgStrategy();
-        // SingleRiseAndFall(i);
         ShortAvgTrend(i, 2, 2);
-        // ShortAvgTrend(i);
     }
+}
+
+void BotSimulator::OpenPosition()
+{
+    data_.actions.push_back(std::pair(true, false));
+    position_opened = true;
+    data_.opens++;
+    open_value = current_records.back();
+}
+
+void BotSimulator::ClosePOsition()
+{
+    data_.actions.push_back(std::pair(false, true));
+    position_opened = false;
+    data_.closes++;
+    data_.balance += current_records.back() - open_value - spread;
 }
 
 void BotSimulator::SingleRiseAndFall(size_t price_index)
 {
     if (SingleRise(current_records) and not position_opened)
     {
-        data_.actions.push_back(std::pair(true, false));
-        position_opened = true;
-        data_.opens++;
-        open_value = prices_.at(price_index);
+        OpenPosition();
     }
     else if (SingleFall(current_records) and position_opened)
     {
-        data_.actions.push_back(std::pair(false, true));
-        position_opened = false;
-        data_.closes++;
-        data_.balance += prices_.at(price_index) - open_value - spread;
+        ClosePOsition();
     }
     else
     {
@@ -63,17 +70,11 @@ void BotSimulator::ShortAvgTrend(size_t price_index, size_t dec_in_row, size_t i
     // try to add some reserve b - more notes in main
     if (IncreasesInRow(data_.short_averages, inc_in_row) and SingleRise(current_records) and not position_opened)
     {
-        data_.actions.push_back(std::pair(true, false));
-        position_opened = true;
-        data_.opens++;
-        open_value = prices_.at(price_index);
+        OpenPosition();
     }
     else if (DecreasesInRow(data_.short_averages, dec_in_row) and SingleFall(current_records) and position_opened)
     {
-        data_.actions.push_back(std::pair(false, true));
-        position_opened = false;
-        data_.closes++;
-        data_.balance += prices_.at(price_index) - open_value - spread;
+        ClosePOsition();
     }
     else
     {
@@ -91,17 +92,11 @@ void BotSimulator::LongAndShortAvgStrategy()
 
     if (CalculateAverage(short_period_) > CalculateAverage(long_period_) and not position_opened)
     {
-        data_.actions.push_back(std::pair(true, false));
-        position_opened = true;
-        data_.opens++;
-        open_value = current_records.back();
+        OpenPosition();
     }
     else if (CalculateAverage(short_period_) < CalculateAverage(long_period_) and position_opened)
     {
-        data_.actions.push_back(std::pair(false, true));
-        position_opened = false;
-        data_.closes++;
-        data_.balance += current_records.back() - open_value - spread;
+        ClosePOsition();
     }
     else
     {
