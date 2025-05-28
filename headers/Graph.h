@@ -22,12 +22,12 @@ class Graph
 public:
     Graph(const DiagnosticData& diag_data, const SimulatedData& sim_data);
 
-    void PrintLinearGraph(const int graph_type);
+    void PrintLinearGraph(const graph_type g_type);
     void PrintHistogram(const int histogram_type);
 
 private:
     std::string GetTitle();
-    std::string BuildGraphCommand(const int graph_type);
+    std::string BuildGraphCommand(const graph_type g_type);
     std::string BuildHistogramCommand(const std::string& title, const std::string& path, const std::string& color);
     void SetDataCommands();
     void WriteLinearDataToFile(const std::vector<double>& data, const std::string& path);

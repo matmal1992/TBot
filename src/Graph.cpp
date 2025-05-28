@@ -7,14 +7,14 @@ Graph::Graph(const DiagnosticData& diag_data, const SimulatedData& sim_data)
     SetDataCommands();
 }
 
-void Graph::PrintLinearGraph(const int graph_type)
+void Graph::PrintLinearGraph(const graph_type g_type)
 {
     WriteLinearDataToFile(diag_data_.prices, paths::prices);
     WriteActionsToFile();
     WriteLinearDataToFile(sim_data_.short_averages, paths::short_avg);
     WriteLinearDataToFile(sim_data_.long_averages, paths::long_avg);
 
-    system(BuildGraphCommand(graph_type).c_str());
+    system(BuildGraphCommand(g_type).c_str());
 }
 
 void Graph::WriteLinearDataToFile(const std::vector<double>& data, const std::string& path)
@@ -59,10 +59,10 @@ std::string Graph::GetTitle()
     return title;
 }
 
-std::string Graph::BuildGraphCommand(const int graph_type)
+std::string Graph::BuildGraphCommand(const graph_type g_type)
 {
     std::string data_command;
-    switch (graph_type)
+    switch (g_type)
     {
         case graph_type::short_avg: data_command = actions_comm_ + ", " + short_avg_comm_; break;
         case graph_type::long_avg: data_command = actions_comm_ + ", " + long_avg_comm_; break;
@@ -89,14 +89,14 @@ void Graph::SetDataCommands()
     actions_comm_ = "'" + paths::opens + "' using 1:2 with points pointtype 7 pointsize 1.0 lc rgb 'green', '"
         + paths::closes + "' using 1:2 with points pointtype 7 pointsize 1.0 lc rgb 'red'";
 }
-
-void Graph::PrintHistogram(const int hist_type)
+#
+void Graph::PrintHistogram(const int h_type)
 {
     const std::map<int, HistogramConfig> configs
         = {{histogram_type::diffs, {1.5, 0.05, paths::histogram_diff, diag_data_.differences, "Difference", "skyblue"}},
            {histogram_type::devs, {0.01, 0.001, paths::histogram_dev, diag_data_.deviations, "Deviation", "orange"}}};
 
-    const auto& cfg = configs.at(hist_type);
+    const auto& cfg = configs.at(h_type);
     int bin_count = static_cast<int>(cfg.max_value / cfg.bin_size);
     std::vector<int> histogram(bin_count, 0);
 

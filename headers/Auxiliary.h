@@ -3,19 +3,17 @@
 
 #include <string>
 
-namespace graph_type
+enum class graph_type
 {
-// to refactor: bitset or sth
-const int short_avg = 1;
-const int long_avg = 2;
-const int both_avg = 3;
-const int only_avgs = 4;
-const int only_actions = 5;
-} // namespace graph_type
+    short_avg = 1,
+    long_avg = 2,
+    both_avg = 3,
+    only_avgs = 4,
+    only_actions = 5
+};
 
 namespace histogram_type
 {
-// to refactor: bitset or sth
 const int diffs = 1;
 const int devs = 2;
 } // namespace histogram_type

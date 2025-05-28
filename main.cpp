@@ -14,7 +14,7 @@ int main()
 
     BotSimulator bot_simulator(diag_data.prices, short_period, long_period);
     SimulatedData sim_data = bot_simulator.GetSimulatedData();
-    
+
     std::cout << "Sells: " << sim_data.closes << std::endl;
     std::cout << "Buys: " << sim_data.opens << std::endl;
     std::cout << "Balance: " << sim_data.balance << std::endl;
