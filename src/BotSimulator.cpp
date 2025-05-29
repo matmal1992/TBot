@@ -29,7 +29,7 @@ void BotSimulator::Iterate()
     for (size_t i {0}; i < prices_.size(); ++i)
     {
         AddRecord(i);
-        ShortAvgTrend(i, 2, 2);
+        MakeDecision();
     }
 }
 
@@ -49,52 +49,23 @@ void BotSimulator::ClosePOsition()
     data_.balance += current_records.back() - open_value - spread;
 }
 
-void BotSimulator::SingleRiseAndFall(size_t price_index)
+void BotSimulator::MakeDecision()
 {
-    if (SingleRise(current_records) and not position_opened)
+    bool single_rise = SingleRise(current_records);
+    bool single_fall = SingleFall(current_records);
+    bool increase_in_row = IncreasesInRow(data_.short_averages, 2);
+    bool decrease_in_row = DecreasesInRow(data_.short_averages, 2);
+    bool short_avg_greater = CalculateAverage(short_period_) > CalculateAverage(long_period_);
+    bool long_avg_greater = CalculateAverage(short_period_) < CalculateAverage(long_period_);
+
+    bool open_condtion = increase_in_row and single_rise and not position_opened;
+    bool close_condition = decrease_in_row and single_fall and position_opened;
+
+    if (open_condtion)
     {
         OpenPosition();
     }
-    else if (SingleFall(current_records) and position_opened)
-    {
-        ClosePOsition();
-    }
-    else
-    {
-        data_.actions.push_back(std::pair(false, false));
-    }
-}
-
-void BotSimulator::ShortAvgTrend(size_t price_index, size_t dec_in_row, size_t inc_in_row)
-{
-    // try to add some reserve b - more notes in main
-    if (IncreasesInRow(data_.short_averages, inc_in_row) and SingleRise(current_records) and not position_opened)
-    {
-        OpenPosition();
-    }
-    else if (DecreasesInRow(data_.short_averages, dec_in_row) and SingleFall(current_records) and position_opened)
-    {
-        ClosePOsition();
-    }
-    else
-    {
-        data_.actions.push_back(std::pair(false, false));
-    }
-}
-
-void BotSimulator::LongAndShortAvgStrategy()
-{
-    if (current_records.size() < long_period_) // add peak check. Reset average or sth, while peak detected
-    {
-        data_.actions.push_back(std::pair(false, false));
-        return;
-    }
-
-    if (CalculateAverage(short_period_) > CalculateAverage(long_period_) and not position_opened)
-    {
-        OpenPosition();
-    }
-    else if (CalculateAverage(short_period_) < CalculateAverage(long_period_) and position_opened)
+    else if (close_condition)
     {
         ClosePOsition();
     }

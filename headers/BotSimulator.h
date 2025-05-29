@@ -25,12 +25,10 @@ public:
 private:
     void Iterate();
     void AddRecord(int record_index);
-    double CalculateAverage(size_t period);
-    void LongAndShortAvgStrategy();
-    void SingleRiseAndFall(size_t price_index);
-    void ShortAvgTrend(size_t price_index, size_t dec_in_row, size_t inc_in_row);
+    void MakeDecision();
     void OpenPosition();
     void ClosePOsition();
+    double CalculateAverage(size_t period);
 
     SimulatedData data_;
     std::vector<double> prices_;
