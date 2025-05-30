@@ -20,7 +20,7 @@ int main()
     std::cout << "Balance: " << sim_data.balance << std::endl;
 
     Graph graph(diag_data, sim_data);
-    graph.PrintLinearGraph(graph_type::only_avgs);
+    graph.PrintLinearGraph(graph_type::short_avg_actions);
     // graph.PrintHistogram(histogram_type::diffs);
 
     return 0;
@@ -31,3 +31,5 @@ int main()
 // track avg devs and diffs of long and short avgs. Also max values.
 // try to add 3 or 4 averages, and track their diffs and devs.
 // peaks - buy when short crosses, sell when long crosses. (ptyhon script: short - 5, long - 15). Try with diff values.
+// przebicie z góry do dołu, ostry peak - kup. Podobnie zaobserwować drugą stronę. I na różnych średnich.
+// ostry peak w górę - później poziomo - sprzedaj.

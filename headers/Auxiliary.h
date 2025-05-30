@@ -5,9 +5,9 @@
 
 enum class graph_type
 {
-    short_avg = 1,
-    long_avg = 2,
-    both_avg = 3,
+    short_avg_actions = 1,
+    long_avg_actions = 2,
+    both_avg_actions = 3,
     only_avgs = 4,
     only_actions = 5
 };
