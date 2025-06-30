@@ -9,7 +9,8 @@ int main()
     const int long_period {24};
     const int time_interval {1};
 
-    CsvData data("testing_data/US500_prices.csv", time_interval);
+    CsvData data("testing_data/eth.csv", time_interval);
+    data.TrimPricesVector(30000, 60000);
     DiagnosticData diag_data = data.GetDiagnosticData();
 
     BotSimulator bot_simulator(diag_data.prices, short_period, long_period);
