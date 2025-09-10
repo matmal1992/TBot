@@ -10,8 +10,7 @@ import logging
 import sqlite3
 import time
 import os
-from dataclasses import dataclass
-from typing import List, Optional
+from typing import Optional
 import ssl
 import smtplib
 from email.message import EmailMessage
@@ -21,12 +20,11 @@ import feedparser
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 import aioschedule as schedule
-import aiofiles
 
 # --- load config ---
 load_dotenv()
 SMTP_HOST = os.getenv("SMTP_HOST")
-SMTP_PORT = int(os.getenv("SMTP_PORT", "465"))
+SMTP_PORT = int(os.getenv("SMTP_PORT", "587"))
 SMTP_USER = os.getenv("SMTP_USER")
 SMTP_PASS = os.getenv("SMTP_PASS")
 ALERT_TO = os.getenv("ALERT_TO")
@@ -43,15 +41,15 @@ logger = logging.getLogger("crypto-monitor")
 
 # --- sources (RSS or pages) ---
 RSS_SOURCES = [
-    # przykładowe RSS - możesz dodać/zmienić
     "https://www.coindesk.com/arc/outboundfeeds/rss/",
     "https://cointelegraph.com/rss",
-    "https://www.reuters.com/markets/cryptocurrencies/rss",
-    "https://www.theblock.co/feed",
+    "https://www.newsnow.co.uk/h/Business+&+Finance/Cryptocurrencies/Bitcoin?type=rss",
+    "https://www.newsnow.co.uk/h/Business+&+Finance/Cryptocurrencies/Ethereum?type=rss",
+    "https://news.google.com/rss/search?q=bitcoin",
+    "https://news.google.com/rss/search?q=ethereum",
 ]
-# możesz dodać też bezpośrednie linki do stron które będziesz scrapować
 
-# --- keywords + weights (prosty scoring) ---
+# --- keywords + weights ---
 KEYWORDS = {
     "bitcoin": 5,
     "btc": 4,
@@ -73,7 +71,7 @@ KEYWORDS = {
     "microstrategy": 3,
 }
 
-SCORE_THRESHOLD = 4  # minimalny wynik aby wysłać alert
+SCORE_THRESHOLD = 1
 
 # --- DB utilities ---
 def init_db():
@@ -115,7 +113,10 @@ def send_email(subject: str, body: str):
     msg.set_content(body)
 
     context = ssl.create_default_context()
-    with smtplib.SMTP_SSL(SMTP_HOST, SMTP_PORT, context=context) as server:
+    with smtplib.SMTP(SMTP_HOST, SMTP_PORT) as server:
+        server.ehlo()
+        server.starttls(context=context)
+        server.ehlo()
         server.login(SMTP_USER, SMTP_PASS)
         server.send_message(msg)
     logger.info("Wysłano e-mail: %s", subject)
@@ -142,6 +143,19 @@ async def fetch(session: aiohttp.ClientSession, url: str) -> Optional[str]:
         logger.exception("Błąd pobierania %s: %s", url, e)
         return None
 
+# --- global email queue ---
+email_queue = asyncio.Queue()
+
+# --- email worker ---
+async def email_worker():
+    while True:
+        subject, body = await email_queue.get()
+        try:
+            await asyncio.to_thread(send_email, subject, body)
+        except Exception as e:
+            logger.exception("Błąd wysyłania emaila: %s", e)
+        email_queue.task_done()
+
 async def process_rss(session: aiohttp.ClientSession, url: str):
     logger.debug("Pobieram RSS: %s", url)
     text = await fetch(session, url)
@@ -149,7 +163,6 @@ async def process_rss(session: aiohttp.ClientSession, url: str):
         return
     feed = feedparser.parse(text)
     for entry in feed.entries:
-        # unikaj pustych pól
         link = entry.get("link") or entry.get("id") or ""
         if not link:
             continue
@@ -162,38 +175,29 @@ async def process_rss(session: aiohttp.ClientSession, url: str):
         sc = score_text(combined)
         logger.info("Nowy wpis: %s | score=%s", title, sc)
         if sc >= SCORE_THRESHOLD:
-            # wyślij alert e-mail
             body = f"Tytuł: {title}\nLink: {link}\nScore: {sc}\n\nFragment:\n{summary}"
-            try:
-                send_email(f"[Crypto ALERT] {title}", body)
-            except Exception as e:
-                logger.exception("Błąd wysyłania emaila: %s", e)
-        # oznacz jako przeczytane bez względu na score, żeby nie spamować
+            # dodaj mail do kolejki
+            await email_queue.put((f"[Crypto ALERT] {title}", body))
         mark_seen(uid, title, link)
 
-# --- (opcjonalne) fetch article content to improve detection ---
-async def fetch_article_text(session: aiohttp.ClientSession, url: str) -> str:
-    txt = await fetch(session, url)
-    if not txt:
-        return ""
-    soup = BeautifulSoup(txt, "html.parser")
-    # heurystyka: zebrać paragrafy
-    paragraphs = [p.get_text(separator=" ", strip=True) for p in soup.find_all("p")]
-    return "\n".join(paragraphs)[:4000]
-
-# --- main job ---
 async def job():
     logger.info("Start job: pobieranie RSS...")
-    async with aiohttp.ClientSession() as session:
+    async with aiohttp.ClientSession(headers={"User-Agent": "Mozilla/5.0 (compatible; CryptoNewsBot/1.0)"}) as session:
         tasks = [process_rss(session, u) for u in RSS_SOURCES]
         await asyncio.gather(*tasks, return_exceptions=True)
     logger.info("Job zakończony.")
 
-# --- scheduler loop using aioschedule ---
+# --- scheduler loop ---
 async def scheduler_loop():
+    # uruchom worker mailowy
+    asyncio.create_task(email_worker())
+
+    # ustaw harmonogram
     schedule.every(POLL_INTERVAL).seconds.do(lambda: asyncio.create_task(job()))
-    # immediately run once
+    
+    # uruchom pierwsze pobranie od razu
     asyncio.create_task(job())
+    
     while True:
         await schedule.run_pending()
         await asyncio.sleep(1)
