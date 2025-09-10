@@ -10,7 +10,7 @@ int main()
     const int time_interval {1};
 
     CsvData data("testing_data/eth.csv", time_interval);
-    data.TrimPricesVector(30000, 60000);
+    data.TrimPricesVector(3000, 6000);
     DiagnosticData diag_data = data.GetDiagnosticData();
 
     BotSimulator bot_simulator(diag_data.prices, short_period, long_period);

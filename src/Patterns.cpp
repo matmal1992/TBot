@@ -176,3 +176,11 @@ bool IncreasesInRow(const std::vector<double>& num_data, size_t inc_in_row)
     }
     return true;
 }
+bool TwoSamePriceInRow(const std::deque<double>& current_records)
+{
+    size_t size = current_records.size();
+    if (size < 2)
+        return false;
+
+    return current_records[size - 1] == current_records[size - 2];
+}

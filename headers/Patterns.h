@@ -24,8 +24,9 @@ bool ShortAvgDecrease(const std::vector<double>& short_averages, size_t price_in
 bool ShortAvgIncrease(const std::vector<double>& short_averages, size_t price_index);
 bool ShortAvgDoubleDecrease(const std::vector<double>& short_averages, size_t price_index);
 bool ShortAvgDoubleIncrease(const std::vector<double>& short_averages, size_t price_index);
-
 bool IncreasesInRow(const std::vector<double>& short_averages, size_t inc_in_row);
 bool DecreasesInRow(const std::vector<double>& short_averages, size_t dec_in_row);
+
+bool TwoSamePriceInRow(const std::deque<double>& current_records);
 
 #endif

@@ -51,16 +51,21 @@ void BotSimulator::ClosePOsition()
 
 void BotSimulator::MakeDecision()
 {
-    bool single_rise = SingleRise(current_records);
-    bool single_fall = SingleFall(current_records);
-    bool increase_in_row = IncreasesInRow(data_.short_averages, 2);
-    bool decrease_in_row = DecreasesInRow(data_.short_averages, 2);
+    // bool single_rise = SingleRise(current_records);
+    // bool single_fall = SingleFall(current_records);
+    // bool increase_in_row = IncreasesInRow(data_.short_averages, 2);
+    // bool decrease_in_row = DecreasesInRow(data_.short_averages, 2);
+    // bool two_same_prices = TwoSamePriceInRow(current_records);
     // bool short_avg_greater = CalculateAverage(short_period_) > CalculateAverage(long_period_);
     // bool long_avg_greater = CalculateAverage(short_period_) < CalculateAverage(long_period_);
-    // bool avg_greater_than_price
+    bool avg_greater_than_price = CalculateAverage(short_period_) > current_records.back();
 
-    bool open_condtion = increase_in_row and single_rise and not position_opened;
-    bool close_condition = decrease_in_row and single_fall and position_opened;
+    // bool open_condtion = increase_in_row and single_rise and not position_opened;
+    // bool close_condition = decrease_in_row and single_fall and position_opened;
+    // bool open_condtion = not two_same_prices and not position_opened;
+    // bool close_condition = two_same_prices and position_opened;
+    bool open_condtion = not avg_greater_than_price and not position_opened;
+    bool close_condition = avg_greater_than_price and position_opened;
 
     if (open_condtion)
     {
