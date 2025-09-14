@@ -2,7 +2,12 @@
 
 bool IsConstantFall(const std::deque<double>& current_records)
 {
-    for (size_t i = 1; i < current_records.size(); ++i)
+    if (current_records.size() < 3)
+    {
+        return false;
+    }
+
+    for (size_t i = 2; i < current_records.size(); ++i)
     {
         if (current_records[i] < current_records[i - 1] and current_records[i - 1] < current_records[i - 2])
         {
@@ -14,6 +19,11 @@ bool IsConstantFall(const std::deque<double>& current_records)
 
 bool IsConstantRise(const std::deque<double>& current_records)
 {
+    if (current_records.size() < 3)
+    {
+        return false;
+    }
+
     for (size_t i = 2; i < current_records.size(); ++i)
     {
         if (current_records[i] > current_records[i - 1] and current_records[i - 1] > current_records[i - 2])
