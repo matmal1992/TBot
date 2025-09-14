@@ -59,51 +59,43 @@ bool IsSuddenFall(const std::deque<double>& current_records)
     return false;
 }
 
-bool SingleFall(const std::deque<double>& current_records)
+template<typename Container, typename Compare> bool CheckTendencyInRow(const Container& data, size_t n, Compare comp)
 {
-    size_t size = current_records.size();
-
-    if (size > 1 and (current_records.at(size - 1) < current_records.at(size - 2)))
+    if (data.size() < n + 1)
     {
-        return true;
+        return false;
     }
 
-    return false;
+    for (size_t i = 0; i < n; ++i)
+    {
+        size_t index = data.size() - 1 - index;
+
+        if (!comp(data[index], data[index - 1]))
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool SingleFall(const std::deque<double>& current_records)
+{
+    return CheckTendencyInRow(current_records, 1, std::less<>());
 }
 
 bool TwoFallsInRow(const std::deque<double>& current_records)
 {
-    size_t size = current_records.size();
-
-    if (size > 2 and (current_records.at(size - 1) < current_records.at(size - 2)))
-    {
-        return true;
-    }
-
-    return false;
+    return CheckTendencyInRow(current_records, 2, std::less<>());
 }
 
 bool SingleRise(const std::deque<double>& current_records)
 {
-    size_t size = current_records.size();
-
-    if (size > 1 and (current_records.at(size - 1) > current_records.at(size - 2)))
-    {
-        return true;
-    }
-    return false;
+    return CheckTendencyInRow(current_records, 1, std::greater<>());
 }
 
 bool TwoRisesInRow(const std::deque<double>& current_records)
 {
-    size_t size = current_records.size();
-
-    if (size > 2 and (current_records.at(size - 1) > current_records.at(size - 2))
-        and (current_records.at(size - 2) > current_records.at(size - 3)))
-    {
-        return true;
-    }
-    return false;
+    return CheckTendencyInRow(current_records, 2, std::greater<>());
 }
 
 bool ShortAvgDecrease(const std::vector<double>& short_averages, size_t /*unused*/)
