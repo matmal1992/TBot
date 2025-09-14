@@ -78,105 +78,33 @@ template<typename Container, typename Compare> bool CheckTendencyInRow(const Con
     return true;
 }
 
-bool SingleFall(const std::deque<double>& current_records)
-{
-    return CheckTendencyInRow(current_records, 1, std::less<>());
-}
-
-bool TwoFallsInRow(const std::deque<double>& current_records)
-{
-    return CheckTendencyInRow(current_records, 2, std::less<>());
-}
-
-bool SingleRise(const std::deque<double>& current_records)
-{
-    return CheckTendencyInRow(current_records, 1, std::greater<>());
-}
-
-bool TwoRisesInRow(const std::deque<double>& current_records)
-{
-    return CheckTendencyInRow(current_records, 2, std::greater<>());
-}
-
 bool ShortAvgDecrease(const std::vector<double>& short_averages, size_t /*unused*/)
 {
-    size_t size = short_averages.size();
-
-    if (size > 1 and (short_averages.at(size - 1) < short_averages.at(size - 2)))
-    {
-        return true;
-    }
-    return false;
+    return CheckTendencyInRow(short_averages, 1, std::less<>());
 }
 
 bool ShortAvgIncrease(const std::vector<double>& short_averages, size_t /*unused*/)
 {
-    size_t size = short_averages.size();
-
-    if (size > 1 and (short_averages.at(size - 1) > short_averages.at(size - 2)))
-    {
-        return true;
-    }
-    return false;
+    return CheckTendencyInRow(short_averages, 1, std::greater<>());
 }
 
 bool ShortAvgDoubleDecrease(const std::vector<double>& short_averages, size_t /*unused*/)
 {
-    size_t size = short_averages.size();
-
-    if (size > 2 and (short_averages.at(size - 1) < short_averages.at(size - 2))
-        and (short_averages.at(size - 2) < short_averages.at(size - 3)))
-    {
-        return true;
-    }
-    return false;
+    return CheckTendencyInRow(short_averages, 2, std::less<>());
 }
 
 bool ShortAvgDoubleIncrease(const std::vector<double>& short_averages, size_t /*unused*/)
 {
-    size_t size = short_averages.size();
-
-    if (size > 2 and (short_averages.at(size - 1) > short_averages.at(size - 2))
-        and (short_averages.at(size - 2) > short_averages.at(size - 3)))
-    {
-        return true;
-    }
-    return false;
+    return CheckTendencyInRow(short_averages, 2, std::greater<>());
 }
 
 bool DecreasesInRow(const std::vector<double>& num_data, size_t dec_in_row)
 {
-    if (num_data.size() < dec_in_row)
-    {
-        return false; // Not enough elements
-    }
-
-    auto start_index = num_data.size() - dec_in_row;
-    for (size_t i = start_index + 1; i < num_data.size(); ++i)
-    {
-        if (num_data[i] >= num_data[i - 1])
-        {
-            return false; // Not strictly decreasing
-        }
-    }
-    return true;
+    return CheckTendencyInRow(num_data, dec_in_row, std::less<>());
 }
 bool IncreasesInRow(const std::vector<double>& num_data, size_t inc_in_row)
 {
-    if (num_data.size() < inc_in_row)
-    {
-        return false; // Not enough elements
-    }
-
-    auto start_index = num_data.size() - inc_in_row;
-    for (size_t i = start_index + 1; i < num_data.size(); ++i)
-    {
-        if (num_data[i] <= num_data[i - 1])
-        {
-            return false; // Not strictly increasing
-        }
-    }
-    return true;
+    return CheckTendencyInRow(num_data, inc_in_row, std::greater<>());
 }
 bool TwoSamePriceInRow(const std::deque<double>& current_records)
 {

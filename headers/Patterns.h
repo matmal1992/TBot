@@ -16,17 +16,14 @@ bool IsConstantFall(const std::deque<double>& current_records);
 bool IsConstantRise(const std::deque<double>& current_records);
 bool IsSuddenFall(const std::deque<double>& current_records);
 bool IsSuddenRise(const std::deque<double>& current_records);
-bool SingleRise(const std::deque<double>& current_records);
-bool SingleFall(const std::deque<double>& current_records);
-bool TwoRisesInRow(const std::deque<double>& current_records);
-bool TwoFallsInRow(const std::deque<double>& current_records);
 bool ShortAvgDecrease(const std::vector<double>& short_averages, size_t price_index);
 bool ShortAvgIncrease(const std::vector<double>& short_averages, size_t price_index);
 bool ShortAvgDoubleDecrease(const std::vector<double>& short_averages, size_t price_index);
 bool ShortAvgDoubleIncrease(const std::vector<double>& short_averages, size_t price_index);
 bool IncreasesInRow(const std::vector<double>& short_averages, size_t inc_in_row);
 bool DecreasesInRow(const std::vector<double>& short_averages, size_t dec_in_row);
-
 bool TwoSamePriceInRow(const std::deque<double>& current_records);
+
+template<typename Container, typename Compare> bool CheckTendencyInRow(const Container& data, size_t n, Compare comp);
 
 #endif
