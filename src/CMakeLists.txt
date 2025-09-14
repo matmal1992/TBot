@@ -1,14 +1,15 @@
-# Add sources
-set(SOURCES
+# Set sources
+set(TBOT_CORE_SOURCES
     BotSimulator.cpp
     LoadCsvData.cpp
     Patterns.cpp
     Graph.cpp
 )
 
-# Create the main executable
-add_executable(TBotSimulator ${SOURCES} ../main.cpp)
-target_compile_options(TBotSimulator PRIVATE -g)
+# Create the static library
+add_library(tbot_core STATIC ${TBOT_CORE_SOURCES})
 
-# Include headers
-target_include_directories(TBotSimulator PRIVATE ../headers)
+# Include headers directory
+target_include_directories(tbot_core 
+    PUBLIC 
+        ${CMAKE_SOURCE_DIR}/headers)

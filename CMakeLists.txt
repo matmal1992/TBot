@@ -15,11 +15,10 @@ endif()
 #Add -Werror to debug builds
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Werror")
 
-# add_compile_options("$<$<COMPILE_LANG_AND_ID:CXX,GNU>:-Wall;-Werror;-Wno-attributes;-g;-Og;>")
-
-# Includes
-include_directories(headers)
-
-# Subdirectories
-# add_subdirectory(tests)
 add_subdirectory(src)
+# add_subdirectory(tests)
+add_executable(tbot_runner main.cpp)
+target_link_libraries(tbot_runner PRIVATE tbot_core)
+
+
+
