@@ -3,17 +3,16 @@ enable_testing()
 # Google Test
 add_subdirectory(../googletest-src googletest-build)
 
-Test sources
+#Test sources
 set(TEST_SOURCES
-    BotSimulatorTest.cpp
-    # LoadCsvDataTest.cpp
+    PatternsTest.cpp
 )
 
 # Test executable
 add_executable(TBotTests ${TEST_SOURCES})
 
 # Link Google Test and project files
-target_link_libraries(TBotTests gtest gtest_main)
+target_link_libraries(TBotTests PRIVATE gtest)
 
 # Include headers
 target_include_directories(TBotTests PRIVATE ../headers)

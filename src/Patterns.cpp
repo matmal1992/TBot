@@ -68,7 +68,7 @@ template<typename Container, typename Compare> bool CheckTendencyInRow(const Con
 
     for (size_t i = 0; i < n; ++i)
     {
-        size_t index = data.size() - 1 - index;
+        size_t index = data.size() - 1 - i;
 
         if (!comp(data[index], data[index - 1]))
         {
