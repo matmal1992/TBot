@@ -96,7 +96,7 @@ bool TwoRisesInRow(const std::deque<double>& current_records)
     return false;
 }
 
-bool ShortAvgDecrease(const std::vector<double>& short_averages, size_t price_index)
+bool ShortAvgDecrease(const std::vector<double>& short_averages, size_t /*unused*/)
 {
     size_t size = short_averages.size();
 
@@ -107,7 +107,7 @@ bool ShortAvgDecrease(const std::vector<double>& short_averages, size_t price_in
     return false;
 }
 
-bool ShortAvgIncrease(const std::vector<double>& short_averages, size_t price_index)
+bool ShortAvgIncrease(const std::vector<double>& short_averages, size_t /*unused*/)
 {
     size_t size = short_averages.size();
 
@@ -118,7 +118,7 @@ bool ShortAvgIncrease(const std::vector<double>& short_averages, size_t price_in
     return false;
 }
 
-bool ShortAvgDoubleDecrease(const std::vector<double>& short_averages, size_t price_index)
+bool ShortAvgDoubleDecrease(const std::vector<double>& short_averages, size_t /*unused*/)
 {
     size_t size = short_averages.size();
 
@@ -130,7 +130,7 @@ bool ShortAvgDoubleDecrease(const std::vector<double>& short_averages, size_t pr
     return false;
 }
 
-bool ShortAvgDoubleIncrease(const std::vector<double>& short_averages, size_t price_index)
+bool ShortAvgDoubleIncrease(const std::vector<double>& short_averages, size_t /*unused*/)
 {
     size_t size = short_averages.size();
 
