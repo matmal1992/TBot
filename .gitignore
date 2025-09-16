@@ -1,6 +1,7 @@
 # dirs
 build/*
 Testing/*
+googletest-build/*
 # testing_data/*
 
 # files

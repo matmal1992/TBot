@@ -1,18 +1,20 @@
-enable_testing()
+
 
 # Google Test
-add_subdirectory(../googletest-src googletest-build)
+add_subdirectory(${CMAKE_SOURCE_DIR}/googletest-src ${CMAKE_SOURCE_DIR}/googletest-build)
 
 #Test sources
 set(TEST_SOURCES
-    PatternsTest.cpp
+        PatternsTest.cpp
 )
 
 # Test executable
 add_executable(TBotTests ${TEST_SOURCES})
 
 # Link Google Test and project files
-target_link_libraries(TBotTests PRIVATE gtest)
+target_link_libraries(TBotTests PRIVATE 
+                        gtest_main 
+                        tbot_core)
 
 # Include headers
 target_include_directories(TBotTests PRIVATE ../headers)

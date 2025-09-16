@@ -59,25 +59,6 @@ bool IsSuddenFall(const std::deque<double>& current_records)
     return false;
 }
 
-template<typename Container, typename Compare> bool CheckTendencyInRow(const Container& data, size_t n, Compare comp)
-{
-    if (data.size() < n + 1)
-    {
-        return false;
-    }
-
-    for (size_t i = 0; i < n; ++i)
-    {
-        size_t index = data.size() - 1 - i;
-
-        if (!comp(data[index], data[index - 1]))
-        {
-            return false;
-        }
-    }
-    return true;
-}
-
 bool ShortAvgDecrease(const std::vector<double>& short_averages, size_t /*unused*/)
 {
     return CheckTendencyInRow(short_averages, 1, std::less<>());

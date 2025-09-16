@@ -23,7 +23,7 @@
             "label": "Run tests",
             "type": "shell",
             "command": [
-                "cd /d ${workspaceFolder}/build; cmake --build .; ctest --verbose"
+                "cd ${workspaceFolder}/build; cmake --build .; ctest --verbose"
             ],
             "group": {
                 "kind": "test",

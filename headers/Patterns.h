@@ -24,6 +24,23 @@ bool IncreasesInRow(const std::vector<double>& short_averages, size_t inc_in_row
 bool DecreasesInRow(const std::vector<double>& short_averages, size_t dec_in_row);
 bool TwoSamePriceInRow(const std::deque<double>& current_records);
 
-template<typename Container, typename Compare> bool CheckTendencyInRow(const Container& data, size_t n, Compare comp);
+template<typename Container, typename Compare> bool CheckTendencyInRow(const Container& data, size_t n, Compare comp)
+{
+    if (data.size() < n + 1)
+    {
+        return false;
+    }
+
+    for (size_t i = 0; i < n; ++i)
+    {
+        size_t index = data.size() - 1 - i;
+
+        if (!comp(data[index], data[index - 1]))
+        {
+            return false;
+        }
+    }
+    return true;
+}
 
 #endif

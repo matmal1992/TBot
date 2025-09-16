@@ -51,9 +51,3 @@ TEST(PatternsTests, ShortAvgDoubleDecrease)
     short_avg = {5.0, 5.0, 3.0};
     EXPECT_FALSE(ShortAvgDoubleDecrease(short_avg, 0));
 }
-
-int main(int argc, char** argv)
-{
-    ::testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
-}

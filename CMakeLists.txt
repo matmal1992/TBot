@@ -14,9 +14,9 @@ endif()
 
 #Add -Werror to debug builds
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Werror")
-
+enable_testing()
 add_subdirectory(src)
-# add_subdirectory(tests)
+add_subdirectory(tests)
 add_executable(tbot_runner main.cpp)
 target_link_libraries(tbot_runner PRIVATE tbot_core)
 
