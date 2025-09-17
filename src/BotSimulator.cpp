@@ -41,7 +41,7 @@ void BotSimulator::OpenPosition()
     open_value = current_records.back();
 }
 
-void BotSimulator::ClosePOsition()
+void BotSimulator::ClosePosition()
 {
     data_.actions.push_back(std::pair(false, true));
     position_opened = false;
@@ -73,7 +73,7 @@ void BotSimulator::MakeDecision()
     }
     else if (close_condition)
     {
-        ClosePOsition();
+        ClosePosition();
     }
     else
     {

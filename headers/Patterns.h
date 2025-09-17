@@ -1,5 +1,5 @@
-#ifndef BEHAVIOURS_H
-#define BEHAVIOURS_H
+#ifndef PATTERNS_H
+#define PATTERNS_H
 
 #include <algorithm>
 #include <cstddef>
@@ -12,19 +12,11 @@ inline constexpr double percentage_loss = 0.05;
 inline constexpr double percentage_peak_profit = 1.9;
 inline constexpr double percentage_peak_loss = 1.9;
 
-bool IsConstantFall(const std::deque<double>& current_records);
-bool IsConstantRise(const std::deque<double>& current_records);
 bool IsSuddenFall(const std::deque<double>& current_records);
 bool IsSuddenRise(const std::deque<double>& current_records);
-bool ShortAvgDecrease(const std::vector<double>& short_averages, size_t price_index);
-bool ShortAvgIncrease(const std::vector<double>& short_averages, size_t price_index);
-bool ShortAvgDoubleDecrease(const std::vector<double>& short_averages, size_t price_index);
-bool ShortAvgDoubleIncrease(const std::vector<double>& short_averages, size_t price_index);
-bool IncreasesInRow(const std::vector<double>& short_averages, size_t inc_in_row);
-bool DecreasesInRow(const std::vector<double>& short_averages, size_t dec_in_row);
 bool TwoSamePriceInRow(const std::deque<double>& current_records);
 
-template<typename Container, typename Compare> bool CheckTendencyInRow(const Container& data, size_t n, Compare comp)
+template<typename Container, typename Compare> bool ConstantTendency(const Container& data, size_t n, Compare comp)
 {
     if (data.size() < n + 1)
     {

@@ -27,7 +27,7 @@ private:
     void AddRecord(int record_index);
     void MakeDecision();
     void OpenPosition();
-    void ClosePOsition();
+    void ClosePosition();
     double CalculateAverage(size_t period);
 
     SimulatedData data_;
