@@ -35,6 +35,23 @@ template<typename Container, typename Compare> bool ConstantTendency(const Conta
     }
     return true;
 }
+
+/* Implementation, which checks only last n elements of the container. To consider later if will be needed.
+
+template<typename Container, typename Compare>
+bool ConstantTendency(const Container& data, size_t n, Compare comp)
+{
+    if (data.size() < n + 1) return false;
+
+    for (size_t i = 0; i < n; ++i)
+    {
+        if (!comp(data[data.size() - n + i], data[data.size() - n + i - 1]))
+        {
+            return false;
+        }
+    }
+    return true;
+}*/
 } // namespace patterns
 
 #endif

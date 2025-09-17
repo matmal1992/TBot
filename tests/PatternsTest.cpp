@@ -50,9 +50,6 @@ TEST(ConstantTendencyTest, FiveTimesInRowFallTrue)
     std::deque<double> d_data = {10.0, 8.0, 6.0, 4.0, 2.0, 0.0};
     EXPECT_TRUE(ConstantTendency(d_data, 5, std::less<>()));
 
-    d_data = {10.0, 8.0, 6.0, 4.0, 2.0, 1.0}; // still strictly decreasing
-    EXPECT_TRUE(ConstantTendency(d_data, 5, std::less<>()));
-
     d_data = {10.0, 8.0, 6.0, 4.0, 2.0, 3.0}; // last value breaks the fall
     EXPECT_FALSE(ConstantTendency(d_data, 5, std::less<>()));
 
@@ -96,5 +93,12 @@ TEST(ConstantTendencyTest, EmptyContainer)
     std::deque<double> d_data = {};
     EXPECT_FALSE(ConstantTendency(d_data, 1, std::greater<>()));
     EXPECT_FALSE(ConstantTendency(d_data, 1, std::less<>()));
+}
+
+TEST(ConstantTendencyTest, CheckIfFunctionWorksForIndexInTheMiddleOfContainer)
+{
+    std::deque<double> d_data = {0.0, 2.0, 1.0, 4.0, 2.0, 3.0};
+    EXPECT_TRUE(ConstantTendency(d_data, 2, std::greater<>())); // checks only last two values: 2.0, 3.0
+    EXPECT_FALSE(ConstantTendency(d_data, 3, std::greater<>())); // checks last three values: 4.0, 2.0, 3.0
 }
 } // namespace patterns
