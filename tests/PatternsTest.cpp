@@ -1,6 +1,8 @@
 #include "../headers/Patterns.h"
 #include "gtest/gtest.h"
 
+namespace patterns
+{
 TEST(ConstantTendencyTest, SingleRiseTrueForDequeAndVector)
 {
     std::deque<double> d_data = {1.0, 2.0};
@@ -95,3 +97,4 @@ TEST(ConstantTendencyTest, EmptyContainer)
     EXPECT_FALSE(ConstantTendency(d_data, 1, std::greater<>()));
     EXPECT_FALSE(ConstantTendency(d_data, 1, std::less<>()));
 }
+} // namespace patterns

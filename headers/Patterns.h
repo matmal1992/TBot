@@ -2,19 +2,20 @@
 #define PATTERNS_H
 
 #include <algorithm>
-#include <cstddef>
 #include <deque>
 #include <functional>
 #include <vector>
 
+namespace patterns
+{
 inline constexpr double percentage_profit = 0.05;
 inline constexpr double percentage_loss = 0.05;
 inline constexpr double percentage_peak_profit = 1.9;
-inline constexpr double percentage_peak_loss = 1.9;
+inline constexpr double percentage_peak_loss = 0.4;
 
 bool IsSuddenFall(const std::deque<double>& current_records);
 bool IsSuddenRise(const std::deque<double>& current_records);
-bool TwoSamePriceInRow(const std::deque<double>& current_records);
+bool TwoSamePricesInRow(const std::deque<double>& current_records);
 
 template<typename Container, typename Compare> bool ConstantTendency(const Container& data, size_t n, Compare comp)
 {
@@ -34,5 +35,6 @@ template<typename Container, typename Compare> bool ConstantTendency(const Conta
     }
     return true;
 }
+} // namespace patterns
 
 #endif
