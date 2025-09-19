@@ -17,41 +17,21 @@ bool IsSuddenFall(const std::deque<double>& current_records);
 bool IsSuddenRise(const std::deque<double>& current_records);
 bool TwoSamePricesInRow(const std::deque<double>& current_records);
 
+// Checks if the last n changes in the container are all in the same direction
 template<typename Container, typename Compare> bool ConstantTendency(const Container& data, size_t n, Compare comp)
 {
-    if (data.size() < n + 1)
+    if (data.size() < n or n < 2)
     {
         return false;
     }
 
-    for (size_t i = 0; i < n; ++i)
+    for (size_t i = data.size() - n; i < data.size() - 1; ++i)
     {
-        size_t index = data.size() - 1 - i;
-
-        if (!comp(data[index], data[index - 1]))
-        {
+        if (!comp(data[i + 1], data[i]))
             return false;
-        }
     }
     return true;
 }
-
-/* Implementation, which checks only last n elements of the container. To consider later if will be needed.
-
-template<typename Container, typename Compare>
-bool ConstantTendency(const Container& data, size_t n, Compare comp)
-{
-    if (data.size() < n + 1) return false;
-
-    for (size_t i = 0; i < n; ++i)
-    {
-        if (!comp(data[data.size() - n + i], data[data.size() - n + i - 1]))
-        {
-            return false;
-        }
-    }
-    return true;
-}*/
 } // namespace patterns
 
 #endif
