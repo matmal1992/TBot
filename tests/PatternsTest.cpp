@@ -107,4 +107,71 @@ TEST(ConstantTendencyTest, CheckNEqualsOne)
     std::deque<double> d_data = {0.0, 2.0, 1.0, 4.0, 2.0, 3.0};
     EXPECT_FALSE(ConstantTendency(d_data, 1, std::greater<>()));
 }
+
+TEST(IsSuddenChangeTest, DetectsSuddenRise)
+{
+    std::deque<double> data = {100.0, 200.0};
+    EXPECT_TRUE(IsSuddenChange(data, change_direction::rise));
+
+    data = {100.0, 150.0};
+    EXPECT_FALSE(IsSuddenChange(data, change_direction::rise));
+}
+
+TEST(IsSuddenChangeTest, DetectsSuddenFall)
+{
+    std::deque<double> data = {100.0, 30.0};
+    EXPECT_TRUE(IsSuddenChange(data, change_direction::fall));
+
+    data = {100.0, 50.0};
+    EXPECT_FALSE(IsSuddenChange(data, change_direction::fall));
+}
+
+TEST(IsSuddenChangeTest, NotEnoughData)
+{
+    std::deque<double> empty_data {};
+    EXPECT_FALSE(IsSuddenChange(empty_data, change_direction::rise));
+    EXPECT_FALSE(IsSuddenChange(empty_data, change_direction::fall));
+
+    std::deque<double> single_data = {100.0};
+    EXPECT_FALSE(IsSuddenChange(single_data, change_direction::rise));
+    EXPECT_FALSE(IsSuddenChange(single_data, change_direction::fall));
+}
+
+TEST(IsSuddenChangeTest, BorderlineCases)
+{
+    std::deque<double> data = {100.0, 190.0};
+    EXPECT_FALSE(IsSuddenChange(data, change_direction::rise));
+
+    data = {100.0, 40.0};
+    EXPECT_FALSE(IsSuddenChange(data, change_direction::fall));
+}
+
+TEST(IsSuddenChangeTest, BiggerDataContainer)
+{
+    std::deque<double> data = {0.0, 2.0, 1.0, 4.0, 2.0, 3.0, 100.0, 191.0};
+    EXPECT_TRUE(IsSuddenChange(data, change_direction::rise));
+
+    data = {0.0, 2.0, 1.0, 4.0, 2.0, 3.0, 100.0, 30.0};
+    EXPECT_TRUE(IsSuddenChange(data, change_direction::fall));
+}
+
+TEST(SamePricesInRowTest, AllSame)
+{
+    std::deque<double> d = {5.0, 5.0, 5.0, 5.0};
+    EXPECT_TRUE(SamePricesInRow(d, 4));
+}
+
+TEST(SamePricesInRowTest, LastTwoSameButNotThree)
+{
+    std::deque<double> d = {1.0, 2.0, 3.0, 3.0};
+    EXPECT_TRUE(SamePricesInRow(d, 2));
+    EXPECT_FALSE(SamePricesInRow(d, 3));
+}
+
+TEST(SamePricesInRowTest, NotEnoughElements)
+{
+    std::deque<double> d = {1.0};
+    EXPECT_FALSE(SamePricesInRow(d, 2));
+}
+
 } // namespace patterns

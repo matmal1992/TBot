@@ -1,34 +1,16 @@
-#include "..\headers\Patterns.h"
+#include "../headers/Patterns.h"
 
 namespace patterns
 {
-bool IsSuddenRise(const std::deque<double>& current_records)
+bool SamePricesInRow(const std::deque<double>& data, const size_t n)
 {
-
-    if (current_records.size() < 2)
-    {
-        return false;
-    }
-    return current_records.back() > current_records[current_records.size() - 2] * percentage_peak_profit;
-}
-
-bool IsSuddenFall(const std::deque<double>& current_records)
-{
-    if (current_records.size() < 2)
-    {
-        return false;
-    }
-    return current_records.back() < current_records[current_records.size() - 2] * percentage_peak_loss;
-}
-
-bool TwoSamePricesInRow(const std::deque<double>& current_records)
-{
-    size_t size = current_records.size();
-    if (size < 2)
+    size_t size = data.size();
+    if (size < 2 or n < 2)
     {
         return false;
     }
 
-    return current_records[size - 1] == current_records[size - 2];
+    const double last = data.back();
+    return std::all_of(data.end() - n, data.end(), [&](double value) { return value == last; });
 }
 } // namespace patterns

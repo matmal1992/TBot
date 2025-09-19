@@ -12,6 +12,12 @@ enum class graph_type
     only_actions = 5
 };
 
+enum class change_direction
+{
+    rise = 1,
+    fall = 2
+};
+
 namespace histogram_type
 {
 const int diffs = 1;
