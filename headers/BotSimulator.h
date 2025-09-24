@@ -18,9 +18,9 @@ struct SimulatedData
 class BotSimulator
 {
 public:
-    BotSimulator(const std::vector<double>& prices, const int short_period = 0, const int long_period = 0);
+    BotSimulator(const std::vector<double>& prices, const size_t short_period = 0, const size_t long_period = 0);
 
-    SimulatedData GetSimulatedData();
+    const SimulatedData& GetSimulatedData() const;
     void RunSimulator();
 
 private:
@@ -29,6 +29,8 @@ private:
     void OpenPosition();
     void ClosePosition();
     double CalculateAverage(size_t period) const;
+    bool ShouldOpen() const;
+    bool ShouldClose() const;
 
     SimulatedData data_;
     std::vector<double> prices_;

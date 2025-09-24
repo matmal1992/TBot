@@ -47,7 +47,7 @@ template<typename Container> bool IsSuddenChange(const Container& data, const di
     const double prev = data[data.size() - 2];
     const double last = data.back();
 
-    if (dir == change_direction::rise)
+    if (dir == direction::rise)
     {
         return last > prev * Thresholds::peak_profit;
     }
