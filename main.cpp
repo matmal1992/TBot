@@ -15,7 +15,7 @@ int main()
     DiagnosticData diag_data = data.GetDiagnosticData();
 
     BotSimulator bot_simulator(diag_data.prices, short_period, long_period);
-    bot_simulator.Iterate();
+    bot_simulator.RunSimulator();
     SimulatedData sim_data = bot_simulator.GetSimulatedData();
 
     std::cout << "Sells: " << sim_data.closes << std::endl;

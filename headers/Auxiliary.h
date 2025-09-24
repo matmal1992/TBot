@@ -12,7 +12,7 @@ enum class graph_type
     only_actions = 5
 };
 
-enum class change_direction
+enum class direction
 {
     rise = 1,
     fall = 2

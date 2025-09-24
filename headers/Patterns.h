@@ -37,7 +37,7 @@ bool ConstantTendency(const Container& data, const size_t n, const Compare comp)
 }
 
 // Checks if the last change in the container is a sudden rise or fall based on predefined thresholds
-template<typename Container> bool IsSuddenChange(const Container& data, const change_direction dir)
+template<typename Container> bool IsSuddenChange(const Container& data, const direction dir)
 {
     if (data.size() < 2)
     {

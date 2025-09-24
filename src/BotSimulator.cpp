@@ -59,10 +59,10 @@ void BotSimulator::MakeDecision()
     // bool close_condition = decrease_in_row and single_fall and position_opened;
     // bool open_condtion = not two_same_prices and not position_opened;
     // bool close_condition = two_same_prices and position_opened;
-    bool open_condtion = not avg_above_price and not position_opened;
+    bool open_condition = not avg_above_price and not position_opened;
     bool close_condition = avg_above_price and position_opened;
 
-    if (open_condtion)
+    if (open_condition)
     {
         OpenPosition();
     }

@@ -111,48 +111,48 @@ TEST(ConstantTendencyTest, CheckNEqualsOne)
 TEST(IsSuddenChangeTest, DetectsSuddenRise)
 {
     std::deque<double> data = {100.0, 200.0};
-    EXPECT_TRUE(IsSuddenChange(data, change_direction::rise));
+    EXPECT_TRUE(IsSuddenChange(data, direction::rise));
 
     data = {100.0, 150.0};
-    EXPECT_FALSE(IsSuddenChange(data, change_direction::rise));
+    EXPECT_FALSE(IsSuddenChange(data, direction::rise));
 }
 
 TEST(IsSuddenChangeTest, DetectsSuddenFall)
 {
     std::deque<double> data = {100.0, 30.0};
-    EXPECT_TRUE(IsSuddenChange(data, change_direction::fall));
+    EXPECT_TRUE(IsSuddenChange(data, direction::fall));
 
     data = {100.0, 50.0};
-    EXPECT_FALSE(IsSuddenChange(data, change_direction::fall));
+    EXPECT_FALSE(IsSuddenChange(data, direction::fall));
 }
 
 TEST(IsSuddenChangeTest, NotEnoughData)
 {
     std::deque<double> empty_data {};
-    EXPECT_FALSE(IsSuddenChange(empty_data, change_direction::rise));
-    EXPECT_FALSE(IsSuddenChange(empty_data, change_direction::fall));
+    EXPECT_FALSE(IsSuddenChange(empty_data, direction::rise));
+    EXPECT_FALSE(IsSuddenChange(empty_data, direction::fall));
 
     std::deque<double> single_data = {100.0};
-    EXPECT_FALSE(IsSuddenChange(single_data, change_direction::rise));
-    EXPECT_FALSE(IsSuddenChange(single_data, change_direction::fall));
+    EXPECT_FALSE(IsSuddenChange(single_data, direction::rise));
+    EXPECT_FALSE(IsSuddenChange(single_data, direction::fall));
 }
 
 TEST(IsSuddenChangeTest, BorderlineCases)
 {
     std::deque<double> data = {100.0, 190.0};
-    EXPECT_FALSE(IsSuddenChange(data, change_direction::rise));
+    EXPECT_FALSE(IsSuddenChange(data, direction::rise));
 
     data = {100.0, 40.0};
-    EXPECT_FALSE(IsSuddenChange(data, change_direction::fall));
+    EXPECT_FALSE(IsSuddenChange(data, direction::fall));
 }
 
 TEST(IsSuddenChangeTest, BiggerDataContainer)
 {
     std::deque<double> data = {0.0, 2.0, 1.0, 4.0, 2.0, 3.0, 100.0, 191.0};
-    EXPECT_TRUE(IsSuddenChange(data, change_direction::rise));
+    EXPECT_TRUE(IsSuddenChange(data, direction::rise));
 
     data = {0.0, 2.0, 1.0, 4.0, 2.0, 3.0, 100.0, 30.0};
-    EXPECT_TRUE(IsSuddenChange(data, change_direction::fall));
+    EXPECT_TRUE(IsSuddenChange(data, direction::fall));
 }
 
 TEST(SamePricesInRowTest, AllSame)
