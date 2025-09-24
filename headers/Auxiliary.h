@@ -18,6 +18,13 @@ enum class change_direction
     fall = 2
 };
 
+enum class action
+{
+    none = 0,
+    open = 1,
+    close = 2
+};
+
 namespace histogram_type
 {
 const int diffs = 1;

@@ -2,8 +2,7 @@
 build/*
 Testing/*
 googletest-build/*
-# testing_data/*
-
+testing_data/*
 # files
 .vscode/settings.json
 GodBoltQuickTesting.cpp

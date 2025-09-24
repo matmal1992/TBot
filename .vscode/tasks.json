@@ -4,7 +4,7 @@
         {
             "label": "Run executable",
             "type": "shell",
-            "command": "./build/src/TBotSimulator",
+            "command": "./build/tbot_runner",
             "problemMatcher": []
         },
         {
