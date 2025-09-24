@@ -8,12 +8,14 @@ int main()
     const int short_period {10};
     const int long_period {24};
     const int time_interval {1};
+    // move this to struct Presets
 
     CsvData data("testing_data/eth.csv", time_interval);
     data.TrimPricesVector(3000, 6000);
     DiagnosticData diag_data = data.GetDiagnosticData();
 
     BotSimulator bot_simulator(diag_data.prices, short_period, long_period);
+    bot_simulator.Iterate();
     SimulatedData sim_data = bot_simulator.GetSimulatedData();
 
     std::cout << "Sells: " << sim_data.closes << std::endl;

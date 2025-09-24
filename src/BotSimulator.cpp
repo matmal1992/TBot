@@ -5,7 +5,6 @@ BotSimulator::BotSimulator(const std::vector<double>& prices, const int short_pe
     , short_period_(short_period)
     , long_period_(long_period)
 {
-    Iterate();
 }
 
 void BotSimulator::AddRecord(int record_index)
@@ -20,7 +19,7 @@ void BotSimulator::AddRecord(int record_index)
     data_.long_averages.push_back(CalculateAverage(long_period_));
 }
 
-void BotSimulator::Iterate()
+void BotSimulator::RunSimulator()
 {
     for (size_t i {0}; i < prices_.size(); ++i)
     {
@@ -42,7 +41,7 @@ void BotSimulator::ClosePosition()
     data_.actions.push_back(action::close);
     position_opened = false;
     data_.closes++;
-    data_.balance += current_records_.back() - open_value - spread;
+    data_.balance += current_records_.back() - open_value - spread_;
 }
 
 void BotSimulator::MakeDecision()
@@ -54,14 +53,14 @@ void BotSimulator::MakeDecision()
     // bool two_same_prices = TwoSamePriceInRow(current_records);
     // bool short_avg_greater = CalculateAverage(short_period_) > CalculateAverage(long_period_);
     // bool long_avg_greater = CalculateAverage(short_period_) < CalculateAverage(long_period_);
-    bool avg_greater_than_price = CalculateAverage(short_period_) > current_records_.back();
+    bool avg_above_price = CalculateAverage(short_period_) > current_records_.back();
 
     // bool open_condtion = increase_in_row and single_rise and not position_opened;
     // bool close_condition = decrease_in_row and single_fall and position_opened;
     // bool open_condtion = not two_same_prices and not position_opened;
     // bool close_condition = two_same_prices and position_opened;
-    bool open_condtion = not avg_greater_than_price and not position_opened;
-    bool close_condition = avg_greater_than_price and position_opened;
+    bool open_condtion = not avg_above_price and not position_opened;
+    bool close_condition = avg_above_price and position_opened;
 
     if (open_condtion)
     {
