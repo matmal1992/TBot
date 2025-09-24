@@ -86,12 +86,13 @@ std::string Graph::BuildGraphCommand(const graph_type g_type)
 
 void Graph::SetDataCommands()
 {
-    short_avg_comm_ = "'" + paths::short_avg + "' using 1:2 with lines lc rgb 'blue'";
-    long_avg_comm_ = "'" + paths::long_avg + "' using 1:2 with lines lc rgb 'green'";
-    actions_comm_ = "'" + paths::opens + "' using 1:2 with points pointtype 7 pointsize 1.0 lc rgb 'green', '"
-        + paths::closes + "' using 1:2 with points pointtype 7 pointsize 1.0 lc rgb 'red'";
+    short_avg_comm_ = std::string("'") + paths::short_avg + "' using 1:2 with lines lc rgb 'blue'";
+    long_avg_comm_ = std::string("'") + paths::long_avg + "' using 1:2 with lines lc rgb 'green'";
+    actions_comm_ = std::string("'") + paths::opens
+        + "' using 1:2 with points pointtype 7 pointsize 1.0 lc rgb 'green', '" + paths::closes
+        + "' using 1:2 with points pointtype 7 pointsize 1.0 lc rgb 'red'";
 }
-#
+
 void Graph::PrintHistogram(const histogram_type h_type)
 {
     const std::map<histogram_type, HistogramConfig> configs

@@ -3,16 +3,6 @@
 
 #include <algorithm>
 
-struct Config
-{
-    const size_t short_period {10};
-    const size_t long_period {24};
-    const size_t time_interval {1};
-    const size_t trim_start {3000};
-    const size_t trim_end {6000};
-    const std::string data_file {"testing_data/eth.csv"};
-};
-
 SimulatedData RunSimulation(const Config& cfg)
 {
     CsvData data(cfg.data_file, cfg.time_interval);
