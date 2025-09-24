@@ -10,7 +10,7 @@ struct SimulatedData
 {
     std::vector<double> short_averages;
     std::vector<double> long_averages;
-    std::vector<std::pair<bool, bool>> actions; // first -> open_pos | second -> close_pos
+    std::vector<action> actions;
     double balance {0};
     int opens {0}, closes {0};
 };

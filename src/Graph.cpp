@@ -31,11 +31,11 @@ void Graph::WriteActionsToFile()
 
     for (size_t i {0}; i < diag_data_.prices.size() - 4; ++i)
     {
-        if (sim_data_.actions.at(i).first == true)
+        if (sim_data_.actions.at(i) == action::open)
         {
             open_points_file << i << " " << diag_data_.prices.at(i) << "\n";
         }
-        else if (sim_data_.actions.at(i).second == true)
+        else if (sim_data_.actions.at(i) == action::close)
         {
             closes_points_file << i << " " << diag_data_.prices.at(i) << "\n";
         }

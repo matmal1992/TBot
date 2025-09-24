@@ -35,7 +35,7 @@ void BotSimulator::Iterate()
 
 void BotSimulator::OpenPosition()
 {
-    data_.actions.push_back(std::pair(true, false));
+    data_.actions.push_back(action::open);
     position_opened = true;
     data_.opens++;
     open_value = current_records.back();
@@ -43,7 +43,7 @@ void BotSimulator::OpenPosition()
 
 void BotSimulator::ClosePosition()
 {
-    data_.actions.push_back(std::pair(false, true));
+    data_.actions.push_back(action::close);
     position_opened = false;
     data_.closes++;
     data_.balance += current_records.back() - open_value - spread;
@@ -77,7 +77,7 @@ void BotSimulator::MakeDecision()
     }
     else
     {
-        data_.actions.push_back(std::pair(false, false));
+        data_.actions.push_back(action::none);
     }
 }
 
