@@ -3,28 +3,40 @@
 
 #include <algorithm>
 
-int main()
+struct Config
 {
-    const int short_period {10};
-    const int long_period {24};
-    const int time_interval {1};
-    // move this to struct Presets
+    const size_t short_period {10};
+    const size_t long_period {24};
+    const size_t time_interval {1};
+    const size_t trim_start {3000};
+    const size_t trim_end {6000};
+    const std::string data_file {"testing_data/eth.csv"};
+};
 
-    CsvData data("testing_data/eth.csv", time_interval);
-    data.TrimPricesVector(3000, 6000);
+SimulatedData RunSimulation(const Config& cfg)
+{
+    CsvData data(cfg.data_file, cfg.time_interval);
+    data.TrimPricesVector(cfg.trim_start, cfg.trim_end);
+
     DiagnosticData diag_data = data.GetDiagnosticData();
-
-    BotSimulator bot_simulator(diag_data.prices, short_period, long_period);
+    BotSimulator bot_simulator(diag_data.prices, cfg.short_period, cfg.long_period);
     bot_simulator.RunSimulator();
-    SimulatedData sim_data = bot_simulator.GetSimulatedData();
 
-    std::cout << "Sells: " << sim_data.closes << std::endl;
-    std::cout << "Buys: " << sim_data.opens << std::endl;
-    std::cout << "Balance: " << sim_data.balance << std::endl;
-
-    Graph graph(diag_data, sim_data);
+    Graph graph(diag_data, bot_simulator.GetSimulatedData());
     graph.PrintLinearGraph(graph_type::short_avg_actions);
     // graph.PrintHistogram(histogram_type::diffs);
+
+    return bot_simulator.GetSimulatedData();
+}
+
+int main()
+{
+    Config cfg;
+    SimulatedData sim_data = RunSimulation(cfg);
+
+    std::cout << "Sells: " << sim_data.closes << '\n'
+              << "Buys: " << sim_data.opens << '\n'
+              << "Balance: " << sim_data.balance << '\n';
 
     return 0;
 }

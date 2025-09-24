@@ -31,22 +31,22 @@ void BotSimulator::RunSimulator()
 void BotSimulator::OpenPosition()
 {
     data_.actions.push_back(action::open);
-    position_opened = true;
+    position_opened_ = true;
     ++data_.opens;
-    open_value = current_records_.back();
+    open_value_ = current_records_.back();
 }
 
 void BotSimulator::ClosePosition()
 {
     data_.actions.push_back(action::close);
-    position_opened = false;
+    position_opened_ = false;
     ++data_.closes;
-    data_.balance += current_records_.back() - open_value - spread_;
+    data_.balance += current_records_.back() - open_value_ - spread_;
 }
 
 bool BotSimulator::ShouldOpen() const
 {
-    if (position_opened or current_records_.empty())
+    if (position_opened_ or current_records_.empty())
     {
         return false;
     }
@@ -59,7 +59,7 @@ bool BotSimulator::ShouldOpen() const
 
 bool BotSimulator::ShouldClose() const
 {
-    if (not position_opened or current_records_.empty())
+    if (not position_opened_ or current_records_.empty())
     {
         return false;
     }

@@ -35,8 +35,8 @@ private:
     SimulatedData data_;
     std::vector<double> prices_;
     std::deque<double> current_records_;
-    bool position_opened {false};
-    double open_value {0};
+    bool position_opened_ {false};
+    double open_value_ {0};
     size_t short_period_, long_period_;
     const double spread_ {0};
 };
