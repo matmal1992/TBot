@@ -28,11 +28,11 @@ private:
     void MakeDecision();
     void OpenPosition();
     void ClosePosition();
-    double CalculateAverage(size_t period);
+    double CalculateAverage(size_t period) const;
 
     SimulatedData data_;
     std::vector<double> prices_;
-    std::deque<double> current_records;
+    std::deque<double> current_records_;
     size_t initial_deposit = 5000;
     bool position_opened {false};
     double open_value {0}, spread {0};

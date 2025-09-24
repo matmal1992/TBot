@@ -10,16 +10,12 @@ BotSimulator::BotSimulator(const std::vector<double>& prices, const int short_pe
 
 void BotSimulator::AddRecord(int record_index)
 {
-    if (current_records.size() < long_period_)
+    if (current_records_.size() >= long_period_)
     {
-        current_records.push_back(prices_.at(record_index));
-    }
-    else
-    {
-        current_records.pop_front();
-        current_records.push_back(prices_.at(record_index));
+        current_records_.pop_front();
     }
 
+    current_records_.push_back(prices_.at(record_index));
     data_.short_averages.push_back(CalculateAverage(short_period_));
     data_.long_averages.push_back(CalculateAverage(long_period_));
 }
@@ -38,7 +34,7 @@ void BotSimulator::OpenPosition()
     data_.actions.push_back(action::open);
     position_opened = true;
     data_.opens++;
-    open_value = current_records.back();
+    open_value = current_records_.back();
 }
 
 void BotSimulator::ClosePosition()
@@ -46,7 +42,7 @@ void BotSimulator::ClosePosition()
     data_.actions.push_back(action::close);
     position_opened = false;
     data_.closes++;
-    data_.balance += current_records.back() - open_value - spread;
+    data_.balance += current_records_.back() - open_value - spread;
 }
 
 void BotSimulator::MakeDecision()
@@ -58,7 +54,7 @@ void BotSimulator::MakeDecision()
     // bool two_same_prices = TwoSamePriceInRow(current_records);
     // bool short_avg_greater = CalculateAverage(short_period_) > CalculateAverage(long_period_);
     // bool long_avg_greater = CalculateAverage(short_period_) < CalculateAverage(long_period_);
-    bool avg_greater_than_price = CalculateAverage(short_period_) > current_records.back();
+    bool avg_greater_than_price = CalculateAverage(short_period_) > current_records_.back();
 
     // bool open_condtion = increase_in_row and single_rise and not position_opened;
     // bool close_condition = decrease_in_row and single_fall and position_opened;
@@ -81,16 +77,11 @@ void BotSimulator::MakeDecision()
     }
 }
 
-double BotSimulator::CalculateAverage(size_t period)
+double BotSimulator::CalculateAverage(size_t period) const
 {
-    if (current_records.size() < period)
-    {
-        return std::accumulate(current_records.begin(), current_records.end(), 0.0) / current_records.size();
-    }
-    else
-    {
-        return std::accumulate(current_records.end() - period, current_records.end(), 0.0) / period;
-    }
+    size_t number_of_elements = std::min(period, current_records_.size());
+    auto first = current_records_.end() - number_of_elements;
+    return std::accumulate(first, current_records_.end(), 0.0) / number_of_elements;
 }
 
 SimulatedData BotSimulator::GetSimulatedData()
