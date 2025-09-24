@@ -25,11 +25,11 @@ enum class action
     close = 2
 };
 
-namespace histogram_type
+enum class histogram_type
 {
-const int diffs = 1;
-const int devs = 2;
-} // namespace histogram_type
+    diffs = 1,
+    devs = 2
+};
 
 namespace paths
 {

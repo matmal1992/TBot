@@ -23,7 +23,7 @@ public:
     Graph(const DiagnosticData& diag_data, const SimulatedData& sim_data);
 
     void PrintLinearGraph(const graph_type g_type);
-    void PrintHistogram(const int histogram_type);
+    void PrintHistogram(const histogram_type histogram_type);
 
 private:
     std::string GetTitle();

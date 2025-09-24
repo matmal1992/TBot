@@ -92,9 +92,9 @@ void Graph::SetDataCommands()
         + paths::closes + "' using 1:2 with points pointtype 7 pointsize 1.0 lc rgb 'red'";
 }
 #
-void Graph::PrintHistogram(const int h_type)
+void Graph::PrintHistogram(const histogram_type h_type)
 {
-    const std::map<int, HistogramConfig> configs
+    const std::map<histogram_type, HistogramConfig> configs
         = {{histogram_type::diffs, {1.5, 0.05, paths::histogram_diff, diag_data_.differences, "Difference", "skyblue"}},
            {histogram_type::devs, {0.01, 0.001, paths::histogram_dev, diag_data_.deviations, "Deviation", "orange"}}};
 
