@@ -6,6 +6,7 @@ add_subdirectory(${CMAKE_SOURCE_DIR}/googletest-src ${CMAKE_SOURCE_DIR}/googlete
 #Test sources
 set(TEST_SOURCES
         PatternsTest.cpp
+        BotSimulatorTest.cpp
 )
 
 # Test executable
